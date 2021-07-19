@@ -24,7 +24,7 @@ class Trial(Base):
 	session_id = Column(Integer, ForeignKey('session.session_id'))
 	trial_start = Column(DateTime, nullable=True)
 	trial_end = Column(DateTime, nullable=True)
-	trial_status = Column(String, default='NEW')
+	trial_status = Column(String, default='new')
 
 	session = relationship('Session', back_populates='trials')
 	events = relationship('Event', order_by=Event.event_timestamp, back_populates='trial')
@@ -38,6 +38,7 @@ class Session(Base):
 	task_id = Column(Integer, ForeignKey('task.task_id'))
 	session_start = Column(DateTime, nullable=True)
 	session_end = Column(DateTime, nullable=True)
+	session_status = Column(String, default='new')
 
 	task = relationship('Task', back_populates='sessions')
 	trials = relationship('Trial', order_by=Trial.trial_start, back_populates='session', lazy='dynamic')
