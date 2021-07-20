@@ -60,7 +60,7 @@ void loop() {
       str_steps += '\n';
       Serial.println(str_delay);
       Serial.println(str_steps);
-      pump_test(str_steps.toInt(), str_delay.toInt())
+      pump_test(str_steps.toInt(), str_delay.toInt());
       str_delay = "";
       str_steps = "";
       delay_rcv = false;
