@@ -22,7 +22,14 @@ float dosage_amount = 50.0;
 
 int incomingByte;
 
+String str_delay;
+String str_steps;
+bool delay_rcv = false;
+bool steps_rcv = false;
+
 void setup() {
+  str_delay = "";
+  str_steps = "";
   //Serial setup
   Serial.begin(9600);
   //SPI setup
@@ -37,15 +44,42 @@ void setup() {
 
 void loop() {
   if (Serial.available() > 0) {
-    incomingByte = Serial.read();
-    if (incomingByte == 'C') {
-      correct(correct_frequency, correct_volume, duration_ms, dosage_amount);
+    char inChar = (char)Serial.read();
+    if (inChar != 'd' && !delay_rcv) {
+      str_delay += inChar;
     }
-    else if (incomingByte == 'I') {
-      incorrect(incorrect_frequency, incorrect_volume, duration_ms);
+    else if (inChar == 'd') {
+      delay_rcv = true;
+      str_delay += '\n';
     }
-  } 
+    else if (inChar != 's' && !steps_rcv) {
+      str_steps += inChar;
+    }
+    else if (inChar == 's') {
+      steps_rcv = true;
+      str_steps += '\n';
+      Serial.println(str_delay);
+      Serial.println(str_steps);
+      pump_test(str_steps.toInt(), str_delay.toInt())
+      str_delay = "";
+      str_steps = "";
+      delay_rcv = false;
+      steps_rcv = false;
+    }
+  }
 }
+
+//void loop() {
+//  if (Serial.available() > 0) {
+//    incomingByte = Serial.read();
+//    if (incomingByte == 'C') {
+//      correct(correct_frequency, correct_volume, duration_ms, dosage_amount);
+//    }
+//    else if (incomingByte == 'I') {
+//      incorrect(incorrect_frequency, incorrect_volume, duration_ms);
+//    }
+//  } 
+//}
 
 void correct(int frequency, int volume, int duration_ms, float dosage_amount) {
   playTone(frequency, volume, duration_ms);
@@ -79,5 +113,14 @@ void pump(float dosage_amount) {
     delay(10);
     digitalWrite(STEP, LOW);
     delay(10);
+  }
+}
+
+void pump_test(int steps, int delay_val) {
+  for (int i = 0; i < steps; i++) {
+    digitalWrite(STEP, HIGH);
+    delay(delay_val);
+    digitalWrite(STEP, LOW);
+    delay(delay_val);
   }
 }
