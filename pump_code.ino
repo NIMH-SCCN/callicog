@@ -107,7 +107,12 @@ void playTone(int frequency, int volume, int duration_ms) {
 }
 
 void pump(float dosage_amount) {
-  int steps = (0.9712 * dosage_amount) - 0.4845;
+  if (dosage_amount = < 250) {
+    int steps = (0.9997 * dosage_amount) - 3.79;
+  }
+  else {
+    int steps = (0.9280 * dosage_amount) - 2.60;
+  }
   for (int i = 0; i < steps; i++) {
     digitalWrite(STEP, HIGH);
     delay(10);
