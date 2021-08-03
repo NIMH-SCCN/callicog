@@ -115,28 +115,29 @@ def wait_for_click(mouse, timeout=0):
 			return True
 	return False
 
-def pack_event_data(description, timestamp, x=None, y=None):
+def pack_event_data(description, timestamp, position=None):
 	event_dict = {}
-	if x:
-		event_dict["touch"] = {
-			"xcoor": x,
-			"ycoor": y
+	if position:
+		event_dict["position"] = {
+			"xcoor": position[0],
+			"ycoor": position[1]
 		}
 	event_dict["description"] = description
 	event_dict["timestamp"] = timestamp
 	return event_dict
 
 def check_stim_click(mouse, window):
+	#event = {}
 	while True:
 		timed_out = wait_for_click(mouse, window.timeout)
 		if timed_out:
 			print('timed out')
-			return events, Outcome.NULL
+			return Outcome.NULL
 		else:
 			print('clicked')
-			events.append(pack_event_data('touch', datetime.now()))
 			for stimulus in window.stimuli:
 				if mouse.isPressedIn(stimulus.ppy_stim.stim_object):
+					#event['touch_pos'] = mouse.getPosition()
 					if window.transition == 'on_click':
 						print(f'in object {stimulus.stim_id}, on click')
 						return stimulus.outcome
@@ -254,6 +255,7 @@ def run_trial(task_name, trial_config, box, ppy_window, ppy_mouse):
 	ppy_mouse.clickReset()
 	
 	outcome = Outcome.NULL
+	event = None
 	for i in range(len(windows)):
 		window = windows[i]
 		window.load()
@@ -269,7 +271,7 @@ def run_trial(task_name, trial_config, box, ppy_window, ppy_mouse):
 			time.sleep(window.timeout)
 			print(f'blank for {window.timeout} seconds') # EVENT
 		else:
-			outcome = check_stim_click(ppy_mouse, window) # MAIN EVENT
+			event, outcome = check_stim_click(ppy_mouse, window) # MAIN EVENT
 
 	if outcome == Outcome.SUCCESS:
 		print('box: correct')
