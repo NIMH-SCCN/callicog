@@ -115,14 +115,26 @@ def wait_for_click(mouse, timeout=0):
 			return True
 	return False
 
+def pack_event_data(description, timestamp, x=None, y=None):
+	event_dict = {}
+	if x:
+		event_dict["touch"] = {
+			"xcoor": x,
+			"ycoor": y
+		}
+	event_dict["description"] = description
+	event_dict["timestamp"] = timestamp
+	return event_dict
+
 def check_stim_click(mouse, window):
 	while True:
 		timed_out = wait_for_click(mouse, window.timeout)
 		if timed_out:
 			print('timed out')
-			return Outcome.NULL
+			return events, Outcome.NULL
 		else:
 			print('clicked')
+			events.append(pack_event_data('touch', datetime.now()))
 			for stimulus in window.stimuli:
 				if mouse.isPressedIn(stimulus.ppy_stim.stim_object):
 					if window.transition == 'on_click':
@@ -141,9 +153,12 @@ def check_stim_click(mouse, window):
 
 def load_task(task_name):
 	print(f'loading task: {task_name}')
+	
 	shape_list = [StimShape.RECT, StimShape.CIRCLE]
 	timeout_list = [2, 4, 6]
 	blue = [0, 0, 1]
+	red = [1, 0, 0]
+	yellow = [1, 1, 0]
 	P1 = StimParam(Param.SHAPE, ParamType.PSEUDORANDOM)
 	P2 = StimParam(Param.TIMEOUT, ParamType.PSEUDORANDOM)
 	params = [P1, P2]
@@ -154,7 +169,7 @@ def load_task(task_name):
 												[0, 0]),
 											StimParam(Param.COLOR,
 												ParamType.CONSTANT,
-												blue),
+												yellow),
 											StimParam(Param.WIDTH,
 												ParamType.CONSTANT,
 												200),
@@ -174,7 +189,7 @@ def load_task(task_name):
 												[0, 0]),
 											StimParam(Param.COLOR,
 												ParamType.CONSTANT,
-												blue),
+												yellow),
 											StimParam(Param.WIDTH,
 												ParamType.CONSTANT,
 												200),
@@ -194,7 +209,7 @@ def load_task(task_name):
 												[-300, 0]),
 											StimParam(Param.COLOR,
 												ParamType.CONSTANT,
-												blue),
+												yellow),
 											StimParam(Param.WIDTH,
 												ParamType.CONSTANT,
 												200),
@@ -211,7 +226,7 @@ def load_task(task_name):
 												[300, 0]),
 											StimParam(Param.COLOR,
 												ParamType.CONSTANT,
-												blue),
+												red),
 											StimParam(Param.WIDTH,
 												ParamType.CONSTANT,
 												200),
@@ -228,44 +243,41 @@ def load_task(task_name):
 	windows = [w1, w2, w3, w4, w5]
 	return windows, params
 
-def run_trial(task_name, trial_config, box):
-	logging.console.setLevel(logging.ERROR)
-	window_size = [1280, 720]
-	ppy_window = visual.Window(window_size, monitor='test', units='pix', pos=(0,0))
-	ppy_mouse = event.Mouse(win=ppy_window)
+def run_trial(task_name, trial_config, box, ppy_window, ppy_mouse):
+	
+	ppy_window.flip()
 	windows, params = load_task(task_name)
 
 	for i, param in enumerate(params):
 		param.set_value(trial_config[i])
 
 	ppy_mouse.clickReset()
-	#box.connect()
-
+	
 	outcome = Outcome.NULL
 	for i in range(len(windows)):
 		window = windows[i]
 		window.load()
 		# new window, clear screen
-		ppy_window.flip(clearBuffer=True)
+		ppy_window.flip()
 		for stimulus in window.stimuli:
 			stimulus.load(ppy_window).draw()
 		# show all stimuli
-		print('--- new window!')
-		ppy_window.flip(clearBuffer=False)
+		print('--- new window!') #EVENT
+		ppy_window.flip()
 
 		if window.transition == 'blank':
 			time.sleep(window.timeout)
-			print(f'blank for {window.timeout} seconds')
+			print(f'blank for {window.timeout} seconds') # EVENT
 		else:
-			outcome = check_stim_click(ppy_mouse, window)
+			outcome = check_stim_click(ppy_mouse, window) # MAIN EVENT
 
-	#if outcome == Outcome.SUCCESS:
-		#box.correct()
-	#elif outcome == Outcome.FAIL:
-		#box.incorrect()
+	if outcome == Outcome.SUCCESS:
+		print('box: correct')
+		box.correct()
+	elif outcome == Outcome.FAIL:
+		print('box: incorrect')
+		box.incorrect()
 
-	#box.disconnect()
-	ppy_window.close()
 	return datetime.now(), outcome
 	# this is the last outcome from all windows
 
