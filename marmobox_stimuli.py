@@ -1,7 +1,5 @@
-#from protocol_base import Window, Stimulus, StageOne, Task
 import sys
-sys.path.append('./test')
-from new_stim import StimShape, Progression, Outcome, run_trial
+from trial_interface import run_trial
 
 def process_stimulus(trial_params, box, ppy_window, ppy_mouse):
 	task_name = trial_params['protocol_name']
