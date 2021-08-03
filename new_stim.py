@@ -271,7 +271,7 @@ def run_trial(task_name, trial_config, box, ppy_window, ppy_mouse):
 			time.sleep(window.timeout)
 			print(f'blank for {window.timeout} seconds') # EVENT
 		else:
-			event, outcome = check_stim_click(ppy_mouse, window) # MAIN EVENT
+			outcome = check_stim_click(ppy_mouse, window) # MAIN EVENT
 
 	if outcome == Outcome.SUCCESS:
 		print('box: correct')

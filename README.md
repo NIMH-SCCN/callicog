@@ -2,6 +2,11 @@
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
+### Fresh install
+
+	sudo apt install python3-venv python3-pip
+	python3 -m venv marmovenv
+
 ### PostgreSQL instructions for Ubuntu 18.04
 
 	sudo apt-get install postgresql-client-11 postgresql-11
