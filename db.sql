@@ -32,7 +32,10 @@ CREATE TABLE session (
 	task_id INTEGER NOT NULL,
 	session_start TIMESTAMP,
 	session_end TIMESTAMP,
+<<<<<<< HEAD
 	session_status VARCHAR(50) DEFAULT 'new',
+=======
+>>>>>>> 3cd8763e591d8cc8aa9042a08f61369de3994ce3
 	FOREIGN KEY (task_id) REFERENCES task(task_id)
 );
 
@@ -41,14 +44,21 @@ CREATE TABLE trial(
 	session_id INTEGER NOT NULL,
 	trial_start TIMESTAMP,
 	trial_end TIMESTAMP,
+<<<<<<< HEAD
 	trial_status VARCHAR(50) DEFAULT 'new',
+=======
+	trial_status VARCHAR(50) DEFAULT 'NEW',
+>>>>>>> 3cd8763e591d8cc8aa9042a08f61369de3994ce3
 	FOREIGN KEY (session_id) REFERENCES session(session_id)
 );
 
 CREATE TABLE event(
 	event_id SERIAL PRIMARY KEY,
 	trial_id INTEGER NOT NULL,
+<<<<<<< HEAD
 	event_description VARCHAR(100) NOT NULL,
+=======
+>>>>>>> 3cd8763e591d8cc8aa9042a08f61369de3994ce3
 	event_timestamp TIMESTAMP NOT NULL,
 	press_xcoor INTEGER,
 	press_ycoor INTEGER,
