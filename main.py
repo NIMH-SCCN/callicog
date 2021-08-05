@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(description='Marmobox client. \
 parser.add_argument('host', help='Marmobox server IP address.', type=str)
 args = parser.parse_args()
 
-db_engine = create_engine('postgresql:///%s' % DATABASE_NAME, echo=True)
+db_engine = create_engine('postgresql:///%s' % DATABASE_NAME, echo=False)
 #db_engine = create_engine('postgresql://postgres:marmoset@35.244.76.212:5432/marmodb') # google cloud VM
 DatabaseSession = sessionmaker()
 DatabaseSession.configure(bind=db_engine)

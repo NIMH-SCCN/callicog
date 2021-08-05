@@ -8,7 +8,7 @@ class Event(Base):
 	__tablename__ = 'event'
 	event_id = Column(Integer, primary_key=True)
 	trial_id = Column(Integer, ForeignKey('trial.trial_id'))
-	event_timestamp = Column(DateTime, nullable=False)
+	#event_timestamp = Column(DateTime, nullable=False)
 	press_xcoor = Column(Integer)
 	press_ycoor = Column(Integer)
 	delay = Column(Float)
@@ -27,7 +27,7 @@ class Trial(Base):
 	trial_status = Column(String, default='new')
 
 	session = relationship('Session', back_populates='trials')
-	events = relationship('Event', order_by=Event.event_timestamp, back_populates='trial')
+	events = relationship('Event', back_populates='trial')
 
 	def __repr__(self):
 		return '<Trial(trial_id=%s)>' % self.trial_id

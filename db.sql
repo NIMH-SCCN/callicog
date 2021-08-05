@@ -48,7 +48,7 @@ CREATE TABLE trial(
 CREATE TABLE event(
 	event_id SERIAL PRIMARY KEY,
 	trial_id INTEGER NOT NULL,
-	event_timestamp TIMESTAMP NOT NULL,
+	--event_timestamp TIMESTAMP NOT NULL,
 	press_xcoor INTEGER,
 	press_ycoor INTEGER,
 	delay NUMERIC,

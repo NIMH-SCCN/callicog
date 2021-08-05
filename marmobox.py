@@ -71,6 +71,7 @@ class Marmobox:
 		if response and response['success'] == 1:
 			body = response['body']
 			trial_data = body['data']
+			print(trial_data)
 			return trial_data
 		return None
 
@@ -97,6 +98,12 @@ class Marmobox:
 				trial_data = self.run_trial(current_task.protocol.protocol_name, trial_config)
 				new_trial.trial_status = trial_data['trial_outcome']
 				new_trial.trial_end = trial_data['trial_end']
+				touch_event = trial_data['trial_touch']
+				if touch_event:
+					event = Event(trial=new_trial, 
+						press_xcoor=touch_event['xcoor'],
+						press_ycoor=touch_event['ycoor'],
+						delay=touch_event['delay'])
 			session.session_end = datetime.now()
 			# check valid trials in session
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
@@ -123,9 +130,14 @@ class Marmobox:
 			trial_config = [random.choice(shape_list), int(random.choice(timeout_list))]
 			new_trial = Trial(session=session, trial_start=datetime.now())
 			trial_data = self.run_trial(current_task.protocol.protocol_name, trial_config)
-			#import pdb; pdb.set_trace()
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
+			touch_event = trial_data['trial_touch']
+			if touch_event:
+				event = Event(trial=new_trial, 
+					press_xcoor=touch_event['xcoor'],
+					press_ycoor=touch_event['ycoor'],
+					delay=touch_event['delay'])
 
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
@@ -150,6 +162,12 @@ class Marmobox:
 			trial_data = self.run_trial(current_task.protocol.protocol_name, trial_config)
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
+			touch_event = trial_data['trial_touch']
+			if touch_event:
+				event = Event(trial=new_trial,
+					press_xcoor=touch_event['xcoor'],
+					press_ycoor=touch_event['ycoor'],
+					delay=touch_event['delay'])
 
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
