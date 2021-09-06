@@ -27,7 +27,7 @@ print('Connected')
 
 animal = mb.wait_for_animal()
 if animal:
-	tasks = [{ 'name': 'dmts', 'progression': 'target_based' }]
+	tasks = [{ 'name': 'supertask', 'progression': 'target_based' }]
 
 	# new experiment or open experiment and continue
 	if len(animal.experiments) > 0:

@@ -24,7 +24,7 @@ class MarmoboxInterface:
 		except:
 			print('Failed to connect to Arduino')
 			return False
-		self.ppy_window = visual.Window(self.window_size, monitor='test', units='pix', pos=(0,0), fullscr=True)
+		self.ppy_window = visual.Window(self.window_size, monitor='test', units='pix', pos=(0,0), fullscr=False)
 		self.ppy_mouse = event.Mouse(win=self.ppy_window)
 		logging.console.setLevel(logging.ERROR)
 		return True

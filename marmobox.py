@@ -117,7 +117,7 @@ class Marmobox:
 				session.session_status = Outcome.FAIL
 			self.db_session.commit()
 
-	def run_target_based_trials(self, current_task, target):
+	def run_target_based_trials(self, current_task, target): # pass full list of trials if resume
 		shape_list = [StimShape.RECT, StimShape.CIRCLE] # list of lists in order to generate random trial_configs
 		timeout_list = [2, 4, 6]
 
@@ -147,7 +147,7 @@ class Marmobox:
 				current_task.complete = True
 			self.db_session.commit()
 
-	def run_rolling_average_trials(self, current_task, threshold, window_size):
+	def run_rolling_average_trials(self, current_task, threshold, window_size): # pass entire list of trials on resume
 		shape_list = [StimShape.RECT, StimShape.CIRCLE] # list of lists in order to generate random trial_configs
 		timeout_list = [2, 4, 6]
 
@@ -204,7 +204,7 @@ class Marmobox:
 		elif progression == Progression.SESSION_BASED:
 			self.run_session_based_trials(current_task, 3, 0.8, 2)
 		elif progression == Progression.TARGET_BASED:
-			self.run_target_based_trials(current_task, 2)
+			self.run_target_based_trials(current_task, 10)
 
 		# run trials
 		if current_task.complete:
