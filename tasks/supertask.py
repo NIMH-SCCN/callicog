@@ -94,47 +94,14 @@ class TaskInterface:
 		
 		# Window 3
 		w3 = Window(transition=WindowTransition.RELEASE)
-		w3_stim = copy.copy(trial_parameters['stimulus'])
+		w3_stim = Stimulus(shape=StimulusShape.ARROW,
+					size=(20,20), 
+					color = (1, 1, 0),
+					size_touch=(120,120))
 		w3_stim.position = (random.randint(-615, 615), random.randint(-335, 335))
 		w3.add_stimulus(w3_stim)
 
 		# Window 4
 		w4 = Window(blank=0.5)
 
-		# Window 5
-		w5 = Window(transition=WindowTransition.RELEASE)
-		w5_stim = copy.copy(trial_parameters['stimulus'])
-		w5_stim.position = (random.randint(-615, 615), random.randint(-335, 335))
-		w5.add_stimulus(w5_stim)
-
-		# Window 6
-		w6_blank = trial_parameters['delay']
-		w6 = Window(blank=w6_blank)
-
-		# Window 7
-		# set targets
-		w7 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
-		targets = trial_parameters['targets']
-		for i in range(targets):
-			target_stim = copy.copy(trial_parameters['stimulus'])
-			target_stim.position = trial_parameters['positions'][i]
-			target_stim.outcome = Outcome.SUCCESS
-			target_stim.after_touch = [{'name': 'hide'}]
-			target_stim.timeout_gain = 2
-			target_stim.auto_draw = True
-			w7.add_stimulus(target_stim)
-		
-		# set distractors
-		distractors = self.__randomize_from(self.pseudorandom_parameters['stimulus'], exclude=[trial_parameters['stimulus']])
-		distractor_positions = self.__randomize_from(self.pseudorandom_parameters['positions'], exclude=trial_parameters['positions'])
-		for i in range(len(distractors)):
-			distractor_stim = copy.copy(distractors[i])
-			distractor_stim.position = distractor_positions[i]
-			distractor_stim.outcome = Outcome.FAIL
-			distractor_stim.auto_draw = True
-			w7.add_stimulus(distractor_stim)
-
-		# Window 8
-		w8 = Window(blank=2)
-
-		return [w1, w2, w3, w4, w5, w6, w7, w8]
+		return [w1, w2, w3, w4]
