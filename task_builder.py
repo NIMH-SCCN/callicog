@@ -207,9 +207,10 @@ class Window:
 				print('released')
 
 class Stimulus:
-	def __init__(self, shape, size, position=None, outcome=None, color=None, window=None):
+	def __init__(self, shape, size, size_touch=None, position=None, outcome=None, color=None, window=None):
 		self.shape = shape
 		self.size = size
+		self.size_touch = size_touch
 		self.color = color
 		self.position = position
 		self.touched = False
@@ -232,7 +233,10 @@ class Stimulus:
 
 	def load(self, ppy_window):
 		self.ppy_touch_stim = visual.Rect(win=ppy_window, opacity=0)
-		self.ppy_touch_stim.size = self.size
+		if self.size_touch:
+			self.ppy_touch_stim.size = self.size_touch
+		else:
+			self.ppy_touch_stim.size = self.size
 		self.ppy_touch_stim.pos = self.position
 		self.ppy_touch_stim.autoDraw = self.auto_draw
 
