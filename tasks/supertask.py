@@ -6,6 +6,42 @@ import copy
 
 class TaskInterface:
 	def __init__(self):
+		self.pseudorandom_parameters = {}
+		self.initialize_pseudorandom_parameters()
+
+	def __add_pseudorandom_parameter_list(self, parameter_name, parameter_values):
+		self.pseudorandom_parameters[parameter_name] = parameter_values
+
+	def __pseudorandomize_parameters(self):
+		list_indices = []
+		for key in self.pseudorandom_parameters:
+			list_indices.append(range(len(self.pseudorandom_parameters[key])))
+
+		trials = []
+		trial_configs = np.array(np.meshgrid(*list_indices)).T.reshape(-1, len(self.pseudorandom_parameters))
+
+		for config in trial_configs:
+			trial_dic = {}
+			for i, key in enumerate(self.pseudorandom_parameters):
+				value = self.pseudorandom_parameters[key][config[i]]
+				trial_dic[key] = value
+			trials.append(trial_dic)
+		return trials
+
+	def __randomize_from(self, sample, exclude=[], size=0):
+		exclude_idx = [sample.index(item) for item in exclude]
+		new_sample_idx = [i for i in range(len(sample)) if i not in exclude_idx]
+		if size > 0:
+			result = random.sample(new_sample_idx, k=size)
+		else:
+			result = random.sample(new_sample_idx, k=random.randint(1, len(new_sample_idx)))
+		return [sample[i] for i in result]
+
+	def __randomize(self):
+		pass
+
+	def initialize_pseudorandom_parameters(self):
+		# define list of pseudorandom parameters
 		red_square = Stimulus(shape=StimulusShape.SQUARE,
 					size=(100, 100),
 					color=(1, 0, 0))
@@ -13,47 +49,44 @@ class TaskInterface:
 					size=(100, 100),
 					color=(0, 0, 1))
 
-		self.stim_list = [red_square, blue_circle]
-		self.position_list = [(-200, 100), (200, 100), (-200, -100), (200, -100)]
-		self.ntarget_list = [1, 2, 3]
-		self.delay_list = [1, 2, 4]
+		stimuli_list = [red_square, blue_circle]
+		ntargets_list = [1, 2, 3]
+		delays_list = [1, 2, 4]
+
+		# add them to task
+		self.__add_pseudorandom_parameter_list('stimulus', stimuli_list)
+		self.__add_pseudorandom_parameter_list('targets', ntargets_list)
+		self.__add_pseudorandom_parameter_list('delay', delays_list)
 
 	def get_trial(self, trial_index):
+		trials = self.__pseudorandomize_parameters()
 		
-
-		trial_configs = np.array(np.meshgrid(range(len(self.stim_list)), 
-											 range(len(self.ntarget_list)), 
-											 range(len(self.delay_list))
-											 )
-								).T.reshape(-1, 3) # 3 dimensions (3 lists)
-
-		trials = []
-		for config in trial_configs:
-			ntargets_idx = config[1] # second dimension
-			ntargets = self.ntarget_list[ntargets_idx]
-			C = combinations(range(len(self.position_list)), ntargets)
-			for positions in list(C):
-				trial = np.concatenate((config, positions))
-				trials.append(trial)
-		idx = trials[trial_index]
+		# additional pseudorandom parameters
+		# e.g. Supertask: positions depending on 'targets'
+		positions_list = [(-200, 100), (200, 100), (-200, -100), (200, -100)]
+		self.__add_pseudorandom_parameter_list('positions', positions_list)
 		
-		# order (stim_list, ntarget, delay, target1_pos, ..., target_ntarget_pos)
-		trial_config = [self.stim_list[idx[0]], self.ntarget_list[idx[1]], self.delay_list[idx[2]]]
-		for i in range(trial_config[1]):
-			trial_config.append(self.position_list[idx[3 + i]])
-		return trial_config, idx
+		new_trials = []
+		for trial in trials:
+			targets = trial['targets']
+			C = list(combinations(range(len(positions_list)), targets))
+			for positions in C:
+				new_trial = copy.copy(trial)
+				new_trial['positions'] = [positions_list[position_index] for position_index in positions]
+				new_trials.append(new_trial)
+
+		return new_trials[trial_index]
 		
 	def load(self, trial_index):
-		# trial_config
-		trial_config, idx = self.get_trial(trial_index)
-		print(trial_config)
+		# get pseudorandom parameters for the current trial
+		trial_parameters = self.get_trial(trial_index)
+
 		# Window 1
 		w1 = Window(transition=WindowTransition.RELEASE)
 		w1_square = Stimulus(shape=StimulusShape.SQUARE,
 					 size=(100, 100),
 					 color=(-1, -1, -1),
 					 position=(0, 0))
-		#w1.stimuli.append(w1_square)
 		w1.add_stimulus(w1_square)
 		
 		# Window 2
@@ -61,9 +94,8 @@ class TaskInterface:
 		
 		# Window 3
 		w3 = Window(transition=WindowTransition.RELEASE)
-		w3_stim = copy.copy(trial_config[0])
+		w3_stim = copy.copy(trial_parameters['stimulus'])
 		w3_stim.position = (random.randint(-615, 615), random.randint(-335, 335))
-		#w3.stimuli.append(w3_stim)
 		w3.add_stimulus(w3_stim)
 
 		# Window 4
@@ -71,47 +103,36 @@ class TaskInterface:
 
 		# Window 5
 		w5 = Window(transition=WindowTransition.RELEASE)
-		w5_stim = copy.copy(trial_config[0])
+		w5_stim = copy.copy(trial_parameters['stimulus'])
 		w5_stim.position = (random.randint(-615, 615), random.randint(-335, 335))
-		#w5.stimuli.append(w5_stim)
 		w5.add_stimulus(w5_stim)
 
 		# Window 6
-		w6_blank = trial_config[2]
+		w6_blank = trial_parameters['delay']
 		w6 = Window(blank=w6_blank)
 
 		# Window 7
 		# set targets
 		w7 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
-		ntargets = trial_config[1]
-		positions = list(range(len(self.position_list)))
-		for i in range(ntargets):
-			target_stim = copy.copy(trial_config[0])
-			target_stim.position = trial_config[-(i + 1)]
+		targets = trial_parameters['targets']
+		for i in range(targets):
+			target_stim = copy.copy(trial_parameters['stimulus'])
+			target_stim.position = trial_parameters['positions'][i]
 			target_stim.outcome = Outcome.SUCCESS
 			target_stim.after_touch = [{'name': 'hide'}]
 			target_stim.timeout_gain = 2
 			target_stim.auto_draw = True
-			positions.remove(idx[-(i + 1)])
 			w7.add_stimulus(target_stim)
-			#w7.stimuli.append(target_stim)
 		
 		# set distractors
-		ndistractors = random.randint(1, len(self.position_list) - ntargets)
-		distractors = list(range(len(self.stim_list)))
-		distractors.remove(idx[0])
-		for i in range(ndistractors):
-			distractor_stim = copy.copy(self.stim_list[random.sample(distractors, k=1)[0]])
-			distractor_idx = random.sample(positions, k=1)[0]
-			distractor_stim.position = self.position_list[distractor_idx]
-			print('distractor position:')
-			print(distractor_stim.position)
+		distractors = self.__randomize_from(self.pseudorandom_parameters['stimulus'], exclude=[trial_parameters['stimulus']])
+		distractor_positions = self.__randomize_from(self.pseudorandom_parameters['positions'], exclude=trial_parameters['positions'])
+		for i in range(len(distractors)):
+			distractor_stim = copy.copy(distractors[i])
+			distractor_stim.position = distractor_positions[i]
 			distractor_stim.outcome = Outcome.FAIL
 			distractor_stim.auto_draw = True
-			positions.remove(distractor_idx)
-			#w7.stimuli.append(distractor_stim)
 			w7.add_stimulus(distractor_stim)
-		print(f'{ntargets} targets, {ndistractors} distractors')
 
 		# Window 8
 		w8 = Window(blank=2)
