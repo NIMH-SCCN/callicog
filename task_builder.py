@@ -232,6 +232,9 @@ class Stimulus:
 			return visual.Rect(win=self.window.ppy_window, colorSpace='rgb')
 		elif self.shape == StimulusShape.CIRCLE:
 			return visual.Circle(win=self.window.ppy_window, colorSpace='rgb')
+		elif self.shape == StimulusShape.ARROW:
+			arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
+			return visual.ShapeStim(win=self.window.ppy_window, vertices=arrow_vertices, colorSpace='rgb')
 
 	def load(self):
 		self.ppy_touch_stim = visual.Rect(win=self.window.ppy_window, opacity=0)
