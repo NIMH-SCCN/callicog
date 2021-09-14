@@ -132,7 +132,9 @@ class Window:
 		stimulus.window = self
 
 	def run(self, ppy_window):
-		ppy_window.flip()
+		self.ppy_window =  ppy_window
+
+		self.ppy_window.flip()
 		print('--- new window!')
 		if self.blank > 0:
 			time.sleep(self.blank)
@@ -140,29 +142,31 @@ class Window:
 			#return
 		if len(self.stimuli) > 0:
 			for stimulus in self.stimuli:
-				stimulus.load(ppy_window)
+				stimulus.load()
 				stimulus.draw()
 				print('stim drawn')
-			ppy_window.flip()
+			self.ppy_window.flip()
+		return datetime.now()
 		#touch_event, outcome = self.__check_touch(ppy_mouse, datetime.now())
 		#return touch_event, outcome
 
-	def get_touch_outcome(self, ppy_window, ppy_mouse):
-		stimulus, touch_event, outcome = self.__check_touch(ppy_mouse, datetime.now())
+	def get_touch_outcome(self, flip_time, ppy_mouse):
+		stimulus, touch_event, outcome = self.__check_touch(ppy_mouse, flip_time)
 		if stimulus and len(stimulus.after_touch) > 0:
-			stimulus.on_touch(ppy_window)
+			stimulus.on_touch()
 		return touch_event, outcome
 
 	def __wait_touch(self, ppy_mouse):
 		print('waiting')
-		start = datetime.now()#time.time()
+		start = datetime.now()
 		while not ppy_mouse.getPressed()[0]:
 			time.sleep(0.001)
 			if self.timeout > 0 and (datetime.now() - start).total_seconds() > self.timeout:
 				return 0, True
-		return (datetime.now() - start).total_seconds(), False
+		touch_time = datetime.now()
+		return touch_time, (touch_time - start).total_seconds(), False
 
-	def reset(self, ppy_window):
+	def reset(self):
 		for stimulus in self.stimuli:
 			stimulus.ppy_show_stim.autoDraw = False
 			stimulus.ppy_touch_stim.autoDraw = False
@@ -170,7 +174,7 @@ class Window:
 	def __check_touch(self, ppy_mouse, flip_time):
 		touch_event = None
 		while True:
-			time_since_touch, timed_out =  self.__wait_touch(ppy_mouse)
+			touch_time, touch_elapsed, timed_out =  self.__wait_touch(ppy_mouse)
 			if timed_out:
 				print('timed out')
 				return None, touch_event, Outcome.NULL
@@ -180,13 +184,13 @@ class Window:
 					if ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
 						stimulus.touched = True
 						if stimulus.outcome == Outcome.SUCCESS and stimulus.timeout_gain > 0:
-							self.timeout = (self.timeout - time_since_touch) + stimulus.timeout_gain
+							self.timeout = (self.timeout - touch_elapsed) + stimulus.timeout_gain
 
 						position = ppy_mouse.getPos()
 						touch_event = {
 							'xcoor': position[0],
 							'ycoor': position[1],
-							'delay': (datetime.now() - flip_time).total_seconds()
+							'delay': (touch_time - flip_time).total_seconds()
 						}
 						if self.transition == WindowTransition.TOUCH:
 							print(f'in object, on touch, waiting for release')
@@ -198,8 +202,9 @@ class Window:
 							print(f'in object, waiting for release')
 							while ppy_mouse.getPressed()[0]:
 								time.sleep(0.001)
+							release_time = datetime.now()
 							print('released')
-							touch_event['delay'] = (datetime.now() - flip_time).total_seconds()
+							touch_event['delay'] = (release_time - flip_time).total_seconds()
 							return stimulus, touch_event, stimulus.outcome
 				print('outside, waiting for release')
 				while ppy_mouse.getPressed()[0]:
@@ -222,17 +227,14 @@ class Stimulus:
 		self.timeout_gain = 0
 		self.window = window
 
-	def __assign_shape(self, ppy_window):
+	def __assign_shape(self):
 		if self.shape == StimulusShape.SQUARE:
-			return visual.Rect(win=ppy_window, colorSpace='rgb')
+			return visual.Rect(win=self.window.ppy_window, colorSpace='rgb')
 		elif self.shape == StimulusShape.CIRCLE:
-			return visual.Circle(win=ppy_window, colorSpace='rgb')
-		#elif self.shape == StimulusShape.ARROW:
-		#	arrow_vertices = []
-		#	return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+			return visual.Circle(win=self.window.ppy_window, colorSpace='rgb')
 
-	def load(self, ppy_window):
-		self.ppy_touch_stim = visual.Rect(win=ppy_window, opacity=0)
+	def load(self):
+		self.ppy_touch_stim = visual.Rect(win=self.window.ppy_window, opacity=0)
 		if self.size_touch:
 			self.ppy_touch_stim.size = self.size_touch
 		else:
@@ -240,7 +242,7 @@ class Stimulus:
 		self.ppy_touch_stim.pos = self.position
 		self.ppy_touch_stim.autoDraw = self.auto_draw
 
-		self.ppy_show_stim = self.__assign_shape(ppy_window)
+		self.ppy_show_stim = self.__assign_shape()
 		self.ppy_show_stim.size = self.size
 		self.ppy_show_stim.color = self.color
 		self.ppy_show_stim.pos = self.position
@@ -250,15 +252,15 @@ class Stimulus:
 		self.ppy_show_stim.draw()
 		self.ppy_touch_stim.draw()
 
-	def on_touch(self, ppy_window):
+	def on_touch(self):
 		for func in self.after_touch:
 			if func["name"] == 'hide':
-				self.__hide(ppy_window)
+				self.__hide()
 
-	def __hide(self, ppy_window):
+	def __hide(self):
 		self.ppy_show_stim.autoDraw = False
 		self.ppy_touch_stim.autoDraw = False
-		ppy_window.flip()
+		self.window.ppy_window.flip()
 
 
 

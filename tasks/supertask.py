@@ -104,7 +104,7 @@ class TaskInterface:
 		# Window 5
 		w5 = Window(transition=WindowTransition.RELEASE)
 		w5_stim = copy.copy(trial_parameters['stimulus'])
-		w5_stim.position = (random.randint(-615, 615), random.randint(-335, 335))
+		w5_stim.position = (random.randint(-615, 615), random.randint(-335, 335)) # ???
 		w5.add_stimulus(w5_stim)
 
 		# Window 6
