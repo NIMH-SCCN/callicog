@@ -42,44 +42,19 @@ class TaskInterface:
 
 	def initialize_pseudorandom_parameters(self):
 		# define list of pseudorandom parameters
-		red_square = Stimulus(shape=StimulusShape.SQUARE,
-					size=(100, 100),
-					color=(1, 0, 0))
-		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
-					size=(100, 100),
-					color=(0, 0, 1))
-
-		stimuli_list = [red_square, blue_circle]
-		ntargets_list = [1, 2, 3]
-		delays_list = [1, 2, 4]
-
-		# add them to task
-		self.__add_pseudorandom_parameter_list('stimulus', stimuli_list)
-		self.__add_pseudorandom_parameter_list('targets', ntargets_list)
-		self.__add_pseudorandom_parameter_list('delay', delays_list)
+		# e.g.
+		# self.__add_pseudorandom_parameter_list('delay', delays_list)
+		pass
 
 	def get_trial(self, trial_index):
-		trials = self.__pseudorandomize_parameters()
-		
+		#trials = self.__pseudorandomize_parameters()
 		# additional pseudorandom parameters
-		# e.g. Supertask: positions depending on 'targets'
-		positions_list = [(-200, 100), (200, 100), (-200, -100), (200, -100)]
-		self.__add_pseudorandom_parameter_list('positions', positions_list)
-		
-		new_trials = []
-		for trial in trials:
-			targets = trial['targets']
-			C = list(combinations(range(len(positions_list)), targets))
-			for positions in C:
-				new_trial = copy.copy(trial)
-				new_trial['positions'] = [positions_list[position_index] for position_index in positions]
-				new_trials.append(new_trial)
+		#return trials
+		pass
 
-		return new_trials[trial_index]
-		
 	def load(self, trial_index):
 		# get pseudorandom parameters for the current trial
-		trial_parameters = self.get_trial(trial_index)
+		#trial_parameters = self.get_trial(trial_index)
 
 		# Window 1
 		w1 = Window(transition=WindowTransition.RELEASE)
