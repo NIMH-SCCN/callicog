@@ -2,6 +2,7 @@ from psychopy import visual
 from numpy import random
 import time
 from datetime import datetime
+import math
 
 class Progression:
 	SESSION_BASED = 'session_based'
@@ -115,6 +116,7 @@ class StimulusShape:
 	SQUARE = 'square'
 	CIRCLE = 'circle'
 	STAR = 'star'
+	DIAMOND = 'diamond'
 	ARROW = 'arrow'
 
 class Window:
@@ -232,6 +234,19 @@ class Stimulus:
 			return visual.Rect(win=self.window.ppy_window, colorSpace='rgb')
 		elif self.shape == StimulusShape.CIRCLE:
 			return visual.Circle(win=self.window.ppy_window, colorSpace='rgb')
+		elif self.shape == StimulusShape.STAR:
+			star_vertices = []
+			outer_radius = 131
+			inner_radius = 65
+			for vertex in range(0,5):
+				x = outer_radius*math.cos(math.radians(90+vertex*72))
+				y = outer_radius*math.sin(math.radians(90+vertex*72))
+				star_vertices.append([x,y]); x = inner_radius*math.cos(math.radians(126+vertex*72))
+				y = inner_radius*math.sin(math.radians(126+vertex*72))
+				star_vertices.append([x,y])
+			return visual.ShapeStim(self.window.ppy_window, vertices=star_vertices, colorSpace='rgb')
+		elif self.shape == StimulusShape.DIAMOND:
+			return visual.Rect(win=self.window.ppy_window, ori=45, colorSpace='rgb')
 		elif self.shape == StimulusShape.ARROW:
 			arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
 			return visual.ShapeStim(win=self.window.ppy_window, vertices=arrow_vertices, colorSpace='rgb')
