@@ -1,92 +1,75 @@
-from task_builder import *
+from task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
+import random
+import numpy as np
+from itertools import combinations
+import copy
 
-class TaskStructure:
-	def load():
-		shape_list = [StimShape.RECT, StimShape.CIRCLE]
-		timeout_list = [2, 4, 6]
-		blue = [0, 0, 1]
-		red = [1, 0, 0]
-		yellow = [1, 1, 0]
-		P1 = StimParam(Param.SHAPE, ParamType.PSEUDORANDOM)
-		P2 = StimParam(Param.TIMEOUT, ParamType.PSEUDORANDOM)
-		params = [P1, P2]
-		
-		w1 = Window('on_release', [PseudoStim(P1, [
-												StimParam(Param.POSITION, 
-													ParamType.CONSTANT, 
-													[0, 0]),
-												StimParam(Param.COLOR,
-													ParamType.CONSTANT,
-													yellow),
-												StimParam(Param.WIDTH,
-													ParamType.CONSTANT,
-													200),
-												StimParam(Param.HEIGHT,
-													ParamType.CONSTANT,
-													200),
-												StimParam(Param.RADIUS,
-													ParamType.CONSTANT,
-													100)
-												]
-							)]
-		)
-		w2 = Window('blank', [], [ StimParam(Param.TIMEOUT, ParamType.CONSTANT, 2) ])
-		w3 = Window('on_click', [PseudoStim(P1, [
-												StimParam(Param.POSITION, 
-													ParamType.CONSTANT, 
-													[0, 0]),
-												StimParam(Param.COLOR,
-													ParamType.CONSTANT,
-													yellow),
-												StimParam(Param.WIDTH,
-													ParamType.CONSTANT,
-													200),
-												StimParam(Param.HEIGHT,
-													ParamType.CONSTANT,
-													200),
-												StimParam(Param.RADIUS,
-													ParamType.CONSTANT,
-													100)
-												]
-							)]
-		)
-		w4 = Window('blank', [], [P2])
-		w5 = Window('on_release', [PseudoStim(P1, [
-												StimParam(Param.POSITION, 
-													ParamType.CONSTANT, 
-													[-300, 0]),
-												StimParam(Param.COLOR,
-													ParamType.CONSTANT,
-													yellow),
-												StimParam(Param.WIDTH,
-													ParamType.CONSTANT,
-													200),
-												StimParam(Param.HEIGHT,
-													ParamType.CONSTANT,
-													200),
-												StimParam(Param.RADIUS,
-													ParamType.CONSTANT,
-													100)
-												], outcome=Outcome.SUCCESS),
-								RandomStim([
-												StimParam(Param.POSITION, 
-													ParamType.CONSTANT, 
-													[300, 0]),
-												StimParam(Param.COLOR,
-													ParamType.CONSTANT,
-													red),
-												StimParam(Param.WIDTH,
-													ParamType.CONSTANT,
-													200),
-												StimParam(Param.HEIGHT,
-													ParamType.CONSTANT,
-													200),
-												StimParam(Param.RADIUS,
-													ParamType.CONSTANT,
-													100)
-												], shape_list, [P1], outcome=Outcome.FAIL)
-							], [P2]
-		)
+class TaskInterface:
+    def __init__(self):
+        self.pseudorandom_parameters = {}
+        self.initialize_pseudorandom_parameters()
 
-		windows = [w1, w2, w3, w4, w5]
-		return windows, params
+    def __add_pseudorandom_parameter_list(self, parameter_name, parameter_values):
+        self.pseudorandom_parameters[parameter_name] = parameter_values
+
+    def __pseudorandomize_parameters(self):
+        list_indices = []
+        for key in self.pseudorandom_parameters:
+            list_indices.append(range(len(self.pseudorandom_parameters[key])))
+
+        trials = []
+        trial_configs = np.array(np.meshgrid(*list_indices)).T.reshape(-1, len(self.pseudorandom_parameters))
+
+        for config in trial_configs:
+            trial_dic = {}
+            for i, key in enumerate(self.pseudorandom_parameters):
+                value = self.pseudorandom_parameters[key][config[i]]
+                trial_dic[key] = value
+            trials.append(trial_dic)
+        return trials
+
+    def __randomize_from(self, sample, exclude=[], size=0):
+        exclude_idx = [sample.index(item) for item in exclude]
+        new_sample_idx = [i for i in range(len(sample)) if i not in exclude_idx]
+        if size > 0:
+            result = random.sample(new_sample_idx, k=size)
+        else:
+            result = random.sample(new_sample_idx, k=random.randint(1, len(new_sample_idx)))
+        return [sample[i] for i in result]
+
+    def __randomize(self):
+        pass
+
+    def initialize_pseudorandom_parameters(self):
+        # define list of pseudorandom parameters
+        # e.g.
+        # self.__add_pseudorandom_parameter_list('delay', delays_list)
+        pass
+
+    def get_trial(self, trial_index):
+        #trials = self.__pseudorandomize_parameters()
+        # additional pseudorandom parameters
+        #return trials
+        pass
+
+    def load(self, trial_index):
+        # get pseudorandom parameters for the current trial
+        #trial_parameters = self.get_trial(trial_index)
+
+        
+        # Window 1
+        w1 = Window(transition=WindowTransition.RELEASE)
+        w1_square = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(100, 100),
+                     color=(-1, -1, -1),
+                     position=(0, 0))
+        w1.add_stimulus(w1_square)	
+        
+        # Window 2
+        w2 = Window(transition=WindowTransition.RELEASE)
+        w2_diamond = Stimulus(shape=StimulusShape.DIAMOND, size=(176.78, 176.78), color=(1, -1, -1), position=(-382.5, 0))
+        #w2_star = Stimulus(shape=StimulusShape.STAR, size=(100, 100), color=(-1, -1, 1), position=(0,0))
+        w2.add_stimulus(w2_diamond)
+        #w2.add_stimulus(w2_star)
+        
+        return [w1, w2]
