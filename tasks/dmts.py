@@ -44,32 +44,76 @@ class TaskInterface:
         # define list of pseudorandom parameters
         # e.g.
         # self.__add_pseudorandom_parameter_list('delay', delays_list)
-        pass
+        red_diamond = Stimulus(shape=StimulusShape.DIAMOND, size=(176.78,176.78), color=(1,1,-1), position=(0,0), size_touch=(250,250))
+        blue_star = Stimulus(shape=StimulusShape.STAR, size = (1,1), color=(-1, -1, 1), position=(0,0), size_touch=(250,250))
+
+        stimulus_list = [red_diamond, blue_star]
+        delay_list = [0.5, 1, 2, 4]
+        position_list = [(-382.5, 0), (382.5, 0)]
+
+        # add them to task
+        self.__add_pseudorandom_parameter_list('stimulus', stimulus_list)
+        self.__add_pseudorandom_parameter_list('delay', delay_list)
+        self.__add_pseudorandom_parameter_list('position', position_list)
 
     def get_trial(self, trial_index):
-        #trials = self.__pseudorandomize_parameters()
-        # additional pseudorandom parameters
-        #return trials
-        pass
+        trials = self.__pseudorandomize_parameters()
+        # additional pseudorandom parameters (e.g. supertask - positions depending on targets)
+        print('trials are ' + str(trials))
+        print('list contains ' + str(trials.count) + 'elements')
+        return trials[trial_index]
+
 
     def load(self, trial_index):
         # get pseudorandom parameters for the current trial
-        #trial_parameters = self.get_trial(trial_index)
 
+        print('trial index is ' + str(trial_index))
+        trial_parameters = self.get_trial(trial_index)
         
         # Window 1
         w1 = Window(transition=WindowTransition.RELEASE)
-        w1_square = Stimulus(shape=StimulusShape.SQUARE,
-                     size=(100, 100),
-                     color=(-1, -1, -1),
-                     position=(0, 0))
+        w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(250, 250), color=(-1, -1, -1), position=(0, 0))
         w1.add_stimulus(w1_square)	
         
         # Window 2
-        w2 = Window(transition=WindowTransition.RELEASE)
-        w2_diamond = Stimulus(shape=StimulusShape.DIAMOND, size=(176.78, 176.78), color=(1, -1, -1), position=(-382.5, 0))
-        #w2_star = Stimulus(shape=StimulusShape.STAR, size=(100, 100), color=(-1, -1, 1), position=(0,0))
-        w2.add_stimulus(w2_diamond)
-        #w2.add_stimulus(w2_star)
+        w2 = Window(blank=0.5)
+
+        # Window 3
+        w3 = Window(transition=WindowTransition.RELEASE)
+        w3_stim = copy.copy(trial_parameters['stimulus'])
+        w3.add_stimulus(w3_stim)
+
+        # Window 4
+        w4 = Window(blank=0.5)
+
+        # Window 5
+        w5 = Window(transition=WindowTransition.RELEASE)
+        w5_stim = copy.copy(trial_parameters['stimulus'])
+        w5.add_stimulus(w5_stim)        
+
+        # Window 6
+        w6_blank = trial_parameters['delay']
+        w6 = Window(blank=w6_blank)
+
+        # Window 7
+        # define target
+        w7 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)  
+        w7_target = copy.copy(trial_parameters['stimulus'])
+        w7_target.position = trial_parameters['position']
+        w7_target.outcome = Outcome.SUCCESS
+        # define distractor      
+        #distractors = self.__randomize_from(self.pseudorandom_parameters['stimulus'], exclude=[trial_parameters['stimulus']])
+        #distractor_positions = self.__randomize_from(self.pseudorandom_parameters['position'], exclude=trial_parameters['position'])
+        #for i in range(len(distractors)):
+        #    w7_distractor = copy.copy(distractors[i])
+        #    w7_distractor.position = distractor_positions[i]
+        #    w7_distractor.outcome = Outcome.FAIL
+        #    w7_distractor.auto_draw = True
+        #w7.add_stimulus(w7_distractor)      
+      
+        w7.add_stimulus(w7_target)
+
+        # Window 8
+        w8 = Window(blank=2)
         
-        return [w1, w2]
+        return [w1, w2, w3, w4, w5, w6, w7, w8]
