@@ -173,7 +173,7 @@ class Window:
 		while not ppy_mouse.getPressed()[0]:
 			time.sleep(0.001)
 			if self.timeout > 0 and (datetime.now() - start).total_seconds() > self.timeout:
-				return 0, True
+				return 0, 0, True
 		touch_time = datetime.now()
 		return touch_time, (touch_time - start).total_seconds(), False
 
