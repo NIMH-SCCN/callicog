@@ -118,6 +118,7 @@ class StimulusShape:
 	STAR = 'star'
 	DIAMOND = 'diamond'
 	ARROW = 'arrow'
+	IMAGE = 'image'
 
 class Window:
 	def __init__(self, blank=0, transition=None, is_outcome=False, timeout=0):
@@ -214,7 +215,7 @@ class Window:
 				print('released')
 
 class Stimulus:
-	def __init__(self, shape, size, size_touch=None, position=None, outcome=None, color=None, window=None):
+	def __init__(self, shape, size, size_touch=None, position=None, outcome=None, color=None, window=None, image=None):
 		self.shape = shape
 		self.size = size
 		self.size_touch = size_touch
@@ -228,6 +229,7 @@ class Stimulus:
 		self.after_touch = []
 		self.timeout_gain = 0
 		self.window = window
+		self.image = image
 
 	def __assign_shape(self):
 		if self.shape == StimulusShape.SQUARE:
@@ -244,12 +246,14 @@ class Stimulus:
 				star_vertices.append([x,y]); x = inner_radius*math.cos(math.radians(126+vertex*72))
 				y = inner_radius*math.sin(math.radians(126+vertex*72))
 				star_vertices.append([x,y])
-			return visual.ShapeStim(self.window.ppy_window, vertices=star_vertices, colorSpace='rgb')
+			return visual.ShapeStim(self.window.ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb')
 		elif self.shape == StimulusShape.DIAMOND:
 			return visual.Rect(win=self.window.ppy_window, ori=45, colorSpace='rgb')
 		elif self.shape == StimulusShape.ARROW:
 			arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
 			return visual.ShapeStim(win=self.window.ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+		elif self.shape == StimulusShape.IMAGE:
+			return visual.ImageStim(win=self.window.ppy_window, colorSpace='rgb')
 
 	def load(self):
 		self.ppy_touch_stim = visual.Rect(win=self.window.ppy_window, opacity=0)
@@ -264,6 +268,7 @@ class Stimulus:
 		self.ppy_show_stim.size = self.size
 		self.ppy_show_stim.color = self.color
 		self.ppy_show_stim.pos = self.position
+		self.ppy_show_stim.image = self.image
 		self.ppy_show_stim.autoDraw = self.auto_draw
 
 	def draw(self):
