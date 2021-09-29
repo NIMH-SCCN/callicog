@@ -75,45 +75,9 @@ class TaskInterface:
         w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(250, 250), color=(-1, -1, -1), position=(0, 0))
         w1.add_stimulus(w1_square)	
         
-        # Window 2
-        w2 = Window(blank=0.5)
-
-        # Window 3
-        w3 = Window(transition=WindowTransition.RELEASE)
-        w3_stim = copy.copy(trial_parameters['stimulus'])
-        w3.add_stimulus(w3_stim)
-
-        # Window 4
-        w4 = Window(blank=0.5)
-
-        # Window 5
-        w5 = Window(transition=WindowTransition.RELEASE)
-        w5_stim = copy.copy(trial_parameters['stimulus'])
-        w5.add_stimulus(w5_stim)        
-
-        # Window 6
-        w6_blank = trial_parameters['delay']
-        w6 = Window(blank=w6_blank)
-
-        # Window 7
-        # define target
-        w7 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)  
-        w7_target = copy.copy(trial_parameters['stimulus'])
-        w7_target.position = trial_parameters['position']
-        w7_target.outcome = Outcome.SUCCESS
-        # define distractor      
-        distractors = self.__randomize_from(self.pseudorandom_parameters['stimulus'], exclude=[trial_parameters['stimulus']])
-        distractor_positions = self.__randomize_from(self.pseudorandom_parameters['position'], exclude=[trial_parameters['position']])
-        for i in range(len(distractors)):
-            w7_distractor = copy.copy(distractors[i])
-            w7_distractor.position = distractor_positions[i]
-            w7_distractor.outcome = Outcome.FAIL
-            w7_distractor.auto_draw = True
-        w7.add_stimulus(w7_distractor)      
-      
-        w7.add_stimulus(w7_target)
-
-        # Window 8
-        w8 = Window(blank=2)
+        # Window 1
+        w2 = Window(transition=WindowTransition.RELEASE)
+        w2_square = Stimulus(shape=StimulusShape.IMAGE, image = '/media/sf_callicog/tasks/composite1-1.jpg', size=(250, 250), position=(0,0), color=(1,1,1))
+        w2.add_stimulus(w2_square)	
         
-        return [w1, w2, w3, w4, w5, w6, w7, w8]
+        return [w1, w2]
