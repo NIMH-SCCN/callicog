@@ -119,6 +119,15 @@ class StimulusShape:
 	DIAMOND = 'diamond'
 	ARROW = 'arrow'
 	IMAGE = 'image'
+	#ARROW1 = 'arrow1'
+	ARROW2 = 'arrow2'
+	ARROW3 = 'arrow3'
+	#ARROW4 = 'arrow1'
+	#ARROW5 = 'arrow1'
+	ARROW6 = 'arrow6'
+	#ARROW7 = 'arrow1'
+	TRIANGLE = 'triangle'
+	
 
 class Window:
 	def __init__(self, blank=0, transition=None, is_outcome=False, timeout=0):
@@ -165,7 +174,7 @@ class Window:
 		while not ppy_mouse.getPressed()[0]:
 			time.sleep(0.001)
 			if self.timeout > 0 and (datetime.now() - start).total_seconds() > self.timeout:
-				return 0, True
+				return 0, 0, True
 		touch_time = datetime.now()
 		return touch_time, (touch_time - start).total_seconds(), False
 
@@ -254,6 +263,18 @@ class Stimulus:
 			return visual.ShapeStim(win=self.window.ppy_window, vertices=arrow_vertices, colorSpace='rgb')
 		elif self.shape == StimulusShape.IMAGE:
 			return visual.ImageStim(win=self.window.ppy_window, colorSpace='rgb')
+		elif self.shape == StimulusShape.ARROW2:
+			arrow_vertices = [(4, 0), (0,-3), (0,-1), (-3,-1), (-3, 1), (0, 1), (0, 3)]
+			return visual.ShapeStim(win=self.window.ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+		elif self.shape == StimulusShape.ARROW3:
+			arrow_vertices = [(-4, 0), (0,-3), (0,-1), (3,-1), (3, 1), (0, 1), (0, 3)]
+			return visual.ShapeStim(win=self.window.ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+		elif self.shape == StimulusShape.ARROW6:
+			arrow_vertices = [(0,-4), (-3,0), (-1,0), (-1,3), (1,3), (1,0), (3,0)]
+			return visual.ShapeStim(win=self.window.ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+		elif self.shape == StimulusShape.TRIANGLE:
+			triangle_vertices = [(-5,0), (5,0), (0, 8)]
+			return visual.ShapeStim(win=self.window.ppy_window, vertices=triangle_vertices, colorSpace='rgb')
 
 	def load(self):
 		self.ppy_touch_stim = visual.Rect(win=self.window.ppy_window, opacity=0)
