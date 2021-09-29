@@ -73,7 +73,7 @@ class TaskInterface:
 					size=(20,20), 
 					color = (1, 1, 0),
 					size_touch=(120,120))
-		w3_stim.position = (random.randint(-615, 615), random.randint(-335, 335))
+		w3_stim.position = (random.randint(-590, 590), random.randint(-310, 310))
 		w3.add_stimulus(w3_stim)
 
 		# Window 4

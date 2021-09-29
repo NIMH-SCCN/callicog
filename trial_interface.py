@@ -5,8 +5,8 @@ import random
 def run_trial(task_name, trial_config, box, ppy_window, ppy_mouse):
 	mod = __import__(f'tasks.{task_name}', fromlist=['TaskInterface'])
 	task = getattr(mod, 'TaskInterface')()
-	windows = task.load(random.randint(0, 50))
-	
+
+	windows = task.load(random.randint(0, 9))
 	ppy_mouse.clickReset()
 
 	outcome = Outcome.NULL
