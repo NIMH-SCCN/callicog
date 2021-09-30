@@ -44,16 +44,9 @@ class TaskInterface:
         # define list of pseudorandom parameters
         # e.g.
         # self.__add_pseudorandom_parameter_list('delay', delays_list)
-        red_diamond = Stimulus(shape=StimulusShape.DIAMOND, size=(176.78,176.78), color=(1,1,-1), position=(0,0), size_touch=(250,250))
-        blue_star = Stimulus(shape=StimulusShape.STAR, size = (1,1), color=(-1, -1, 1), position=(0,0), size_touch=(250,250))
-
-        stimulus_list = [red_diamond, blue_star]
-        delay_list = [0.5, 1, 2, 4]
         position_list = [(-382.5, 0), (382.5, 0)]
 
         # add them to task
-        self.__add_pseudorandom_parameter_list('stimulus', stimulus_list)
-        self.__add_pseudorandom_parameter_list('delay', delay_list)
         self.__add_pseudorandom_parameter_list('position', position_list)
 
     def get_trial(self, trial_index):
@@ -75,9 +68,14 @@ class TaskInterface:
         w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(250, 250), color=(-1, -1, -1), position=(0, 0))
         w1.add_stimulus(w1_square)	
         
-        # Window 1
-        w2 = Window(transition=WindowTransition.RELEASE)
-        w2_square = Stimulus(shape=StimulusShape.IMAGE, image = '/media/sf_callicog/tasks/composite1-1.jpg', size=(250, 250), position=(0,0), color=(1,1,1))
-        w2.add_stimulus(w2_square)	
-        
+        # Window 2
+        w2 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=2)
+        reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = '/media/sf_callicog/tasks/images/composite1-1.jpg', color = (1,1,1), size_touch=(250,250)) #will need to change path
+        penalty_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = '/media/sf_callicog/tasks/images/composite1-2.jpg', color = (1,1,1), size_touch=(250,250)) #will need to change path
+        reward_stim.position = trial_parameters['position']
+        penalty_stim.position = self.__randomize_from(self.pseudorandom_parameters['position'], exclude=[trial_parameters['position']])
+        reward_stim.outcome = Outcome.SUCCESS
+        penalty_stim.outcome = Outcome.FAIL
+        w2.add_stimulus(reward_stim)	
+        w2.add_stimulus(penalty_stim)	        
         return [w1, w2]
