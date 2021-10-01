@@ -1,12 +1,14 @@
-from task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
-import random
-import numpy as np
+from min_task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
 from itertools import combinations
+import numpy as np
+import random
 import copy
 
 class TaskInterface:
 	def __init__(self):
 		self.pseudorandom_parameters = {}
+		self.trials = []
+
 		self.initialize_pseudorandom_parameters()
 
 	def __add_pseudorandom_parameter_list(self, parameter_name, parameter_values):
@@ -56,7 +58,7 @@ class TaskInterface:
 		#self.__add_pseudorandom_parameter_list('delay', delays_list)
 		self.__add_pseudorandom_parameter_list('positions', positions_list)
 #IF I DONT WANT AN ELEMENT TO BE PSEUDORANDOMISED, ADD IT AFTER TRIALS = SELF.__PSEUDORANDOMISE PARAMETERS
-	def get_trial(self, trial_index):
+	def generate_trials(self):
 		trials = self.__pseudorandomize_parameters()
 		
 		
@@ -90,11 +92,11 @@ class TaskInterface:
 		#		new_trial['positions'] = [positions_list[position_index] for position_index in positions]
 		#		new_trials.append(new_trial)
 
-		return trials[trial_index]
+		self.trials = trials
 		
-	def load(self, trial_index):
+	def build_trial(self, trial_index):
 		# get pseudorandom parameters for the current trial
-		trial_parameters = self.get_trial(trial_index)
+		trial_parameters = self.trials[trial_index]
 
 		# Window 1
 		w1 = Window(transition=WindowTransition.RELEASE)

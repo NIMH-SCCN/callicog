@@ -53,6 +53,10 @@ class Task(Base):
 	protocol_id = Column(Integer, ForeignKey('protocol.protocol_id'))
 	task_order = Column(Integer, nullable=False)
 	progression = Column(String, nullable=False)
+	target_trials = Column(Integer, nullable=True)
+	target_sessions = Column(Integer, nullable=True)
+	success_rate = Column(Float, nullable=True)
+	rolling_window_size = Column(Integer, nullable=True)
 	complete = Column(Boolean, default=False)
 
 	experiment = relationship('Experiment', back_populates='tasks')

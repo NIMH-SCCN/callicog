@@ -1,26 +1,150 @@
-from task_builder import Outcome
+from task_builder import StimulusShape, Outcome, WindowTransition
 from datetime import datetime
-import random
+from psychopy import visual
+import math
+import time
 
-def run_trial(task_name, trial_config, box, ppy_window, ppy_mouse):
-	mod = __import__(f'tasks.{task_name}', fromlist=['TaskInterface'])
-	task = getattr(mod, 'TaskInterface')()
+class WindowRuntime:
+	def __get_ppy_stim_from_shape(self, shape, ppy_window):
+		if shape == StimulusShape.SQUARE:
+			return visual.Rect(win=ppy_window, colorSpace='rgb')
+		elif shape == StimulusShape.CIRCLE:
+			return visual.Circle(win=ppy_window, colorSpace='rgb')
+		elif shape == StimulusShape.STAR:
+			star_vertices = []
+			outer_radius = 131
+			inner_radius = 65
+			for vertex in range(0,5):
+				x = outer_radius*math.cos(math.radians(90+vertex*72))
+				y = outer_radius*math.sin(math.radians(90+vertex*72))
+				star_vertices.append([x,y]); x = inner_radius*math.cos(math.radians(126+vertex*72))
+				y = inner_radius*math.sin(math.radians(126+vertex*72))
+				star_vertices.append([x,y])
+			return visual.ShapeStim(stimulus.window.ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb')
+		elif shape == StimulusShape.DIAMOND:
+			return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb')
+		elif shape == StimulusShape.ARROW:
+			arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
+			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+		elif shape == StimulusShape.IMAGE:
+			return visual.ImageStim(win=ppy_window, colorSpace='rgb')
+		elif shape == StimulusShape.ARROW2:
+			arrow_vertices = [(4, 0), (0,-3), (0,-1), (-3,-1), (-3, 1), (0, 1), (0, 3)]
+			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+		elif shape == StimulusShape.ARROW3:
+			arrow_vertices = [(-4, 0), (0,-3), (0,-1), (3,-1), (3, 1), (0, 1), (0, 3)]
+			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+		elif shape == StimulusShape.ARROW6:
+			arrow_vertices = [(0,-4), (-3,0), (-1,0), (-1,3), (1,3), (1,0), (3,0)]
+			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+		elif shape == StimulusShape.TRIANGLE:
+			triangle_vertices = [(-5,0), (5,0), (0, 8)]
+			return visual.ShapeStim(win=ppy_window, vertices=triangle_vertices, colorSpace='rgb')
 
-	windows = task.load(random.randint(0, 9))
+	def __load_stimulus(self, stimulus, ppy_window):
+		stimulus.ppy_touch_stim = visual.Rect(win=ppy_window, opacity=0)
+		if stimulus.size_touch:
+			stimulus.ppy_touch_stim.size = stimulus.size_touch
+		else:
+			stimulus.ppy_touch_stim.size = stimulus.size
+		stimulus.ppy_touch_stim.pos = stimulus.position
+		stimulus.ppy_touch_stim.autoDraw = stimulus.auto_draw
+
+		stimulus.ppy_show_stim = self.__get_ppy_stim_from_shape(stimulus.shape, ppy_window)
+		stimulus.ppy_show_stim.size = stimulus.size
+		stimulus.ppy_show_stim.color = stimulus.color
+		stimulus.ppy_show_stim.pos = stimulus.position
+		stimulus.ppy_show_stim.image = stimulus.image
+		stimulus.ppy_show_stim.autoDraw = stimulus.auto_draw
+
+	def run_window(self, window, ppy_window):
+		window.ppy_window = ppy_window
+		ppy_window.flip()
+		print('--- new window!')
+		if window.blank > 0:
+			time.sleep(window.blank)
+			print(f'blank for {window.blank} seconds')
+			#return
+		if len(window.stimuli) > 0:
+			for stimulus in window.stimuli:
+				self.__load_stimulus(stimulus, ppy_window)
+				stimulus.draw()
+				print('stim drawn')
+			ppy_window.flip()
+		return datetime.now()
+
+	def get_touch_outcome(self, window, flip_time, ppy_mouse):
+		stimulus, touch_event, outcome = self.__check_touch(window, flip_time, ppy_mouse)
+		if stimulus and len(stimulus.after_touch) > 0:
+			stimulus.on_touch()
+		return touch_event, outcome
+
+	def __check_touch(self, window, flip_time, ppy_mouse):
+		touch_event = None
+		while True:
+			touch_time, touch_elapsed, timed_out =  self.__wait_touch(window, ppy_mouse)
+			if timed_out:
+				print('timed out')
+				return None, touch_event, Outcome.NULL
+			else:
+				print('touched')
+				for stimulus in window.stimuli:
+					if ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
+						stimulus.touched = True
+						if stimulus.outcome == Outcome.SUCCESS and stimulus.timeout_gain > 0:
+							window.timeout = (window.timeout - touch_elapsed) + stimulus.timeout_gain
+
+						position = ppy_mouse.getPos()
+						touch_event = {
+							'xcoor': position[0],
+							'ycoor': position[1],
+							'delay': (touch_time - flip_time).total_seconds()
+						}
+						if window.transition == WindowTransition.TOUCH:
+							print(f'in object, on touch, waiting for release')
+							while ppy_mouse.getPressed()[0]:
+								time.sleep(0.001)
+							print('released')
+							return stimulus, touch_event, stimulus.outcome
+						elif window.transition == WindowTransition.RELEASE:
+							print(f'in object, waiting for release')
+							while ppy_mouse.getPressed()[0]:
+								time.sleep(0.001)
+							release_time = datetime.now()
+							print('released')
+							touch_event['delay'] = (release_time - flip_time).total_seconds()
+							return stimulus, touch_event, stimulus.outcome
+				print('outside, waiting for release')
+				while ppy_mouse.getPressed()[0]:
+					time.sleep(0.001)
+				print('released')
+
+	def __wait_touch(self, window, ppy_mouse):
+		print('waiting')
+		start = datetime.now()
+		while not ppy_mouse.getPressed()[0]:
+			time.sleep(0.001)
+			if window.timeout > 0 and (datetime.now() - start).total_seconds() > window.timeout:
+				return 0, 0, True
+		touch_time = datetime.now()
+		return touch_time, (touch_time - start).total_seconds(), False
+
+def run_trial(windows, box, ppy_window, ppy_mouse):
+	ppy_runtime = WindowRuntime()
 	ppy_mouse.clickReset()
 
 	outcome = Outcome.NULL
 	touch_event = None
 	for window in windows:
-		flip_time = window.run(ppy_window)
+		flip_time = ppy_runtime.run_window(window, ppy_window)
 		if window.is_outcome:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
 			while not all([target.touched for target in targets]):
-				touch_event, outcome = window.get_touch_outcome(flip_time, ppy_mouse)
+				touch_event, outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 				if (outcome == Outcome.FAIL) or (outcome == Outcome.NULL):
 					break
 		elif window.blank == 0:
-			window.get_touch_outcome(flip_time, ppy_mouse)
+			ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 		window.reset()
 
 	if outcome == Outcome.SUCCESS:

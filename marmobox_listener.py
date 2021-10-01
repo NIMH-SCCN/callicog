@@ -1,6 +1,7 @@
 import argparse
 import socket
 import signal
+import pickle
 import json
 import sys
 from marmobox_interface import MarmoboxInterface
@@ -54,9 +55,15 @@ class ClientJob(Thread):
 					break
 				try:
 					msg = json.loads(buf.decode())
-					self.parse_msg(msg)
-				except json.decoder.JSONDecodeError:
+					#self.parse_msg(msg)
+				except:
+					print('Cannot decode data as JSON. Trying with pickle...')
+					pass
+				try:
+					msg = pickle.loads(buf)
+				except:
 					break
+				self.parse_msg(msg)
 			self.mbox_interface.close()
 		else: # status report
 			self.client_socket.send(bytes(json.dumps(self.pack_response({'status': 'arduino failed'})), 'utf8'))

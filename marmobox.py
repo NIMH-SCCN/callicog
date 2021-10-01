@@ -7,6 +7,7 @@ from datetime import datetime
 from numpy import random
 import socket
 import select
+import pickle
 import json
 
 class Marmobox:
@@ -36,6 +37,10 @@ class Marmobox:
 		if self.client_socket:
 			self.client_socket.send(bytes(json.dumps(message), 'utf8'))
 
+	def send_binary(self, message):
+		if self.client_socket:
+			self.client_socket.send(message)
+
 	def receive(self, timeout=None):
 		if self.client_socket:
 			ready = select.select([self.client_socket], [], [], timeout)
@@ -43,6 +48,10 @@ class Marmobox:
 				response = self.client_socket.recv(self.TX_MAX_LENGTH)
 				return json.loads(response.decode())
 		return None
+
+	def get_animal(self, animal_code):
+		animal = self.db_session.query(Animal).filter(Animal.animal_code == animal_code).all()[0]
+		return animal
 
 	def wait_for_animal(self):
 		message = {
@@ -57,16 +66,14 @@ class Marmobox:
 			return animal
 		return None
 
-	def run_trial(self, protocol_name, trial_config):
+	def run_trial(self, trial_windows):
 		message = {
 			'action': 'run_trial',
 			'trial_params': {
-				'protocol_name': protocol_name,
-				'trial_config': trial_config
+				'trial_windows': trial_windows # serialize properly (pickle)
 			}
 		}
-		#import pdb; pdb.set_trace()
-		self.send(message)
+		self.send_binary(pickle.dumps(message))
 		response = self.receive()
 		if response and response['success'] == 1:
 			body = response['body']
@@ -117,9 +124,9 @@ class Marmobox:
 				session.session_status = Outcome.FAIL
 			self.db_session.commit()
 
-	def run_target_based_trials(self, current_task, target): # pass full list of trials if resume
-		shape_list = [StimShape.RECT, StimShape.CIRCLE] # list of lists in order to generate random trial_configs
-		timeout_list = [2, 4, 6]
+	def run_target_based_trials(self, current_task, task_interface): # pass full list of trials if resume
+		#shape_list = [StimShape.RECT, StimShape.CIRCLE] # list of lists in order to generate random trial_configs
+		#timeout_list = [2, 4, 6]
 
 		if len(current_task.sessions) > 0:
 			session = current_task.sessions[0] # I think always a new session until task complete
@@ -127,14 +134,15 @@ class Marmobox:
 			session =  Session(task=current_task, session_start=datetime.now())
 
 		while not current_task.complete:
-			trial_config = [random.choice(shape_list), int(random.choice(timeout_list))]
+			#trial_config = [random.choice(shape_list), int(random.choice(timeout_list))]
+			trial_windows = task_interface.build_trial(random.randint(0, len(task_interface.trials) - 1))
 			new_trial = Trial(session=session, trial_start=datetime.now())
-			trial_data = self.run_trial(current_task.protocol.protocol_name, trial_config)
+			trial_data = self.run_trial(trial_windows)
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
 			touch_event = trial_data['trial_touch']
 			if touch_event:
-				event = Event(trial=new_trial, 
+				event = Event(trial=new_trial,
 					press_xcoor=touch_event['xcoor'],
 					press_ycoor=touch_event['ycoor'],
 					delay=touch_event['delay'])
@@ -142,7 +150,7 @@ class Marmobox:
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 			success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
-			if success_trials >= target:
+			if success_trials >= current_task.target_trials:
 				session.session_end = datetime.now()
 				current_task.complete = True
 			self.db_session.commit()
@@ -182,12 +190,18 @@ class Marmobox:
 
 	def new_experiment(self, animal, tasks):
 		experiment = Experiment(animal=animal, experiment_start=datetime.now())
-		for order, task in enumerate(tasks):
-			protocol = self.db_session.query(Protocol).filter(Protocol.protocol_name == task['name']).all()[0]
-			task = Task(experiment=experiment, protocol=protocol, task_order=order, progression=task['progression'])
+		for order, task_config in enumerate(tasks):
+			protocol = self.db_session.query(Protocol).filter(Protocol.protocol_name == task_config['TASK_NAME']).all()[0]
+			progression_type = task_config['PROGRESSION_TYPE']
+			#import pdb; pdb.set_trace()
+			task = Task(experiment=experiment, 
+						protocol=protocol,
+						task_order=order,
+						progression=progression_type)
+			if 'TARGET_TRIALS' in task_config:
+				task.target_trials = task_config['TARGET_TRIALS']
 		self.db_session.commit()
 		return experiment
-		print('New experiment and tasks saved.')
 
 	def continue_task_experiment(self, experiment):
 		# check tasks
@@ -199,12 +213,16 @@ class Marmobox:
 		current_task = open_tasks[0]
 		progression = current_task.progression
 
+		mod = __import__(f'tasks.{current_task.protocol.protocol_name}', fromlist=['TaskInterface'])
+		task_interface = getattr(mod, 'TaskInterface')()
+		task_interface.generate_trials()
+
 		if progression == Progression.ROLLING_AVERAGE:
 			self.run_rolling_average_trials(current_task, 0.8, 2)
 		elif progression == Progression.SESSION_BASED:
 			self.run_session_based_trials(current_task, 3, 0.8, 2)
 		elif progression == Progression.TARGET_BASED:
-			self.run_target_based_trials(current_task, 10)
+			self.run_target_based_trials(current_task, task_interface)
 
 		# run trials
 		if current_task.complete:

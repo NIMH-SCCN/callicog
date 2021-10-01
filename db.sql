@@ -22,6 +22,10 @@ CREATE TABLE task (
 	protocol_id INTEGER NOT NULL,
 	task_order INTEGER NOT NULL,
 	progression VARCHAR(50) NOT NULL,
+	target_trials INTEGER,
+	target_sessions INTEGER,
+	success_rate NUMERIC,
+	rolling_window_size INTEGER,
 	complete BOOLEAN DEFAULT FALSE,
 	FOREIGN KEY (protocol_id) REFERENCES protocol(protocol_id),
 	FOREIGN KEY (experiment_id) REFERENCES experiment(experiment_id)

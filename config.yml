@@ -1,0 +1,9 @@
+DATABASE_NAME: "marmodb"
+MARMOBOX_PORT: 10000
+MARMOBOX_HOST: "localhost"
+
+ANIMAL_CODE: "MSIMD-2123"
+TASKS:
+  - TASK_NAME: "leveltwo"
+    PROGRESSION_TYPE: "target_based"
+    TARGET_TRIALS: 3

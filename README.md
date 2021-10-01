@@ -2,23 +2,12 @@
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
-### Fresh install
-
-	sudo apt install python3-venv python3-pip
-	python3 -m venv marmovenv
-
-### PostgreSQL instructions for Ubuntu 18.04
-
-	sudo apt-get install postgresql-client-11 postgresql-11
-	sudo -u postgres createuser --interactive
-
 ### PostgreSQL instructions for Debian Stretch
 
-	sudo apt-get install postgresql postgresql-client libpq-dev python-dev
+	sudo apt-get install postgresql postgresql-client
 	sudo -u postgres createuser --interactive
 	pip install psycopg2-binary SQLAlchemy
 	./createdb.sh
-	./psql.sh
 
 ### Copy files to Google Drive with `rclone`
 
