@@ -1,4 +1,4 @@
-from min_task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
+from task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
 from itertools import combinations
 import numpy as np
 import random
