@@ -83,14 +83,6 @@ class Marmobox:
 		return None
 
 	def run_session_based_trials(self, current_task, n_trials, success_rate, n_sessions):
-		shape_list = [StimShape.RECT, StimShape.CIRCLE] # list of lists in order to generate random trial_configs
-		timeout_list = [2, 4, 6]
-
-		trial_1 = [StimShape.RECT, 4]
-		trial_2 = [StimShape.CIRCLE, 8]
-		trial_3 = [StimShape.CIRCLE, 2]
-		trials = [trial_1, trial_2, trial_3]
-
 		if len(trials) < n_trials:
 			new_trials = [[random.choice(shape_list), int(random.choice(timeout_list))] for i in range(n_trials - len(trials))]
 			trials.extend(new_trials)
@@ -117,30 +109,35 @@ class Marmobox:
 			success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
 			if (success_trials / len(valid_trials)) >= success_rate:
 				session.session_status = Outcome.SUCCESS
-				if all([se.session_status == Outcome.SUCCESS for se in current_task.sessions[-n_sessions:]]): # wrong
+				if all([se.session_status == Outcome.SUCCESS for se in current_task.sessions[-n_sessions:]]):
 					# all n_sessions are success
 					current_task.complete = True
 			else:
 				session.session_status = Outcome.FAIL
 			self.db_session.commit()
 
-	def run_target_based_trials(self, current_task, task_interface): # pass full list of trials if resume
-		#shape_list = [StimShape.RECT, StimShape.CIRCLE] # list of lists in order to generate random trial_configs
-		#timeout_list = [2, 4, 6]
-
-		if len(current_task.sessions) > 0:
-			session = current_task.sessions[0] # I think always a new session until task complete
-		else:
-			session =  Session(task=current_task, session_start=datetime.now())
+	def run_target_based_trials(self, current_task, task_interface):
+		#if len(current_task.sessions) > 0:
+		#	session = current_task.sessions[0] # I think always a new session until task complete
+		#else:
+		session = Session(task=current_task, session_start=datetime.now())
+		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
 
 		while not current_task.complete:
-			#trial_config = [random.choice(shape_list), int(random.choice(timeout_list))]
-			trial_windows = task_interface.build_trial(random.randint(0, len(task_interface.trials) - 1))
+			try:
+				next_trial = next(iter_trials)
+				trial_windows = task_interface.build_trial(next_trial)
+			except StopIteration:
+				trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+				continue
+
 			new_trial = Trial(session=session, trial_start=datetime.now())
 			trial_data = self.run_trial(trial_windows)
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
 			touch_event = trial_data['trial_touch']
+			if new_trial.trial_status == Outcome.NULL:
+				trial_indices.append(next_trial)
 			if touch_event:
 				event = Event(trial=new_trial,
 					press_xcoor=touch_event['xcoor'],
@@ -155,22 +152,25 @@ class Marmobox:
 				current_task.complete = True
 			self.db_session.commit()
 
-	def run_rolling_average_trials(self, current_task, threshold, window_size): # pass entire list of trials on resume
-		shape_list = [StimShape.RECT, StimShape.CIRCLE] # list of lists in order to generate random trial_configs
-		timeout_list = [2, 4, 6]
-
-		if len(current_task.sessions) > 0:
-			session = current_task.sessions[0] # I think always a new session until task complete
-		else:
-			session = Session(task=current_task, session_start=datetime.now())
+	def run_rolling_average_trials(self, current_task, threshold, window_size):
+		session = Session(task=current_task, session_start=datetime.now())
+		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
 
 		while not current_task.complete:
-			trial_config = [random.choice(shape_list), int(random.choice(timeout_list))]
+			try:
+				next_trial = next(iter_trials)
+				trial_windows = task_interface.build_trial(next_trial)
+			except StopIteration:
+				trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+				continue
+
 			new_trial = Trial(session=session, trial_start=datetime.now())
-			trial_data = self.run_trial(current_task.protocol.protocol_name, trial_config)
+			trial_data = self.run_trial(trial_windows)
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
 			touch_event = trial_data['trial_touch']
+			if new_trial.trial_status == Outcome.NULL:
+				trial_indices.append(next_trial)
 			if touch_event:
 				event = Event(trial=new_trial,
 					press_xcoor=touch_event['xcoor'],
@@ -181,12 +181,17 @@ class Marmobox:
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 			if len(valid_trials) >= window_size:
 				window = valid_trials[-window_size:]
-				#print([trial.trial_status for trial in window])
 				success_trials = sum([1 for trial in window if trial.trial_status == Outcome.SUCCESS])
 				if (success_trials / len(window)) >= threshold:
 					session.session_end = datetime.now()
 					current_task.complete = True
 			self.db_session.commit()
+
+	def shuffle_trials(self, trials):
+		trial_indices = list(range(len(trials)))
+		random.shuffle(trial_indices)
+		iter_trials = iter(trial_indices)
+		return trial_indices, iter_trials
 
 	def new_experiment(self, animal, tasks):
 		experiment = Experiment(animal=animal, experiment_start=datetime.now())
@@ -200,6 +205,12 @@ class Marmobox:
 						progression=progression_type)
 			if 'TARGET_TRIALS' in task_config:
 				task.target_trials = task_config['TARGET_TRIALS']
+			if 'TARGET_SESSIONS' in task_config:
+				task.target_sessions = task_config['TARGET_SESSIONS']
+			if 'SUCCESS_RATE' in task_config:
+				task.success_rate = task_config['SUCCESS_RATE']
+			if 'ROLLING_WINDOW_SIZE' in task_config:
+				task.rolling_window_size = task_config['ROLLING_WINDOW_SIZE']
 		self.db_session.commit()
 		return experiment
 
