@@ -152,7 +152,7 @@ class Marmobox:
 				current_task.complete = True
 			self.db_session.commit()
 
-	def run_rolling_average_trials(self, current_task, threshold, window_size):
+	def run_rolling_average_trials(self, current_task, task_interface):
 		session = Session(task=current_task, session_start=datetime.now())
 		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
 
@@ -179,10 +179,10 @@ class Marmobox:
 
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
-			if len(valid_trials) >= window_size:
-				window = valid_trials[-window_size:]
+			if len(valid_trials) >= current_task.rolling_window_size:
+				window = valid_trials[-current_task.rolling_window_size:]
 				success_trials = sum([1 for trial in window if trial.trial_status == Outcome.SUCCESS])
-				if (success_trials / len(window)) >= threshold:
+				if (success_trials / len(window)) >= current_task.success_rate:
 					session.session_end = datetime.now()
 					current_task.complete = True
 			self.db_session.commit()
@@ -220,24 +220,26 @@ class Marmobox:
 		if len(open_tasks) == 0:
 			print('\n\n\nall tasks complete, experiment done')
 			return
-		#for current_task in open_tasks
-		current_task = open_tasks[0]
-		progression = current_task.progression
+		for current_task in open_tasks:
+			#current_task = open_tasks[0]
+			progression = current_task.progression
+			print(f'new task: {current_task.protocol.protocol_name}, progression: {progression}')
 
-		mod = __import__(f'tasks.{current_task.protocol.protocol_name}', fromlist=['TaskInterface'])
-		task_interface = getattr(mod, 'TaskInterface')()
-		task_interface.generate_trials()
+			mod = __import__(f'tasks.{current_task.protocol.protocol_name}', fromlist=['TaskInterface'])
+			task_interface = getattr(mod, 'TaskInterface')()
+			task_interface.generate_trials()
 
-		if progression == Progression.ROLLING_AVERAGE:
-			self.run_rolling_average_trials(current_task, 0.8, 2)
-		elif progression == Progression.SESSION_BASED:
-			self.run_session_based_trials(current_task, 3, 0.8, 2)
-		elif progression == Progression.TARGET_BASED:
-			self.run_target_based_trials(current_task, task_interface)
+			if progression == Progression.ROLLING_AVERAGE:
+				self.run_rolling_average_trials(current_task, task_interface)
+			elif progression == Progression.SESSION_BASED:
+				self.run_session_based_trials(current_task, 3, 0.8, 2)
+			elif progression == Progression.TARGET_BASED:
+				self.run_target_based_trials(current_task, task_interface)
 
-		# run trials
-		if current_task.complete:
-			print('task complete')
-		else:
-			print('taks incomplete')
-		return
+			# run trials
+			if current_task.complete:
+				print('task complete')
+			else:
+				print('taks incomplete')
+			#return
+		print('\n\n\nall tasks complete, experiment done')

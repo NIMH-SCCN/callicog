@@ -4,6 +4,10 @@ MARMOBOX_HOST: "localhost"
 
 ANIMAL_CODE: "MSIMD-2123"
 TASKS:
-  - TASK_NAME: "leveltwo"
+  - TASK_NAME: "supertask_min"
     PROGRESSION_TYPE: "target_based"
-    TARGET_TRIALS: 3
+    TARGET_TRIALS: 1
+  - TASK_NAME: "supertask_min"
+    PROGRESSION_TYPE: "rolling_average"
+    SUCCESS_RATE: 0.8
+    ROLLING_WINDOW_SIZE: 2
