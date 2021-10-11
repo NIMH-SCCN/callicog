@@ -82,19 +82,20 @@ class Marmobox:
 			return trial_data
 		return None
 
-	def run_session_based_trials(self, current_task, n_trials, success_rate, n_sessions):
-		if len(trials) < n_trials:
-			new_trials = [[random.choice(shape_list), int(random.choice(timeout_list))] for i in range(n_trials - len(trials))]
-			trials.extend(new_trials)
-		elif len(trials) > n_trials:
-			trials = trials[:n_trials]
-
+	def run_session_based_trials(self, current_task, task_interface):
 		while not current_task.complete:
-			# always a new session, previous could be not success so basically a start over
 			session = Session(task=current_task, session_start=datetime.now())
-			for trial_config in trials:
+			pseudorandom_trials = self.get_fixed_pseudorandom_trials(task_interface, current_task.target_trials)
+			iter_trials = iter(pseudorandom_trials)
+			while True:
+				try:
+					next_trial = next(iter_trials)
+					trial_windows = task_interface.build_trial(next_trial)
+				except StopIteration:
+					break
+
 				new_trial = Trial(session=session, trial_start=datetime.now())
-				trial_data = self.run_trial(current_task.protocol.protocol_name, trial_config)
+				trial_data = self.run_trial(trial_windows)
 				new_trial.trial_status = trial_data['trial_outcome']
 				new_trial.trial_end = trial_data['trial_end']
 				touch_event = trial_data['trial_touch']
@@ -103,13 +104,17 @@ class Marmobox:
 						press_xcoor=touch_event['xcoor'],
 						press_ycoor=touch_event['ycoor'],
 						delay=touch_event['delay'])
+				if new_trial.trial_status == Outcome.NULL:
+					pseudorandom_trials.append(next_trial)
+
+			# all trials, included null repetitions, complete
 			session.session_end = datetime.now()
 			# check valid trials in session
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 			success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
-			if (success_trials / len(valid_trials)) >= success_rate:
+			if (success_trials / len(valid_trials)) >= current_task.success_rate:
 				session.session_status = Outcome.SUCCESS
-				if all([se.session_status == Outcome.SUCCESS for se in current_task.sessions[-n_sessions:]]):
+				if all([se.session_status == Outcome.SUCCESS for se in current_task.sessions[-current_task.target_sessions:]]):
 					# all n_sessions are success
 					current_task.complete = True
 			else:
@@ -193,6 +198,21 @@ class Marmobox:
 		iter_trials = iter(trial_indices)
 		return trial_indices, iter_trials
 
+	def get_fixed_pseudorandom_trials(self, task_interface, target_trials):
+		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+		pseudorandom_trials = []
+		for i in range(target_trials):
+			while True:
+				try:
+					next_trial = next(iter_trials)
+					trial_windows = task_interface.build_trial(next_trial)
+				except StopIteration:
+					trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+					continue
+				break
+			pseudorandom_trials.append(next_trial)
+		return pseudorandom_trials
+
 	def new_experiment(self, animal, tasks):
 		experiment = Experiment(animal=animal, experiment_start=datetime.now())
 		for order, task_config in enumerate(tasks):
@@ -232,7 +252,7 @@ class Marmobox:
 			if progression == Progression.ROLLING_AVERAGE:
 				self.run_rolling_average_trials(current_task, task_interface)
 			elif progression == Progression.SESSION_BASED:
-				self.run_session_based_trials(current_task, 3, 0.8, 2)
+				self.run_session_based_trials(current_task, task_interface)
 			elif progression == Progression.TARGET_BASED:
 				self.run_target_based_trials(current_task, task_interface)
 
