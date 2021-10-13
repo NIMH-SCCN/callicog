@@ -46,7 +46,7 @@ class TaskInterface:
 		# define list of pseudorandom parameters
 
 		#ntargets_list = [1]
-		ndistractors_list = [1,2,3]
+		ndistractors_list = [2,3,4,5]
 		#delays_list = [1, 2, 4]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 		
@@ -64,20 +64,33 @@ class TaskInterface:
 		
 		
 
-		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
-					size=(15,15),
-					color=(0, 0.7, 1),
-					size_touch= (120,120))
-		blue_star = Stimulus(shape=StimulusShape.STAR,
-					size=(0.6,0.6),
-					color=(0, 0.7, 1),
-					size_touch= (120,120))
-		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
-					size=(120,120),
-					color=(0, 0.7, 1),
-					size_touch= (120,120))
 
-		distractor_list = [blue_triangle, blue_star, blue_circle]
+		yellow_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
+					size=(20,20), 
+					color = (1, 1, 0),
+					size_touch=(120,120))
+		yellow_arrow_nw = Stimulus(shape=StimulusShape.ARROW_NW,
+					size=(20,20), 
+					color = (1, 1, 0),
+					size_touch=(120,120))
+		yellow_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
+					size=(20,20), 
+					color = (1, 1, 0),
+					size_touch=(120,120))
+		yellow_arrow_sw = Stimulus(shape=StimulusShape.ARROW_SW,
+					size=(20,20), 
+					color = (1, 1, 0),
+					size_touch=(120,120))
+		blue_arrow_s = Stimulus(shape=StimulusShape.ARROW_S,
+					size=(20,20), 
+					color = (0, 0.7, 1),
+					size_touch=(120,120))
+		blue_arrow_n = Stimulus(shape=StimulusShape.ARROW_N,
+					size=(20,20), 
+					color = (0, 0.7, 1),
+					size_touch=(120,120))
+
+		distractor_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n]
 		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
 		# additional pseudorandom parameters
 		# e.g. Supertask: positions depending on 'targets'
@@ -114,7 +127,7 @@ class TaskInterface:
 		# set targets
 		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
 		#targets = trial_parameters['targets']
-		target_stim = Stimulus(shape=StimulusShape.ARROW_SW,
+		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
 				size=(20,20), 
 				color = (1, 1, 0),
 				size_touch=(120,120))
