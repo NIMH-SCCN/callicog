@@ -1,5 +1,6 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+#from sqlalchemy import create_engine
+#from sqlalchemy.orm import sessionmaker
+from database import DatabaseSession
 from marmobox import Marmobox
 import argparse
 import yaml
@@ -12,10 +13,10 @@ args = parser.parse_args()
 config_stream = open(args.config_filename, 'r')
 config = yaml.safe_load(config_stream)
 
-db_engine = create_engine('postgresql:///%s' % config['DATABASE_NAME'], echo=False)
+#db_engine = create_engine('postgresql:///%s' % config['DATABASE_NAME'], echo=False)
 #db_engine = create_engine('postgresql://postgres:marmoset@35.244.76.212:5432/marmodb') # google cloud VM
-DatabaseSession = sessionmaker()
-DatabaseSession.configure(bind=db_engine)
+#DatabaseSession = sessionmaker()
+#DatabaseSession.configure(bind=db_engine)
 db_session = DatabaseSession()
 
 mb = Marmobox(config['MARMOBOX_HOST'], config['MARMOBOX_PORT'], db_session)

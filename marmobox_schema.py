@@ -1,8 +1,6 @@
-from sqlalchemy.ext.declarative import declarative_base
+from database import Base
 from sqlalchemy import Column, Integer, Float, Boolean, DateTime, String, ForeignKey
 from sqlalchemy.orm import relationship
-
-Base = declarative_base()
 
 class Event(Base):
 	__tablename__ = 'event'
