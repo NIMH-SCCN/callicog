@@ -150,7 +150,6 @@ class Marmobox:
 					delay=touch_event['delay'])
 
 			# check if task is over
-			import pdb; pdb.set_trace()
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 			success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
 			if success_trials >= current_task.target_trials:
