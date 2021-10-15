@@ -7,6 +7,7 @@ import copy
 class TaskInterface:
     def __init__(self):
         self.pseudorandom_parameters = {}
+        self.trials = []
         self.initialize_pseudorandom_parameters()
 
     def __add_pseudorandom_parameter_list(self, parameter_name, parameter_values):
@@ -49,19 +50,19 @@ class TaskInterface:
         # add them to task
         self.__add_pseudorandom_parameter_list('position', position_list)
 
-    def get_trial(self, trial_index):
+    def generate_trials(self):
         trials = self.__pseudorandomize_parameters()
         # additional pseudorandom parameters (e.g. supertask - positions depending on targets)
         print('trials are ' + str(trials))
         print('list contains ' + str(trials.count) + 'elements')
-        return trials[trial_index]
+        self.trials = trials
 
 
-    def load(self, trial_index):
+    def build_trial(self, trial_index):
         # get pseudorandom parameters for the current trial
 
         print('trial index is ' + str(trial_index))
-        trial_parameters = self.get_trial(trial_index)
+        trial_parameters = self.trials[trial_index]
         
         # Window 1
         w1 = Window(transition=WindowTransition.RELEASE)
