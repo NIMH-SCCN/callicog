@@ -1,0 +1,30 @@
+# share wifi internet (eduroam) via Ethernet from a Windows machine
+# connect ethernet cable to mini pc
+# boot to bios, make usb first priority
+# install normally, pick ssh-server and system utils
+
+su
+apt update
+# add contrib non-free to /etc/apt/sources.list
+
+apt install firmware-iwlwifi firmware-intel-sound firmware-linux firmware-misc-nonfree intel-microcode i965-va-driver-shaders intel-media-va-driver-non-free mesa-utils mesa-utils-extra firmware-realtek
+
+apt install sudo
+# add jack ALL=(ALL) ALL to /etc/sudoers
+
+sudo apt install xfce4 xfce4-terminal
+sudo reboot
+
+sudo apt install wpasupplicant
+sudo chmod 0600 /etc/network/interfaces
+
+# add to /etc/network/interfaces
+allow-hotplug wlp1s0
+iface wlp1s0 inet dhcp
+	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+# edit .conf for eduroam connection
+sudo reboot
+
+# callicog-related installation steps
+sudo apt install git

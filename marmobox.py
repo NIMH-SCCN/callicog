@@ -85,14 +85,19 @@ class Marmobox:
 	def run_session_based_trials(self, current_task, task_interface):
 		while not current_task.complete:
 			session = Session(task=current_task, session_start=datetime.now())
-			pseudorandom_trials = self.get_fixed_pseudorandom_trials(task_interface, current_task.target_trials)
-			iter_trials = iter(pseudorandom_trials)
-			while True:
+			trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.target_trials)
+
+			#pseudorandom_trials = self.get_fixed_pseudorandom_trials(task_interface, current_task.target_trials)
+			#iter_trials = iter(pseudorandom_trials)
+
+			valid_trials = []
+			while len(valid_trials) < current_task.target_trials:
 				try:
 					next_trial = next(iter_trials)
 					trial_windows = task_interface.build_trial(next_trial)
 				except StopIteration:
-					break
+					trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+					continue
 
 				new_trial = Trial(session=session, trial_start=datetime.now())
 				trial_data = self.run_trial(trial_windows)
@@ -105,28 +110,30 @@ class Marmobox:
 						press_ycoor=touch_event['ycoor'],
 						delay=touch_event['delay'])
 				if new_trial.trial_status == Outcome.NULL:
-					pseudorandom_trials.append(next_trial)
+					trial_indices.append(next_trial)
+				valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 
 			# all trials, included null repetitions, complete
 			session.session_end = datetime.now()
 			# check valid trials in session
-			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
+
+			#valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 			success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
+			import pdb; pdb.set_trace()
 			if (success_trials / len(valid_trials)) >= current_task.success_rate:
 				session.session_status = Outcome.SUCCESS
-				if all([se.session_status == Outcome.SUCCESS for se in current_task.sessions[-current_task.target_sessions:]]):
-					# all n_sessions are success
-					current_task.complete = True
+				last_sessions = current_task.sessions[-current_task.target_sessions:]
+				if len(last_sessions) == current_task.target_sessions:
+					if all([se.session_status == Outcome.SUCCESS for se in last_sessions]):
+						# all n_sessions are success
+						current_task.complete = True
 			else:
 				session.session_status = Outcome.FAIL
 			self.db_session.commit()
 
 	def run_target_based_trials(self, current_task, task_interface):
-		#if len(current_task.sessions) > 0:
-		#	session = current_task.sessions[0] # I think always a new session until task complete
-		#else:
 		session = Session(task=current_task, session_start=datetime.now())
-		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.target_trials)
 
 		while not current_task.complete:
 			try:
@@ -151,8 +158,8 @@ class Marmobox:
 
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
-			success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
-			if success_trials >= current_task.target_trials:
+			#success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
+			if len(valid_trials) == current_task.target_trials:
 				session.session_end = datetime.now()
 				current_task.complete = True
 			self.db_session.commit()
@@ -192,26 +199,29 @@ class Marmobox:
 					current_task.complete = True
 			self.db_session.commit()
 
-	def shuffle_trials(self, trials):
+	def shuffle_trials(self, trials, target=0):
 		trial_indices = list(range(len(trials)))
 		random.shuffle(trial_indices)
 		iter_trials = iter(trial_indices)
+		if target > 0 and len(trials) >= target:
+			trial_subset = trial_indices[:target]
+			return trial_subset, iter(trial_subset)
 		return trial_indices, iter_trials
 
-	def get_fixed_pseudorandom_trials(self, task_interface, target_trials):
-		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
-		pseudorandom_trials = []
-		for i in range(target_trials):
-			while True:
-				try:
-					next_trial = next(iter_trials)
-					trial_windows = task_interface.build_trial(next_trial)
-				except StopIteration:
-					trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
-					continue
-				break
-			pseudorandom_trials.append(next_trial)
-		return pseudorandom_trials
+	#def get_fixed_pseudorandom_trials(self, task_interface, target_trials):
+	#	trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+	#	pseudorandom_trials = []
+	#	for i in range(target_trials):
+	#		while True:
+	#			try:
+	#				next_trial = next(iter_trials)
+	#				#trial_windows = task_interface.build_trial(next_trial)
+	#			except StopIteration:
+	#				trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+	#				continue
+	#			break
+	#		pseudorandom_trials.append(next_trial)
+	#	return pseudorandom_trials
 
 	def new_experiment(self, animal, tasks):
 		experiment = Experiment(animal=animal, experiment_start=datetime.now())

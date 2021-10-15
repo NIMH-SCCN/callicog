@@ -5,7 +5,7 @@ ANIMAL_CODE: "MSIMD-2123"
 TASKS:
   - TASK_NAME: "supertask_min"
     PROGRESSION_TYPE: "target_based"
-    TARGET_TRIALS: 2
+    TARGET_TRIALS: 3
   - TASK_NAME: "supertask_min"
     PROGRESSION_TYPE: "rolling_average"
     SUCCESS_RATE: 0.8
