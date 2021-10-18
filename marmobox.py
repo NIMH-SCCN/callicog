@@ -119,7 +119,6 @@ class Marmobox:
 
 			#valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 			success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
-			import pdb; pdb.set_trace()
 			if (success_trials / len(valid_trials)) >= current_task.success_rate:
 				session.session_status = Outcome.SUCCESS
 				last_sessions = current_task.sessions[-current_task.target_sessions:]
@@ -228,7 +227,6 @@ class Marmobox:
 		for order, task_config in enumerate(tasks):
 			protocol = self.db_session.query(Protocol).filter(Protocol.protocol_name == task_config['TASK_NAME']).all()[0]
 			progression_type = task_config['PROGRESSION_TYPE']
-			#import pdb; pdb.set_trace()
 			task = Task(experiment=experiment, 
 						protocol=protocol,
 						task_order=order,
