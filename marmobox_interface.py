@@ -19,12 +19,12 @@ class MarmoboxInterface:
 
 	def initialize(self):
 		try:
-			self.box = MarmoboxIO(self.arduino_port, dummy=True)
+			self.box = MarmoboxIO(self.arduino_port, dummy=False)
 			self.box.connect()
 		except:
 			print('Failed to connect to Arduino')
 			return False
-		self.ppy_window = visual.Window(self.window_size, monitor='test', units='pix', pos=(0,0), fullscr=False) #change fullscr to True for final version
+		self.ppy_window = visual.Window(self.window_size, monitor='test', units='pix', pos=(0,0), fullscr=True) #change fullscr to True for final version
 		self.ppy_mouse = event.Mouse(win=self.ppy_window)
 		logging.console.setLevel(logging.ERROR)
 		return True
