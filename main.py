@@ -1,12 +1,13 @@
-#from sqlalchemy import create_engine
-#from sqlalchemy.orm import sessionmaker
 from database import DatabaseSession
 from marmobox import Marmobox
 import argparse
 import yaml
 
+MARMOBOX_PORT = 10000
+
 parser = argparse.ArgumentParser(description='Marmobox client. \
 	Connects to Marmobox server and stores data in local database.')
+parser.add_argument('server_ip', help='Box IP address.', type=str)
 parser.add_argument('config_filename', help='Client configuration file.', type=str)
 args = parser.parse_args()
 
@@ -19,7 +20,7 @@ config = yaml.safe_load(config_stream)
 #DatabaseSession.configure(bind=db_engine)
 db_session = DatabaseSession()
 
-mb = Marmobox(config['MARMOBOX_HOST'], config['MARMOBOX_PORT'], db_session)
+mb = Marmobox(args.server_ip, MARMOBOX_PORT, db_session)
 mb.connect()
 print('Connected')
 
@@ -28,11 +29,13 @@ if animal:
 	tasks = config['TASKS']
 
 	# new experiment or open experiment and continue
-	if len(animal.experiments) > 0:
-		experiment = animal.experiments[0]
-	else:
-		experiment = mb.new_experiment(animal, tasks)
+	#if len(animal.experiments) > 0:
+	#	experiment = animal.experiments[0]
+	#else:
+	#	experiment = mb.new_experiment(animal, tasks)
 
+	# resume experiment? find from ID
+	experiment = mb.new_experiment(animal, tasks)
 	mb.continue_task_experiment(experiment)
 
 mb.disconnect()

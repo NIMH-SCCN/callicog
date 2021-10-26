@@ -77,7 +77,8 @@ Install latest Python 3 version via source package found [here](https://www.pyth
 
 Create the `marmovenv` virtual environment:
 
-	python3.8 -m venv marmovenv
+	sudo apt install python3-venv python3-pip
+	python3.7 -m venv marmovenv
 	source marmovenv/bin/activate
 	pip install wheel
 	python -m pip install --upgrade pip
@@ -85,7 +86,9 @@ Create the `marmovenv` virtual environment:
 Install Psychopy:
 
 	sudo apt-get install libsdl2-dev
-	pip install pyserial matplotlib numpy
+	python -m pip install --upgrade Pillow
+	pip install pyserial numpy
+	pip install matplotlib
 	pip install pyqt5==5.14
 	pip install psychopy --no-deps
 	pip install pyyaml requests freetype-py pandas python-bidi pyglet json-tricks scipy packaging future imageio

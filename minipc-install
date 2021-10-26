@@ -23,6 +23,12 @@ allow-hotplug wlp1s0
 iface wlp1s0 inet dhcp
 	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 
+# for wired connection
+auto enp2s0
+iface enp2s0 inet static
+	address 192.168.0.10/24
+	gateway 192.168.0.1
+
 # edit .conf for eduroam connection
 sudo reboot
 

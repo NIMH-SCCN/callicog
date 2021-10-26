@@ -155,16 +155,15 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 				touch_event, outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 				if (outcome == Outcome.FAIL) or (outcome == Outcome.NULL):
 					break
+			if outcome == Outcome.SUCCESS:
+				print('box: correct')
+				box.correct()
+			elif outcome == Outcome.FAIL:
+				print('box: incorrect')
+				box.incorrect()
 		elif window.blank == 0:
 			ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 		window.reset()
-
-	if outcome == Outcome.SUCCESS:
-		print('box: correct')
-		box.correct()
-	elif outcome == Outcome.FAIL:
-		print('box: incorrect')
-		box.incorrect()
 
 	return datetime.now(), outcome, touch_event
 	# this is the last outcome from all windows

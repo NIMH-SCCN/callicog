@@ -19,10 +19,10 @@ def service_shutdown(signum, frame):
 	raise ServiceExit
 
 class ClientJob(Thread):
-	def __init__(self, client_socket, client_address, arduino_port, window_size):
+	def __init__(self, client_socket, client_address, arduino_port, window_size, is_dummy, is_fullscreen):
 		Thread.__init__(self)
 		self.shutdown_flag = Event()
-		self.mbox_interface = MarmoboxInterface(arduino_port, window_size)
+		self.mbox_interface = MarmoboxInterface(arduino_port, window_size, is_dummy, is_fullscreen)
 		self.client_socket = client_socket
 		self.client_address = client_address
 
@@ -72,9 +72,12 @@ class ClientJob(Thread):
 def main():
 	parser = argparse.ArgumentParser(description='Marmobox server. \
 		Waits for client then opens psychopy window and Arduino USB interface.')
-	parser.add_argument('port', help='Arduino port (e.g. "/dev/ttyACM0")', type=str)
+	parser.add_argument('port', help='Arduino port (e.g. "ttyACM0")', type=str)
 	parser.add_argument('--width', help='Width of the Psychopy window', type=int, default=1280)
 	parser.add_argument('--height', help='Height of the Psychopy window', type=int, default=720)
+	parser.add_argument('--dummy', help='Dummy box (no actuators)', dest='dummy', action='store_true')
+	parser.add_argument('--fullscreen', help='Psychopy window is fullscreen', dest='fullscreen', action='store_true')
+	parser.set_defaults(dummy=False, fullscreen=False)
 	args = parser.parse_args()
 
 	signal.signal(signal.SIGTERM, service_shutdown)
@@ -91,7 +94,7 @@ def main():
 	while True:
 		try:
 			(client_socket, address) = server_socket.accept()
-			ct = ClientJob(client_socket, address, args.port, [args.width, args.height])
+			ct = ClientJob(client_socket, address, args.port, [args.width, args.height], args.dummy, args.fullscreen)
 			ct.start()
 		except ServiceExit:
 			if ct:

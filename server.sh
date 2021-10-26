@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python marmobox_listener.py /dev/ttyACM0
+python marmobox_listener.py ttyACM0 --dummy
