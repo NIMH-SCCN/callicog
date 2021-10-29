@@ -1,6 +1,3 @@
-import sys
-sys.path.append('./test')
-
 from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Event
 from new_stim import StimShape, Progression, Outcome
 from datetime import datetime
