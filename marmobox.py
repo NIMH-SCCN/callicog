@@ -1,4 +1,5 @@
 from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Event
+from task_builder import Progression, Outcome
 from datetime import datetime
 from numpy import random
 import socket
