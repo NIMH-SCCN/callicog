@@ -55,20 +55,14 @@
 	</div>
 	<div class="column is-four-fifths">
 		<div class="section">
-			<!--{% for message in get_flashed_messages() %}
-			<div class="notification is-success is-light">
-				<button class="delete"></button>
-				{{ message }}
-			</div>
-			{% endfor %}-->
-			<h1 class="title">Tasks</h1>
+			<h1 class="title">Modify task</h1>
 			<form method="POST" action="">
 				<div class="columns">
 					<div class="column is-one-quarter">
 						<div class="field">
 							<label class="label">Task ID</label>
 							<div class="control">
-								<input type="text" name="task_id" class="input" placeholder="Task ID" disabled>
+								<input type="text" name="task_id" class="input" placeholder="Task ID" value="{{ task.protocol_id }}" disabled>
 							</div>
 						</div>
 					</div>
@@ -76,54 +70,23 @@
 						<div class="field">
 							<label class="label">Task</label>
 							<div class="control">
-								<input type="text" name="task_name" class="input" placeholder="Task name">
+								<input type="text" name="task_name" class="input" value="{{ task.protocol_name }}" placeholder="Task name">
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="field is-grouped">
 					<div class="control">
-						<button class="button is-link" type="submit">Add</button>
+						<button class="button is-link" type="submit">Update</button>
+					</div>
+					<div class="control">
+						<a class="button is-danger" href="{{ url_for('deleteTask', id=task.protocol_id) }}">Delete</a>
 					</div>
 				</div>
 			</form>
 		</div>
-		<div class="section">
-			<h1 class="title">List</h1>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Task ID</th>
-						<th>Task name</th>
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>
-						<th>Task ID</th>
-						<th>Task name</th>
-					</tr>
-				</tfoot>
-				<tbody>
-					{% for task in tasks %}
-					<tr>
-						<td>{{ task.protocol_id }}</td>
-						<td><a href="{{ url_for('updateTask', id=task.protocol_id) }}"> {{ task.protocol_name }} </a></td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
 	</div>
 </div>
-<!--<script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', () => {
-		(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
-			const $notification = $delete.parentNode;
-			$delete.addEventListener('click', () => {
-				$notification.parentNode.removeChild($notification);
-			});
-		});
-	});
-</script>-->
+
 </body>
 </html>

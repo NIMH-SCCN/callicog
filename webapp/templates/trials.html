@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-	<title>Callicog - Tasks</title>
+	<title>Callicog</title>
 </head>
 <body>
 
@@ -40,8 +40,8 @@
 					Manage
 				</p>
 				<ul class="menu-list">
-					<li><a href="/animals">Animals</a></li>
-					<li><a href="/tasks">Tasks</a></li>
+					<li><a>Animals</a></li>
+					<li><a>Tasks</a></li>
 					<li><a>Experiments</a></li>
 				</ul>
 				<p class="menu-label">
@@ -55,20 +55,14 @@
 	</div>
 	<div class="column is-four-fifths">
 		<div class="section">
-			<!--{% for message in get_flashed_messages() %}
-			<div class="notification is-success is-light">
-				<button class="delete"></button>
-				{{ message }}
-			</div>
-			{% endfor %}-->
-			<h1 class="title">Tasks</h1>
+			<h1 class="title">Trials</h1>
 			<form method="POST" action="">
 				<div class="columns">
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Task ID</label>
+							<label class="label">Animal</label>
 							<div class="control">
-								<input type="text" name="task_id" class="input" placeholder="Task ID" disabled>
+								<input type="text" name="animal_id" class="input" placeholder="Animal ID">
 							</div>
 						</div>
 					</div>
@@ -76,38 +70,49 @@
 						<div class="field">
 							<label class="label">Task</label>
 							<div class="control">
-								<input type="text" name="task_name" class="input" placeholder="Task name">
+								<input type="text" name="task_id" class="input" placeholder="Task ID">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Experiment</label>
+							<div class="control">
+								<input type="text" name="experiment_id" class="input" placeholder="Experiment ID">
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="field is-grouped">
 					<div class="control">
-						<button class="button is-link" type="submit">Add</button>
+						<button class="button is-link" type="submit">Search</button>
 					</div>
 				</div>
 			</form>
 		</div>
 		<div class="section">
-			<h1 class="title">List</h1>
+			<h1 class="title">Task data</h1>
 			<table class="table">
 				<thead>
 					<tr>
-						<th>Task ID</th>
-						<th>Task name</th>
+						<th>Order</th>
+						<th>Progression</th>
+						<th>Complete</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
-						<th>Task ID</th>
-						<th>Task name</th>
+						<th>Order</th>
+						<th>Progression</th>
+						<th>Complete</th>
 					</tr>
 				</tfoot>
 				<tbody>
 					{% for task in tasks %}
 					<tr>
-						<td>{{ task.protocol_id }}</td>
-						<td><a href="{{ url_for('updateTask', id=task.protocol_id) }}"> {{ task.protocol_name }} </a></td>
+						<td>{{ task.task_order }}</td>
+						<td>{{ task.progression }}</td>
+						<td>{{ task.complete }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -115,15 +120,6 @@
 		</div>
 	</div>
 </div>
-<!--<script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', () => {
-		(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
-			const $notification = $delete.parentNode;
-			$delete.addEventListener('click', () => {
-				$notification.parentNode.removeChild($notification);
-			});
-		});
-	});
-</script>-->
+
 </body>
 </html>

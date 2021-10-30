@@ -6,8 +6,21 @@ This README would normally document whatever steps are necessary to get your app
 
 	sudo apt-get install postgresql postgresql-client
 	sudo -u postgres createuser --interactive
-	pip install psycopg2-binary SQLAlchemy
-	./createdb.sh
+	pip install wheel
+	pip install --upgrade pip
+	pip install numpy psycopg2-binary SQLAlchemy pyyaml
+
+### PostgreSQL instructions for macOS
+
+	brew install postgresql
+	brew services start postgresql
+	createuser --interactive
+
+### How to fix Homebrew in macOS (nuke and reinstall)
+
+	sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+	brew update-reset
 
 ### Copy files to Google Drive with `rclone`
 
@@ -95,11 +108,3 @@ Install Psychopy:
 	# download wxPython for Debian 10 (buster)
 	wget https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
 	pip install wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
-
-### Progression logic
-
-- Rolling average
-	- inputs: number of trials, success criterion, sample size
-	- evaluation
-		1. 
-- Global success

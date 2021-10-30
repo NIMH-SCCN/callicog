@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-	<title>Callicog - Tasks</title>
+	<title>Callicog - Animals</title>
 </head>
 <body>
 
@@ -61,22 +61,22 @@
 				{{ message }}
 			</div>
 			{% endfor %}-->
-			<h1 class="title">Tasks</h1>
+			<h1 class="title">Animals</h1>
 			<form method="POST" action="">
 				<div class="columns">
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Task ID</label>
+							<label class="label">Animal ID</label>
 							<div class="control">
-								<input type="text" name="task_id" class="input" placeholder="Task ID" disabled>
+								<input type="text" name="animal_id" class="input" placeholder="Animal ID" disabled>
 							</div>
 						</div>
 					</div>
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Task</label>
+							<label class="label">Alias</label>
 							<div class="control">
-								<input type="text" name="task_name" class="input" placeholder="Task name">
+								<input type="text" name="animal_code" class="input" placeholder="Alias">
 							</div>
 						</div>
 					</div>
@@ -93,21 +93,21 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>Task ID</th>
-						<th>Task name</th>
+						<th>Animal ID</th>
+						<th>Alias</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
-						<th>Task ID</th>
-						<th>Task name</th>
+						<th>Animal ID</th>
+						<th>Alias</th>
 					</tr>
 				</tfoot>
 				<tbody>
-					{% for task in tasks %}
+					{% for animal in animals %}
 					<tr>
-						<td>{{ task.protocol_id }}</td>
-						<td><a href="{{ url_for('updateTask', id=task.protocol_id) }}"> {{ task.protocol_name }} </a></td>
+						<td>{{ animal.animal_id }}</td>
+						<td><a href="{{ url_for('updateAnimal', id=animal.animal_id) }}"> {{ animal.animal_code }} </a></td>
 					</tr>
 					{% endfor %}
 				</tbody>
