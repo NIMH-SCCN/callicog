@@ -1,4 +1,4 @@
-from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Event
+from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Event, Template
 from task_builder import Progression, Outcome
 from datetime import datetime
 from numpy import random
@@ -50,6 +50,14 @@ class Marmobox:
 		animal = self.db_session.query(Animal).filter(Animal.animal_code == animal_code).all()[0]
 		return animal
 
+	def get_template(self, template_name):
+		template = self.db_session.query(Template).filter(Template.template_name == template_name).all()[0]
+		return template
+
+	def get_experiment(self, experiment_id):
+		experiment = self.db_session.query(Experiment).filter(Experiment.experiment_id == experiment_id).all()[0]
+		return experiment
+
 	def wait_for_animal(self):
 		message = {
 			'action': 'wait_for_animal'
@@ -82,13 +90,13 @@ class Marmobox:
 	def run_session_based_trials(self, current_task, task_interface):
 		while not current_task.complete:
 			session = Session(task=current_task, session_start=datetime.now())
-			trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.target_trials)
+			trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.template_protocol.target_trials)
 
 			#pseudorandom_trials = self.get_fixed_pseudorandom_trials(task_interface, current_task.target_trials)
 			#iter_trials = iter(pseudorandom_trials)
 
 			valid_trials = []
-			while len(valid_trials) < current_task.target_trials:
+			while len(valid_trials) < current_task.template_protocol.target_trials:
 				try:
 					next_trial = next(iter_trials)
 					trial_windows = task_interface.build_trial(next_trial)
@@ -116,10 +124,10 @@ class Marmobox:
 
 			#valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 			success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
-			if (success_trials / len(valid_trials)) >= current_task.success_rate:
+			if (success_trials / len(valid_trials)) >= current_task.template_protocol.success_rate:
 				session.session_status = Outcome.SUCCESS
-				last_sessions = current_task.sessions[-current_task.target_sessions:]
-				if len(last_sessions) == current_task.target_sessions:
+				last_sessions = current_task.sessions[-current_task.template_protocol.target_sessions:]
+				if len(last_sessions) == current_task.template_protocol.target_sessions:
 					if all([se.session_status == Outcome.SUCCESS for se in last_sessions]):
 						# all n_sessions are success
 						current_task.complete = True
@@ -129,7 +137,7 @@ class Marmobox:
 
 	def run_target_based_trials(self, current_task, task_interface):
 		session = Session(task=current_task, session_start=datetime.now())
-		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.target_trials)
+		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.template_protocol.target_trials)
 
 		while not current_task.complete:
 			try:
@@ -155,7 +163,7 @@ class Marmobox:
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 			#success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
-			if len(valid_trials) == current_task.target_trials:
+			if len(valid_trials) == current_task.template_protocol.target_trials:
 				session.session_end = datetime.now()
 				current_task.complete = True
 			self.db_session.commit()
@@ -187,10 +195,10 @@ class Marmobox:
 
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
-			if len(valid_trials) >= current_task.rolling_window_size:
-				window = valid_trials[-current_task.rolling_window_size:]
+			if len(valid_trials) >= current_task.template_protocol.rolling_window_size:
+				window = valid_trials[-current_task.template_protocol.rolling_window_size:]
 				success_trials = sum([1 for trial in window if trial.trial_status == Outcome.SUCCESS])
-				if (success_trials / len(window)) >= current_task.success_rate:
+				if (success_trials / len(window)) >= current_task.template_protocol.success_rate:
 					session.session_end = datetime.now()
 					current_task.complete = True
 			self.db_session.commit()
@@ -219,23 +227,11 @@ class Marmobox:
 	#		pseudorandom_trials.append(next_trial)
 	#	return pseudorandom_trials
 
-	def new_experiment(self, animal, tasks):
-		experiment = Experiment(animal=animal, experiment_start=datetime.now())
-		for order, task_config in enumerate(tasks):
-			protocol = self.db_session.query(Protocol).filter(Protocol.protocol_name == task_config['TASK_NAME']).all()[0]
-			progression_type = task_config['PROGRESSION_TYPE']
+	def new_experiment(self, animal, template):
+		experiment = Experiment(animal=animal, template=template, experiment_start=datetime.now())
+		for protocol in template.protocols:
 			task = Task(experiment=experiment, 
-						protocol=protocol,
-						task_order=order,
-						progression=progression_type)
-			if 'TARGET_TRIALS' in task_config:
-				task.target_trials = task_config['TARGET_TRIALS']
-			if 'TARGET_SESSIONS' in task_config:
-				task.target_sessions = task_config['TARGET_SESSIONS']
-			if 'SUCCESS_RATE' in task_config:
-				task.success_rate = task_config['SUCCESS_RATE']
-			if 'ROLLING_WINDOW_SIZE' in task_config:
-				task.rolling_window_size = task_config['ROLLING_WINDOW_SIZE']
+						template_protocol=protocol)
 		self.db_session.commit()
 		return experiment
 
@@ -246,11 +242,10 @@ class Marmobox:
 			print('\n\n\nall tasks complete, experiment done')
 			return
 		for current_task in open_tasks:
-			#current_task = open_tasks[0]
-			progression = current_task.progression
-			print(f'new task: {current_task.protocol.protocol_name}, progression: {progression}')
+			progression = current_task.template_protocol.progression
+			print(f'new task: {current_task.template_protocol.protocol.protocol_name}, progression: {progression}')
 
-			mod = __import__(f'tasks.{current_task.protocol.protocol_name}', fromlist=['TaskInterface'])
+			mod = __import__(f'tasks.{current_task.template_protocol.protocol.protocol_name}', fromlist=['TaskInterface'])
 			task_interface = getattr(mod, 'TaskInterface')()
 			task_interface.generate_trials()
 
