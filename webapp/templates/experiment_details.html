@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-	<title>Callicog - Animals</title>
+	<title>Callicog - Experiments</title>
 </head>
 <body>
 
@@ -48,6 +48,7 @@
 					Report
 				</p>
 				<ul class="menu-list">
+					<li><a href="/experiments">Experiments</a></li>
 					<li><a>Trials</a></li>
 				</ul>
 			</aside>
@@ -61,37 +62,48 @@
 				{{ message }}
 			</div>
 			{% endfor %}-->
-			<h1 class="title">Update animal</h1>
-			<form method="POST" action="">
-				<div class="columns">
-					<div class="column is-one-quarter">
-						<div class="field">
-							<label class="label">Animal ID</label>
-							<div class="control">
-								<input type="text" name="animal_id" class="input" placeholder="Animal ID" value="{{ animal.animal_id }}" disabled>
-							</div>
-						</div>
+			<h1 class="title">Experiment detail</h1>
+			{% for task in experiment.tasks %}
+				<article class="message">
+					<div class="message-header">
+						<p>{{ task.protocol.protocol_name }}</p>
 					</div>
-					<div class="column is-one-quarter">
-						<div class="field">
-							<label class="label">Alias</label>
-							<div class="control">
-								<input type="text" name="animal_code" class="input" value="{{ animal.animal_code }}" placeholder="Alias">
-							</div>
-						</div>
+					<div class="message-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Task ID</th>
+									<th>Task name</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>Task ID</th>
+									<th>Task name</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr>
+									<td>id</td>
+									<td><a href="#">task!</a></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
-				</div>
-				<div class="field is-grouped">
-					<div class="control">
-						<button class="button is-link" type="submit">Update</button>
-					</div>
-					<div class="control">
-						<a class="button is-danger" href="{{ url_for('deleteAnimal', id=animal.animal_id) }}">Delete</a>
-					</div>
-				</div>
-			</form>
+				</article>
+			{% endfor %}
 		</div>
 	</div>
 </div>
+<!--<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', () => {
+		(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+			const $notification = $delete.parentNode;
+			$delete.addEventListener('click', () => {
+				$notification.parentNode.removeChild($notification);
+			});
+		});
+	});
+</script>-->
 </body>
 </html>

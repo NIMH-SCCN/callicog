@@ -8,17 +8,14 @@ CREATE TABLE protocol (
 	protocol_name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE experiment (
-	experiment_id SERIAL PRIMARY KEY,
-	animal_id INTEGER NOT NULL,
-	experiment_start TIMESTAMP NOT NULL,
-	experiment_end TIMESTAMP,
-	FOREIGN KEY (animal_id) REFERENCES animal(animal_id)
+CREATE TABLE template (
+	template_id SERIAL PRIMARY KEY,
+	template_name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE task (
-	task_id SERIAL PRIMARY KEY,
-	experiment_id INTEGER NOT NULL,
+CREATE TABLE template_protocol(
+	template_protocol_id SERIAL PRIMARY KEY,
+	template_id INTEGER NOT NULL,
 	protocol_id INTEGER NOT NULL,
 	task_order INTEGER NOT NULL,
 	progression VARCHAR(50) NOT NULL,
@@ -26,9 +23,27 @@ CREATE TABLE task (
 	target_sessions INTEGER,
 	success_rate NUMERIC,
 	rolling_window_size INTEGER,
+	FOREIGN KEY (template_id) REFERENCES template(template_id),
+	FOREIGN KEY (protocol_id) REFERENCES protocol(protocol_id)
+);
+
+CREATE TABLE experiment (
+	experiment_id SERIAL PRIMARY KEY,
+	animal_id INTEGER NOT NULL,
+	template_id INTEGER NOT NULL,
+	experiment_start TIMESTAMP NOT NULL,
+	experiment_end TIMESTAMP,
+	FOREIGN KEY (animal_id) REFERENCES animal(animal_id),
+	FOREIGN KEY (template_id) REFERENCES template(template_id)
+);
+
+CREATE TABLE task (
+	task_id SERIAL PRIMARY KEY,
+	experiment_id INTEGER NOT NULL,
+	template_protocol_id INTEGER NOT NULL,
 	complete BOOLEAN DEFAULT FALSE,
-	FOREIGN KEY (protocol_id) REFERENCES protocol(protocol_id),
-	FOREIGN KEY (experiment_id) REFERENCES experiment(experiment_id)
+	FOREIGN KEY (experiment_id) REFERENCES experiment(experiment_id),
+	FOREIGN KEY (template_protocol_id) REFERENCES template_protocol(template_protocol_id)
 );
 
 CREATE TABLE session (

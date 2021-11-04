@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, Integer, Float, Boolean, DateTime, String, ForeignKey
+from sqlalchemy import Column, Integer, Float, Boolean, DateTime, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 class Event(Base):
@@ -48,17 +48,11 @@ class Task(Base):
 	__tablename__ = 'task'
 	task_id = Column(Integer, primary_key=True)
 	experiment_id = Column(Integer, ForeignKey('experiment.experiment_id'))
-	protocol_id = Column(Integer, ForeignKey('protocol.protocol_id'))
-	task_order = Column(Integer, nullable=False)
-	progression = Column(String, nullable=False)
-	target_trials = Column(Integer, nullable=True)
-	target_sessions = Column(Integer, nullable=True)
-	success_rate = Column(Float, nullable=True)
-	rolling_window_size = Column(Integer, nullable=True)
+	template_protocol_id = Column(Integer, ForeignKey('template_protocol.template_protocol_id'))
 	complete = Column(Boolean, default=False)
 
 	experiment = relationship('Experiment', back_populates='tasks')
-	protocol = relationship('Protocol', back_populates='tasks')
+	template_protocol = relationship('TemplateProtocol', back_populates='tasks')
 	sessions = relationship('Session', order_by=Session.session_start, back_populates='task')
 
 	def __repr__(self):
@@ -68,11 +62,13 @@ class Experiment(Base):
 	__tablename__ = 'experiment'
 	experiment_id = Column(Integer, primary_key=True)
 	animal_id = Column(Integer, ForeignKey('animal.animal_id'))
+	template_id = Column(Integer, ForeignKey('template.template_id'))
 	experiment_start = Column(DateTime, nullable=False)
 	experiment_end = Column(DateTime)
 
 	animal = relationship('Animal', back_populates='experiments')
-	tasks = relationship('Task', order_by=Task.task_order, back_populates='experiment')
+	template = relationship('Template', back_populates='experiments')
+	tasks = relationship('Task', back_populates='experiment')
 
 	def __repr__(self):
 		return '<Experiment(experiment_id=%s)>' % str(self.experiment_id)
@@ -87,15 +83,51 @@ class Animal(Base):
 	def __repr__(self):
 		return '<Animal(animal_code=%s)>' % self.animal_code
 
+class TemplateProtocol(Base):
+	__tablename__ = 'template_protocol'
+	template_protocol_id = Column(Integer, primary_key=True)
+	template_id = Column(Integer, ForeignKey('template.template_id'))
+	protocol_id = Column(Integer, ForeignKey('protocol.protocol_id'))
+	task_order = Column(Integer, nullable=False)
+	progression = Column(String, nullable=False)
+	target_trials = Column(Integer, nullable=True)
+	target_sessions = Column(Integer, nullable=True)
+	success_rate = Column(Float, nullable=True)
+	rolling_window_size = Column(Integer, nullable=True)
+
+	protocol = relationship('Protocol', back_populates='templates')
+	template = relationship('Template', back_populates='protocols')
+	tasks = relationship('Task', back_populates='template_protocol') # not used but kept
+
+	def __repr__(self):
+		return '<TemplateProtocol(template_protocol_id=%s>' % self.template_protocol_id
+
 class Protocol(Base):
 	__tablename__ = 'protocol'
 	protocol_id = Column(Integer, primary_key=True)
 	protocol_name = Column(String, nullable=False)
 
-	tasks = relationship('Task', back_populates='protocol') # not very useful, but kept here
+	templates = relationship('TemplateProtocol', back_populates='protocol') # not very useful, but kept here
 
 	def __repr__(self):
 		return '<Protocol(protocol_name=%s)>' % self.protocol_name
+
+class Template(Base):
+	__tablename__ = 'template'
+	template_id = Column(Integer, primary_key=True)
+	template_name = Column(String, nullable=False)
+
+	protocols = relationship('TemplateProtocol', back_populates='template')
+	experiments = relationship('Experiment', order_by=Experiment.experiment_start, back_populates='template')
+
+	def __repr__(self):
+		return '<Template(template_name=%s)>' % self.template_name
+
+#TemplateProtocol = Table('template_protocol', Base.metadata,
+#	Column('template_protocol_id', Integer, primary_key=True),
+#	Column('template_id', Integer, ForeignKey('template.template_id')),
+#	Column('protocol_id', Integer, ForeignKey('protocol.protocol_id')),
+#	Column('task_order', Integer, nullable=False))
 
 #Animal.experiments = relationship('Experiment', order_by=Experiment.experiment_start, back_populates='animal')
 #Protocol.experiments = relationship('Experiment', order_by=Experiment.experiment_start, back_populates='protocol')
@@ -103,3 +135,8 @@ class Protocol(Base):
 #Experiment.sessions = relationship('Session', order_by=Session.session_number, back_populates='experiment')
 #Session.trials = relationship('Trial', order_by=Trial.trial_number, back_populates='session')
 #Trial.events = relationship('Event', order_by=Event.event_timestamp, back_populates='trial')
+
+# t = Template(template_name='t1')
+# a = TemplateProtocol(task_order=1)
+# a.protocol = db.query(Protocol).all()[0]
+# t.protocols.append(a)

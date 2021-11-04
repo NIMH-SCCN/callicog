@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-	<title>Callicog - Animals</title>
+	<title>Callicog - Templates</title>
 </head>
 <body>
 
@@ -61,37 +61,69 @@
 				{{ message }}
 			</div>
 			{% endfor %}-->
-			<h1 class="title">Update animal</h1>
+			<h1 class="title">Templates</h1>
 			<form method="POST" action="">
 				<div class="columns">
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Animal ID</label>
+							<label class="label">Template ID</label>
 							<div class="control">
-								<input type="text" name="animal_id" class="input" placeholder="Animal ID" value="{{ animal.animal_id }}" disabled>
+								<input type="text" name="template_id" class="input" placeholder="Template ID" disabled>
 							</div>
 						</div>
 					</div>
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Alias</label>
+							<label class="label">Name</label>
 							<div class="control">
-								<input type="text" name="animal_code" class="input" value="{{ animal.animal_code }}" placeholder="Alias">
+								<input type="text" name="template_name" class="input" placeholder="Name">
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="field is-grouped">
 					<div class="control">
-						<button class="button is-link" type="submit">Update</button>
-					</div>
-					<div class="control">
-						<a class="button is-danger" href="{{ url_for('deleteAnimal', id=animal.animal_id) }}">Delete</a>
+						<button class="button is-link" type="submit">Add</button>
 					</div>
 				</div>
 			</form>
 		</div>
+		<div class="section">
+			<h1 class="title">List</h1>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Template ID</th>
+						<th>Name</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>Template ID</th>
+						<th>Name</th>
+					</tr>
+				</tfoot>
+				<tbody>
+					{% for template in templates %}
+					<tr>
+						<td>{{ template.template_id }}</td>
+						<td><a href="{{ url_for('updateTemplate', id=template.template_id) }}"> {{ template.template_name }} </a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
+<!--<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', () => {
+		(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+			const $notification = $delete.parentNode;
+			$delete.addEventListener('click', () => {
+				$notification.parentNode.removeChild($notification);
+			});
+		});
+	});
+</script>-->
 </body>
 </html>

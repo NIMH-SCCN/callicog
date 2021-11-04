@@ -34,3 +34,16 @@ sudo reboot
 
 # callicog-related installation steps
 sudo apt install git
+
+# autologin, modify /etc/lightdm/lightdm.conf, uncomment and add
+
+user-session=xfce4
+autologin-user=jack
+autologin-user-timeout=0
+
+# kill remotely
+ssh -l jack callicog-ip
+ps -A | grep xfce4-terminal # get pid
+kill pid
+
+# disable screenlocker in Session & Startup

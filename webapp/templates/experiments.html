@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-	<title>Callicog - Animals</title>
+	<title>Callicog - Experiments</title>
 </head>
 <body>
 
@@ -48,6 +48,7 @@
 					Report
 				</p>
 				<ul class="menu-list">
+					<li><a href="/experiments">Experiments</a></li>
 					<li><a>Trials</a></li>
 				</ul>
 			</aside>
@@ -61,53 +62,80 @@
 				{{ message }}
 			</div>
 			{% endfor %}-->
-			<h1 class="title">Animals</h1>
+			<h1 class="title">Experiments</h1>
 			<form method="POST" action="">
 				<div class="columns">
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Animal ID</label>
+							<label class="label">Animal</label>
 							<div class="control">
-								<input type="text" name="animal_id" class="input" placeholder="Animal ID" disabled>
+								<div class="select">
+									<select name="animal_id">
+										{% for animal in all_animals %}
+											<option value="{{ animal.animal_id }}">{{ animal.animal_code }}</option>
+										{% endfor %}
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Alias</label>
+							<label class="label">Template</label>
 							<div class="control">
-								<input type="text" name="animal_code" class="input" placeholder="Alias">
+								<div class="select">
+									<select name="template_id">
+										{% for template in all_templates %}
+											<option value="{{ template.template_id }}">{{ template.template_name }}</option>
+										{% endfor %}
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="field is-grouped">
 					<div class="control">
-						<button class="button is-link" type="submit">Add</button>
+						<a class="button is-success" href="#">Run</a>
+					</div>
+					<div class="control">
+						<button class="button is-link" type="submit">Search</button>
 					</div>
 				</div>
 			</form>
 		</div>
 		<div class="section">
-			<h1 class="title">List</h1>
+			<h1 class="title">History</h1>
 			<table class="table">
 				<thead>
 					<tr>
-						<th>Animal ID</th>
-						<th>Alias</th>
+						<th>Experiment ID</th>
+						<th>Animal</th>
+						<th>Template</th>
+						<th>Start</th>
+						<th>End</th>
+						<th>Status</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
-						<th>Animal ID</th>
-						<th>Alias</th>
+						<th>Experiment ID</th>
+						<th>Animal</th>
+						<th>Template</th>
+						<th>Start</th>
+						<th>End</th>
+						<th>Status</th>
 					</tr>
 				</tfoot>
 				<tbody>
-					{% for animal in animals %}
+					{% for experiment in experiments %}
 					<tr>
-						<td>{{ animal.animal_id }}</td>
-						<td><a href="{{ url_for('updateAnimal', id=animal.animal_id) }}"> {{ animal.animal_code }} </a></td>
+						<td>{{ experiment.experiment_id }}</td>
+						<td>{{ experiment.animal.animal_code }}</td>
+						<td>template?</td>
+						<td><a href="{{ url_for('getExperimentDetails', id=experiment.experiment_id) }}">{{ experiment.experiment_start }}</a></td>
+						<td>{{ experiment.experiment_end }}</td>
+						<td>{{ 'ongoing' if experiment.experiment_end == None else 'done' }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>
