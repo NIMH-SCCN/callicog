@@ -132,7 +132,7 @@
 					<tr>
 						<td>{{ experiment.experiment_id }}</td>
 						<td>{{ experiment.animal.animal_code }}</td>
-						<td>template?</td>
+						<td>{{ experiment.template.template_name }}</td>
 						<td><a href="{{ url_for('getExperimentDetails', id=experiment.experiment_id) }}">{{ experiment.experiment_start }}</a></td>
 						<td>{{ experiment.experiment_end }}</td>
 						<td>{{ 'ongoing' if experiment.experiment_end == None else 'done' }}</td>

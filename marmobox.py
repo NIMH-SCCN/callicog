@@ -256,10 +256,12 @@ class Marmobox:
 			elif progression == Progression.TARGET_BASED:
 				self.run_target_based_trials(current_task, task_interface)
 
-			# run trials
 			if current_task.complete:
 				print('task complete')
 			else:
 				print('taks incomplete')
-			#return
-		print('\n\n\nall tasks complete, experiment done')
+
+		if all([task.complete for task in open_tasks]):
+			experiment.experiment_end = datetime.now()
+			self.db_session.commit()
+			print('\n\n\nall tasks complete, experiment done')

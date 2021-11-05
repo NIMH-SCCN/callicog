@@ -21,12 +21,12 @@ parser = argparse.ArgumentParser(description='Marmobox client. \
 parser.add_argument('server', help='Callicog IP address.', type=str)
 subparsers = parser.add_subparsers()
 
-parser_run = subparsers.add_parser('run')
+parser_run = subparsers.add_parser('run', help='Executes a new experiment.')
 parser_run.add_argument('animal', type=str)
 parser_run.add_argument('template', type=str)
 parser_run.set_defaults(func=callicog_run)
 
-parser_resume = subparsers.add_parser('resume')
+parser_resume = subparsers.add_parser('resume', help='Resumes an existing experiment.')
 parser_resume.add_argument('experiment', type=int)
 parser_resume.set_defaults(func=callicog_resume)
 

@@ -8,7 +8,7 @@ This README would normally document whatever steps are necessary to get your app
 	sudo -u postgres createuser --interactive
 	pip install wheel
 	pip install --upgrade pip
-	pip install numpy psycopg2-binary SQLAlchemy pyyaml
+	pip install numpy psycopg2-binary SQLAlchemy pyyaml flask flask-cors
 
 ### PostgreSQL instructions for macOS
 
