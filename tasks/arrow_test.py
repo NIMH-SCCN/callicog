@@ -69,10 +69,10 @@ class TaskInterface:
 		
 		# Window 3
 		w3 = Window(transition=WindowTransition.RELEASE)
-		w3_stim = Stimulus(shape=StimulusShape.ARROW,
-					size=(20,20), 
+		w3_stim = Stimulus(shape=StimulusShape.ARROW_N,
+					size=(25,25), 
 					color = (1, 1, 0),
-					size_touch=(120,120))
+					size_touch=(150,150))
 		w3_stim.position = (random.randint(-590, 590), random.randint(-310, 310))
 		w3.add_stimulus(w3_stim)
 
