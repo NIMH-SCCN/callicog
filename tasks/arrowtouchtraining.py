@@ -84,7 +84,7 @@ class TaskInterface:
 		# Window 1
 		w1 = Window(transition=WindowTransition.RELEASE)
 		w1_square = Stimulus(shape=StimulusShape.SQUARE,
-					 size=(100, 100),
+					 size=(200, 200),
 					 color=(-1, -1, -1),
 					 position=(0, 0))
 		w1.add_stimulus(w1_square)
@@ -97,10 +97,10 @@ class TaskInterface:
 		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=2)
 		#targets = trial_parameters['targets']
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
-				size=(20,20), 
+				size=(25,25), 
 				color = (1, 1, 0),
-				size_touch=(120,120))
-		target_stim.position = (random.randint(-590, 590), random.randint(-310, 310))
+				size_touch=(160,160))
+		target_stim.position = (random.randint(-550, 550), random.randint(-270, 270))
 		target_stim.outcome = Outcome.SUCCESS
 		#target_stim.after_touch = [{'name': 'hide'}]
 		#target_stim.timeout_gain = 2
