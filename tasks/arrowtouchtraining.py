@@ -1,12 +1,14 @@
 from task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
-import random
-import numpy as np
 from itertools import combinations
+import numpy as np
+import random
 import copy
 
 class TaskInterface:
 	def __init__(self):
 		self.pseudorandom_parameters = {}
+		self.trials = []
+
 		self.initialize_pseudorandom_parameters()
 
 	def __add_pseudorandom_parameter_list(self, parameter_name, parameter_values):
@@ -42,41 +44,70 @@ class TaskInterface:
 
 	def initialize_pseudorandom_parameters(self):
 		# define list of pseudorandom parameters
-		# e.g.
-		# self.__add_pseudorandom_parameter_list('delay', delays_list)
-		pass
 
-	def get_trial(self, trial_index):
-		#trials = self.__pseudorandomize_parameters()
-		# additional pseudorandom parameters
-		#return trials
-		pass
 
-	def load(self, trial_index):
+		ndistractors_list = [1,2,3]
+		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
+		
+
+		self.__add_pseudorandom_parameter_list('ndistractor', ndistractors_list)
+		self.__add_pseudorandom_parameter_list('positions', positions_list)
+
+	def generate_trials(self):
+		trials = self.__pseudorandomize_parameters()
+		
+		
+		
+
+		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
+					size=(15,15),
+					color=(0, 0.7, 1),
+					size_touch= (120,120))
+		blue_star = Stimulus(shape=StimulusShape.STAR,
+					size=(0.6,0.6),
+					color=(0, 0.7, 1),
+					size_touch= (120,120))
+		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
+					size=(120,120),
+					color=(0, 0.7, 1),
+					size_touch= (120,120))
+
+		distractor_list = [blue_triangle, blue_star, blue_circle]
+		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
+
+		self.trials = trials
+		
+	def build_trial(self, trial_index):
 		# get pseudorandom parameters for the current trial
-		#trial_parameters = self.get_trial(trial_index)
+		trial_parameters = self.trials[trial_index]
 
 		# Window 1
 		w1 = Window(transition=WindowTransition.RELEASE)
 		w1_square = Stimulus(shape=StimulusShape.SQUARE,
-					 size=(100, 100),
+					 size=(200, 200),
 					 color=(-1, -1, -1),
 					 position=(0, 0))
 		w1.add_stimulus(w1_square)
 		
 		# Window 2
 		w2 = Window(blank=0.5)
-		
-		# Window 3
-		w3 = Window(transition=WindowTransition.RELEASE)
-		w3_stim = Stimulus(shape=StimulusShape.ARROW_N,
-					size=(25,25), 
-					color = (1, 1, 0),
-					size_touch=(150,150))
-		w3_stim.position = (random.randint(-590, 590), random.randint(-310, 310))
-		w3.add_stimulus(w3_stim)
 
-		# Window 4
-		w4 = Window(blank=0.5)
+		# Window 3
+		# set targets
+		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=2)
+		#targets = trial_parameters['targets']
+		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
+				size=(25,25), 
+				color = (1, 1, 0),
+				size_touch=(160,160))
+		target_stim.position = (random.randint(-550, 550), random.randint(-270, 270))
+		target_stim.outcome = Outcome.SUCCESS
+		#target_stim.after_touch = [{'name': 'hide'}]
+		#target_stim.timeout_gain = 2
+		#target_stim.auto_draw = True
+		w3.add_stimulus(target_stim)
+		
+		# Window 8
+		w4 = Window(blank=1)
 
 		return [w1, w2, w3, w4]
