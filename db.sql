@@ -64,12 +64,50 @@ CREATE TABLE trial(
 	FOREIGN KEY (session_id) REFERENCES session(session_id)
 );
 
+--CREATE TABLE event(
+--	event_id SERIAL PRIMARY KEY,
+--	trial_id INTEGER NOT NULL,
+	--event_timestamp TIMESTAMP NOT NULL,
+--	press_xcoor INTEGER,
+--	press_ycoor INTEGER,
+--	delay NUMERIC,
+--	FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
+--);
+
+CREATE TABLE stimulus_object(
+	stimulus_object_id SERIAL PRIMARY KEY,
+	stimulus_shape VARCHAR(50),
+	stimulus_size_x INTEGER,
+	stimulus_size_y INTEGER,
+	stimulus_position_x INTEGER,
+	stimulus_position_y INTEGER,
+	stimulus_outcome VARCHAR(50),
+	stimulus_color_r NUMERIC,
+	stimulus_color_g NUMERIC,
+	stimulus_color_b NUMERIC,
+	stimulus_image_file VARCHAR(100),
+	stimulus_timeout_gain NUMERIC
+);
+
+CREATE TABLE window_object(
+	window_object_id SERIAL PRIMARY KEY,
+	is_outcome BOOLEAN DEFAULT FALSE,
+	window_delay NUMERIC NOT NULL,
+	window_transition_type VARCHAR(100),
+	window_timeout NUMERIC NOT NULL
+);
+
 CREATE TABLE event(
 	event_id SERIAL PRIMARY KEY,
 	trial_id INTEGER NOT NULL,
-	--event_timestamp TIMESTAMP NOT NULL,
-	press_xcoor INTEGER,
-	press_ycoor INTEGER,
-	delay NUMERIC,
+	flip_timestamp TIMESTAMP,
+	touch_timestamp TIMESTAMP,
+	release_timestamp TIMESTAMP,
+	input_xcoor INTEGER,
+	input_ycoor INTEGER,
+	stimulus_object_id INTEGER,
+	window_object_id INTEGER,
+	FOREIGN KEY (stimulus_object_id) REFERENCES stimulus_object(stimulus_object_id),
+	FOREIGN KEY (window_object_id) REFERENCES window_object(window_object_id),
 	FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
 );

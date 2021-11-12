@@ -89,7 +89,7 @@ class WindowRuntime:
 		stimulus, touch_event, outcome = self.__check_touch(window, flip_time, ppy_mouse)
 		if stimulus and len(stimulus.after_touch) > 0:
 			stimulus.on_touch()
-		return touch_event, outcome
+		return stimulus, touch_event, outcome
 
 	def __check_touch(self, window, flip_time, ppy_mouse):
 		touch_event = None
@@ -110,12 +110,15 @@ class WindowRuntime:
 						touch_event = {
 							'xcoor': position[0],
 							'ycoor': position[1],
-							'delay': (touch_time - flip_time).total_seconds()
+							#'delay': (touch_time - flip_time).total_seconds()
+							'touch_time': touch_time
 						}
 						if window.transition == WindowTransition.TOUCH:
 							print(f'in object, on touch, waiting for release')
 							while ppy_mouse.getPressed()[0]:
 								time.sleep(0.001)
+							release_time = datetime.now()
+							touch_event['release_time'] = release_time
 							print('released')
 							return stimulus, touch_event, stimulus.outcome
 						elif window.transition == WindowTransition.RELEASE:
@@ -123,8 +126,9 @@ class WindowRuntime:
 							while ppy_mouse.getPressed()[0]:
 								time.sleep(0.001)
 							release_time = datetime.now()
+							#touch_event['delay'] = (release_time - flip_time).total_seconds()
+							touch_event['release_time'] = release_time
 							print('released')
-							touch_event['delay'] = (release_time - flip_time).total_seconds()
 							return stimulus, touch_event, stimulus.outcome
 				print('outside, waiting for release')
 				while ppy_mouse.getPressed()[0]:
@@ -141,20 +145,47 @@ class WindowRuntime:
 		touch_time = datetime.now()
 		return touch_time, (touch_time - start).total_seconds(), False
 
+def pack_event_data(stimulus=None, window=None, x=None, y=None, flip=None, touch=None, release=None, timeout=None):
+	event = {
+		'stimulus': stimulus,
+		'window': window,
+		'x': x,
+		'y': y,
+		'flip': str(flip) if flip else None,
+		'touch': str(touch) if touch else None,
+		'release': str(release) if release else None,
+		'timeout': str(timeout) if timeout else None
+	}
+	return event
+
 def run_trial(windows, box, ppy_window, ppy_mouse):
 	ppy_runtime = WindowRuntime()
 	ppy_mouse.clickReset()
 
 	outcome = Outcome.NULL
-	touch_event = None
+	#touch_event = None
+
+	events = []
 	for window in windows:
 		flip_time = ppy_runtime.run_window(window, ppy_window)
+		events.append(pack_event_data(flip=flip_time, window=window.pack_data()))
+		
 		if window.is_outcome:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
 			while not all([target.touched for target in targets]):
-				touch_event, outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
+				stimulus, touch_event, outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
+				if stimulus:
+					events.append(
+						pack_event_data(
+							stimulus=stimulus.pack_data(), 
+							x=touch_event['xcoor'], 
+							y=touch_event['ycoor'], 
+							flip=flip_time,
+							touch=touch_event['touch_time'],
+							release=touch_event['release_time']))
 				if (outcome == Outcome.FAIL) or (outcome == Outcome.NULL):
 					break
+			# evaluate window outcome
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
 				box.correct()
@@ -162,8 +193,17 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 				print('box: incorrect')
 				box.incorrect()
 		elif window.blank == 0:
-			ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
+			stimulus, touch_event, outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
+			if stimulus:
+				events.append(
+					pack_event_data(
+						stimulus=stimulus.pack_data(), 
+						x=touch_event['xcoor'], 
+						y=touch_event['ycoor'], 
+						flip=flip_time,
+						touch=touch_event['touch_time'],
+						release=touch_event['release_time']))
 		window.reset()
 
-	return datetime.now(), outcome, touch_event
+	return datetime.now(), outcome, events
 	# this is the last outcome from all windows

@@ -51,6 +51,14 @@ class Window:
 			stimulus.ppy_show_stim.autoDraw = False
 			stimulus.ppy_touch_stim.autoDraw = False
 
+	def pack_data(self):
+		return {
+			'is_outcome': self.is_outcome,
+			'delay': self.blank,
+			'transition': self.transition,
+			'timeout': self.timeout
+		}
+
 class Stimulus:
 	def __init__(self, shape, size, size_touch=None, position=None, outcome=None, color=None, window=None, image=None):
 		self.shape = shape
@@ -77,6 +85,17 @@ class Stimulus:
 		for func in self.after_touch:
 			if func["name"] == 'hide':
 				self.__hide()
+
+	def pack_data(self):
+		return {
+			'shape': self.shape,
+			'size': self.size,
+			'position': self.position,
+			'outcome': self.outcome,
+			'color': self.color,
+			'image': self.image,
+			'timeout_gain': self.timeout_gain
+		}
 
 	def __hide(self):
 		self.ppy_show_stim.autoDraw = False

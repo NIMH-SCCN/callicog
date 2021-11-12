@@ -1,4 +1,4 @@
-from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Event, Template
+from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Event, Template, WindowObject, StimulusObject
 from task_builder import Progression, Outcome
 from datetime import datetime
 from numpy import random
@@ -135,6 +135,36 @@ class Marmobox:
 				session.session_status = Outcome.FAIL
 			self.db_session.commit()
 
+	def save_trial_events(self, events, trial):
+		for event in events:
+			trial_event = Event(
+				trial=trial, 
+				flip_timestamp=event['flip'], 
+				touch_timestamp=event['touch'], 
+				release_timestamp=event['release'],
+				input_xcoor=event['x'],
+				input_ycoor=event['y'])
+			if event['window']:
+				trial_event.window_object = WindowObject(
+					is_outcome=event['window']['is_outcome'],
+					window_delay=event['window']['delay'],
+					window_transition_type=event['window']['transition'],
+					window_timeout=event['window']['timeout'])
+			if event['stimulus']:
+				trial_event.stimulus_object = StimulusObject(
+					stimulus_shape=event['stimulus']['shape'],
+					stimulus_size_x=event['stimulus']['size'][0],
+					stimulus_size_y=event['stimulus']['size'][1],
+					stimulus_position_x=event['stimulus']['position'][0],
+					stimulus_position_y=event['stimulus']['position'][1],
+					stimulus_outcome=event['stimulus']['outcome'],
+					stimulus_color_r=event['stimulus']['color'][0],
+					stimulus_color_g=event['stimulus']['color'][1],
+					stimulus_color_b=event['stimulus']['color'][2],
+					stimulus_image_file=event['stimulus']['image'],
+					stimulus_timeout_gain=event['stimulus']['timeout_gain'])
+		#self.db_session.commit()
+
 	def run_target_based_trials(self, current_task, task_interface):
 		session = Session(task=current_task, session_start=datetime.now())
 		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.template_protocol.target_trials)
@@ -151,14 +181,15 @@ class Marmobox:
 			trial_data = self.run_trial(trial_windows)
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
-			touch_event = trial_data['trial_touch']
+			trial_events = trial_data['events']
 			if new_trial.trial_status == Outcome.NULL:
 				trial_indices.append(next_trial)
-			if touch_event:
-				event = Event(trial=new_trial,
-					press_xcoor=touch_event['xcoor'],
-					press_ycoor=touch_event['ycoor'],
-					delay=touch_event['delay'])
+			if len(trial_events) > 0:
+				self.save_trial_events(trial_events, new_trial)
+				#event = Event(trial=new_trial,
+				#	press_xcoor=touch_event['xcoor'],
+				#	press_ycoor=touch_event['ycoor'],
+				#	delay=touch_event['delay'])
 
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
