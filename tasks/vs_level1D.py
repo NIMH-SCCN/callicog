@@ -46,14 +46,10 @@ class TaskInterface:
 		# define list of pseudorandom parameters
 
 		#ntargets_list = [1]
-		ndistractors_list = [2,3,4,5]
+		ndistractors_list = [4,5]
 		#delays_list = [1, 2, 4]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
-		
-		
-		# add them to task
-		#self.__add_pseudorandom_parameter_list('distractor', distractor_list)
-		#self.__add_pseudorandom_parameter_list('targets', ntargets_list)
+
 		self.__add_pseudorandom_parameter_list('ndistractor', ndistractors_list)
 		#self.__add_pseudorandom_parameter_list('delay', delays_list)
 		self.__add_pseudorandom_parameter_list('positions', positions_list)
@@ -64,27 +60,24 @@ class TaskInterface:
 		
 		
 
-		yellow_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
+		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
-					color=(1, 1, 0),
+					color=(0, 0.7, 1),
 					size_touch= (120,120))
-		blue_arrow_e = Stimulus(shape=StimulusShape.ARROW_E,
-					size=(20,20), 
-					color = (0, 0.7, 1),
-					size_touch=(120,120))
-		blue_arrow_w = Stimulus(shape=StimulusShape.ARROW_W,
-					size=(20,20), 
-					color = (0, 0.7, 1),
-					size_touch=(120,120))
-		yellow_star = Stimulus(shape=StimulusShape.STAR,
+		blue_star = Stimulus(shape=StimulusShape.STAR,
 					size=(0.6,0.6),
-					color=(1, 1, 0),
+					color=(0, 0.7, 1),
 					size_touch= (120,120))
-		yellow_circle = Stimulus(shape=StimulusShape.CIRCLE,
+		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
 					size=(120,120),
-					color=(1, 1, 0),
+					color=(0, 0.7, 1),
 					size_touch= (120,120))
-		distractor_list = [yellow_triangle, blue_arrow_e, blue_arrow_w, yellow_star, yellow_circle]
+		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
+					size=(150,150),
+					color=(0, 0.7, 1),
+					size_touch= (120,120))
+
+		distractor_list = [blue_triangle, blue_star, blue_circle, blue_diamond]
 		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
 		# additional pseudorandom parameters
 		# e.g. Supertask: positions depending on 'targets'

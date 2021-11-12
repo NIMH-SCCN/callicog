@@ -46,14 +46,10 @@ class TaskInterface:
 		# define list of pseudorandom parameters
 
 		#ntargets_list = [1]
-		ndistractors_list = [1,2,3]
+		ndistractors_list = [1,2]
 		#delays_list = [1, 2, 4]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
-		
-		
-		# add them to task
-		#self.__add_pseudorandom_parameter_list('distractor', distractor_list)
-		#self.__add_pseudorandom_parameter_list('targets', ntargets_list)
+
 		self.__add_pseudorandom_parameter_list('ndistractor', ndistractors_list)
 		#self.__add_pseudorandom_parameter_list('delay', delays_list)
 		self.__add_pseudorandom_parameter_list('positions', positions_list)
@@ -76,8 +72,12 @@ class TaskInterface:
 					size=(120,120),
 					color=(0, 0.7, 1),
 					size_touch= (120,120))
+		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
+					size=(150,150),
+					color=(0, 0.7, 1),
+					size_touch= (120,120))
 
-		distractor_list = [blue_triangle, blue_star, blue_circle]
+		distractor_list = [blue_triangle, blue_star, blue_circle, blue_diamond]
 		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
 		# additional pseudorandom parameters
 		# e.g. Supertask: positions depending on 'targets'
@@ -115,7 +115,7 @@ class TaskInterface:
 		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
 		#targets = trial_parameters['targets']
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
-				size=(20,20), 
+				size=(25,25), 
 				color = (1, 1, 0),
 				size_touch=(120,120))
 		target_stim.position = trial_parameters['positions']

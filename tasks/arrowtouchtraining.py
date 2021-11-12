@@ -100,7 +100,7 @@ class TaskInterface:
 				size=(25,25), 
 				color = (1, 1, 0),
 				size_touch=(160,160))
-		target_stim.position = (random.randint(-550, 550), random.randint(-270, 270))
+		target_stim.position = (random.randint(-520, 520), random.randint(-220, 220))
 		target_stim.outcome = Outcome.SUCCESS
 		#target_stim.after_touch = [{'name': 'hide'}]
 		#target_stim.timeout_gain = 2
