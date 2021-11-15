@@ -108,12 +108,13 @@ class Marmobox:
 				trial_data = self.run_trial(trial_windows)
 				new_trial.trial_status = trial_data['trial_outcome']
 				new_trial.trial_end = trial_data['trial_end']
-				touch_event = trial_data['trial_touch']
-				if touch_event:
-					event = Event(trial=new_trial, 
-						press_xcoor=touch_event['xcoor'],
-						press_ycoor=touch_event['ycoor'],
-						delay=touch_event['delay'])
+				trial_events = trial_data['events']
+				if len(trial_events) > 0:
+					self.save_trial_events(trial_events, new_trial)
+					#event = Event(trial=new_trial, 
+					#	press_xcoor=touch_event['xcoor'],
+					#	press_ycoor=touch_event['ycoor'],
+					#	delay=touch_event['delay'])
 				if new_trial.trial_status == Outcome.NULL:
 					trial_indices.append(next_trial)
 				valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
@@ -215,14 +216,15 @@ class Marmobox:
 			trial_data = self.run_trial(trial_windows)
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
-			touch_event = trial_data['trial_touch']
+			trial_events = trial_data['events']
 			if new_trial.trial_status == Outcome.NULL:
 				trial_indices.append(next_trial)
-			if touch_event:
-				event = Event(trial=new_trial,
-					press_xcoor=touch_event['xcoor'],
-					press_ycoor=touch_event['ycoor'],
-					delay=touch_event['delay'])
+			if len(trial_events) > 0:
+				self.save_trial_events(trial_events, new_trial)
+				#event = Event(trial=new_trial,
+				#	press_xcoor=touch_event['xcoor'],
+				#	press_ycoor=touch_event['ycoor'],
+				#	delay=touch_event['delay'])
 
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
