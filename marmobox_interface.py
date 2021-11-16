@@ -1,5 +1,4 @@
 import time
-#import marmobox_hardware as hw
 import marmobox_stimuli as st
 from marmobox_IO import MarmoboxIO
 from psychopy import visual, event, logging

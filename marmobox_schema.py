@@ -2,19 +2,68 @@ from database import Base
 from sqlalchemy import Column, Integer, Float, Boolean, DateTime, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
+#class Event(Base):
+#	__tablename__ = 'event'
+#	event_id = Column(Integer, primary_key=True)
+#	trial_id = Column(Integer, ForeignKey('trial.trial_id'))
+	#event_timestamp = Column(DateTime, nullable=False)
+#	press_xcoor = Column(Integer)
+#	press_ycoor = Column(Integer)
+#	delay = Column(Float)
+
+#	trial = relationship('Trial', back_populates='events')
+
+#	def __repr__(self):
+#		return '<Event(event_id=%s)>' % str(self.event_id)
+
+class WindowObject(Base):
+	__tablename__ = 'window_object'
+	window_object_id = Column(Integer, primary_key=True)
+	is_outcome = Column(Boolean, default=False)
+	window_delay = Column(Float, nullable=False)
+	window_transition_type = Column(String)
+	window_timeout = Column(Float, nullable=False)
+
+	event = relationship('Event', back_populates='window_object', uselist=False)
+
+	def __repr__(self):
+		return '<WindowObject(window_object_id=%s)>' % str(self.window_object_id)
+
+class StimulusObject(Base):
+	__tablename__ = 'stimulus_object'
+	stimulus_object_id = Column(Integer, primary_key=True)
+	stimulus_shape = Column(String)
+	stimulus_size_x = Column(Integer)
+	stimulus_size_y = Column(Integer)
+	stimulus_position_x = Column(Integer)
+	stimulus_position_y = Column(Integer)
+	stimulus_outcome = Column(String)
+	stimulus_color_r = Column(Float)
+	stimulus_color_g = Column(Float)
+	stimulus_color_b = Column(Float)
+	stimulus_image_file = Column(String)
+	stimulus_timeout_gain = Column(Float)
+
+	event = relationship('Event', back_populates='stimulus_object', uselist=False)
+
+	def __repr__(self):
+		return '<StimulusObject(stimulus_object_id=%s)>' % str(self.stimulus_object_id)
+
 class Event(Base):
 	__tablename__ = 'event'
 	event_id = Column(Integer, primary_key=True)
 	trial_id = Column(Integer, ForeignKey('trial.trial_id'))
-	#event_timestamp = Column(DateTime, nullable=False)
-	press_xcoor = Column(Integer)
-	press_ycoor = Column(Integer)
-	delay = Column(Float)
+	flip_timestamp = Column(DateTime, nullable=True)
+	touch_timestamp = Column(DateTime, nullable=True)
+	release_timestamp = Column(DateTime, nullable=True)
+	input_xcoor = Column(Integer, nullable=True)
+	input_ycoor = Column(Integer, nullable=True)
+	stimulus_object_id = Column(Integer, ForeignKey('stimulus_object.stimulus_object_id'))
+	window_object_id = Column(Integer, ForeignKey('window_object.window_object_id'))
 
 	trial = relationship('Trial', back_populates='events')
-
-	def __repr__(self):
-		return '<Event(event_id=%s)>' % str(self.event_id)
+	stimulus_object = relationship('StimulusObject', back_populates='event')
+	window_object = relationship('WindowObject', back_populates='event')
 
 class Trial(Base):
 	__tablename__ = 'trial'
