@@ -57,8 +57,6 @@ class TaskInterface:
 	def generate_trials(self):
 		trials = self.__pseudorandomize_parameters()
 		
-		
-		
 
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
@@ -79,19 +77,7 @@ class TaskInterface:
 
 		distractor_list = [blue_triangle, blue_star, blue_circle, blue_diamond]
 		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
-		# additional pseudorandom parameters
-		# e.g. Supertask: positions depending on 'targets'
-		#positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
-		#self.__add_pseudorandom_parameter_list('positions', positions_list)
-		
-		#new_trials = []
-		#for trial in trials:
-		#	distractors = trial['distractors']
-		#	C = list(combinations(range(len(positions_list)), distractors))
-		#	for positions in C:
-		#		new_trial = copy.copy(trial)
-		#		new_trial['positions'] = [positions_list[position_index] for position_index in positions]
-		#		new_trials.append(new_trial)
+
 
 		self.trials = trials
 		

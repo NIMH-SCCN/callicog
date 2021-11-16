@@ -76,11 +76,12 @@ class TaskInterface:
         # Window 1
         w1 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
-                     size=(200,200),
-                     position=(0, 0))
+                     size=(200,200))
         w1_square.color = trial_parameters['colours']
+        w1_square.position = (random.randint(-520, 520), random.randint(-220, 220))
         w1.add_stimulus(w1_square)
         w1_square.outcome = Outcome.SUCCESS
+        
         # Window 2
         w2 = Window(blank=0.5)
 
