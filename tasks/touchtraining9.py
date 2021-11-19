@@ -83,7 +83,7 @@ class TaskInterface:
                      position = (100,0))
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
                      size=(250,250),
-                     position=(-50, 0),
+                     position=(-150, 0),
                      size_touch=(250,250))
         w1_square.color = trial_parameters['colours']
 
