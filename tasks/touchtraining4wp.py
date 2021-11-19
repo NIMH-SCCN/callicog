@@ -87,8 +87,8 @@ class TaskInterface:
                      size_touch=(250,250))
         w1_square.color = trial_parameters['colours']
 
-        w1.add_stimulus(w1_background)
         w1.add_stimulus(w1_square)
+        w1.add_stimulus(w1_background)
         w1_background.outcome = Outcome.FAIL
         w1_square.outcome = Outcome.SUCCESS
 
