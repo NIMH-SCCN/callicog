@@ -73,7 +73,7 @@ class TaskInterface:
 					color=(0, 0.7, 1),
 					size_touch= (160,160))
 		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
-					size=(150,150),
+					size=(140,140),
 					color=(0, 0.7, 1),
 					size_touch= (160,160))
 
