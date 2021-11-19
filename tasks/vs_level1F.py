@@ -61,19 +61,19 @@ class TaskInterface:
 		
 
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
-					size=(18,18),
+					size=(20,20),
 					color=(0, 0.7, 1),
 					size_touch= (160,160))
 		blue_star = Stimulus(shape=StimulusShape.STAR,
-					size=(0.7,0.7),
+					size=(0.75,0.75),
 					color=(0, 0.7, 1),
 					size_touch= (160,160))
 		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
-					size=(130,130),
+					size=(140,140),
 					color=(0, 0.7, 1),
 					size_touch= (160,160))
 		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
-					size=(140,140),
+					size=(135,135),
 					color=(0, 0.7, 1),
 					size_touch= (160,160))
 
