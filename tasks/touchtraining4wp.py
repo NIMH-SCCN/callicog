@@ -80,6 +80,8 @@ class TaskInterface:
                      position=(0, 0))
         w1_square.color = trial_parameters['colours']
         w1_background = Stimulus(shape=StimulusShape.SQUARE,
+                    size= (900,900),
+                    color=(0,0,0),
                     size_touch=(900,900))
 
         w1.add_stimulus(w1_square)
