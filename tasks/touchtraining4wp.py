@@ -83,9 +83,8 @@ class TaskInterface:
                     size= (900,900),
                     color=(0,0,0),
                     size_touch=(900,900))
-
-        w1.add_stimulus(w1_square)
         w1.add_stimulus(w1_background)
+        w1.add_stimulus(w1_square)
         w1_square.outcome = Outcome.SUCCESS
         w1_background.outcome = Outcome.FAIL
         # Window 2
