@@ -79,7 +79,7 @@ class TaskInterface:
         w1_background = Stimulus(shape=StimulusShape.SQUARE,
                      size=(500,500),
                      color= (0.3,0.3,0.3),
-                     size_touch=(900,900),
+                     size_touch=(500,500),
                      position = (100,0))
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
                      size=(250,250),
