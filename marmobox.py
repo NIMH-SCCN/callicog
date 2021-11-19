@@ -139,7 +139,7 @@ class Marmobox:
 	def save_trial_events(self, events, trial):
 		for event in events:
 			trial_event = Event(
-				trial=trial, 
+				trial=trial,
 				flip_timestamp=event['flip'], 
 				touch_timestamp=event['touch'], 
 				release_timestamp=event['release'],
@@ -148,8 +148,9 @@ class Marmobox:
 			if event['window']:
 				trial_event.window_object = WindowObject(
 					is_outcome=event['window']['is_outcome'],
+					is_outside_fail=event['window']['is_outside_fail'],
 					window_delay=event['window']['delay'],
-					window_transition_type=event['window']['transition'],
+					window_transition=event['window']['transition'],
 					window_timeout=event['window']['timeout'])
 			if event['stimulus']:
 				trial_event.stimulus_object = StimulusObject(

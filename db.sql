@@ -93,8 +93,9 @@ CREATE TABLE window_object(
 	window_object_id SERIAL PRIMARY KEY,
 	is_outcome BOOLEAN DEFAULT FALSE,
 	window_delay NUMERIC NOT NULL,
-	window_transition_type VARCHAR(100),
-	window_timeout NUMERIC NOT NULL
+	window_transition VARCHAR(50),
+	window_timeout NUMERIC NOT NULL,
+	is_outside_fail BOOLEAN NOT NULL
 );
 
 CREATE TABLE event(
@@ -107,7 +108,7 @@ CREATE TABLE event(
 	input_ycoor INTEGER,
 	stimulus_object_id INTEGER,
 	window_object_id INTEGER,
-	FOREIGN KEY (stimulus_object_id) REFERENCES stimulus_object(stimulus_object_id),
+	FOREIGN KEY (stimulus_object_id) REFERENCES stimulus_object(	stimulus_object_id),
 	FOREIGN KEY (window_object_id) REFERENCES window_object(window_object_id),
 	FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
 );

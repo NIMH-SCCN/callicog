@@ -34,11 +34,13 @@ class StimulusShape:
 	TRIANGLE = 'triangle'
 
 class Window:
-	def __init__(self, blank=0, transition=None, is_outcome=False, timeout=0):
+	def __init__(self, blank=0, transition=None, is_outcome=False, timeout=0, is_outside_fail=False):
 		self.blank = blank
 		self.transition = transition
 		self.is_outcome = is_outcome
+		self.is_outside_fail = is_outside_fail
 		self.timeout = timeout
+		self.active_timeout = timeout
 		self.ppy_window = None
 		self.stimuli = []
 
@@ -56,7 +58,8 @@ class Window:
 			'is_outcome': self.is_outcome,
 			'delay': self.blank,
 			'transition': self.transition,
-			'timeout': self.timeout
+			'timeout': self.timeout,
+			'is_outside_fail': self.is_outside_fail
 		}
 
 class Stimulus:
@@ -73,9 +76,18 @@ class Stimulus:
 		self.ppy_show_stim = None
 		self.ppy_touch_stim = None
 		self.touched = False
+		self.touch_pos = None
+		self.touch_tstamp = None
+		self.release_tstamp = None
+
 		self.auto_draw = False
 		self.after_touch = []
 		self.timeout_gain = 0
+
+	def record_touch_data(self, touch_x, touch_y, touch, release):
+		self.touch_pos = (touch_x, touch_y)
+		self.touch_tstamp = touch
+		self.release_tstamp = release
 
 	def draw(self):
 		self.ppy_show_stim.draw()
