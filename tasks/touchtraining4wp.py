@@ -87,8 +87,9 @@ class TaskInterface:
 
         w1.add_stimulus(w1_background)
         w1.add_stimulus(w1_square)
-        w1_square.outcome = Outcome.SUCCESS
         w1_background.outcome = Outcome.FAIL
+        w1_square.outcome = Outcome.SUCCESS
+
         # Window 2
         w2 = Window(blank=0.5)
 
