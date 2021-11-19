@@ -1,7 +1,9 @@
 import sys
 sys.path.append('..')
 
-from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash
+from io import StringIO
+import csv
+from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash, make_response
 from flask_cors import CORS
 from sqlalchemy.orm import scoped_session
 from database import DatabaseSession
@@ -91,6 +93,18 @@ def getExperimentDetails(id):
 		experiment = query_exp[0]
 		if request.method == 'GET':
 			return render_template('experiment_details.html', experiment=experiment)
+
+@app.route('/experiments/save/<int:id>', methods=['GET'])
+def saveExperiment(id):
+	si = StringIO()
+	cw = csv.writer(si)
+	query_result = db.execute('select * from get_experiment_data(:param_id);', {'param_id': id})
+	cw.writerow(query_result.keys())
+	cw.writerows(query_result)
+	response = make_response(si.getvalue())
+	response.headers['Content-Disposition'] = f'attachment; filename=experiment_{id}_data.csv'
+	response.headers["Content-type"] = "text/csv"
+	return response
 
 @app.route('/tasks/update/<int:id>', methods=['GET', 'POST'])
 def updateTask(id):

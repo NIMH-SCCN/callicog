@@ -114,7 +114,7 @@ class TaskInterface:
 
         # Window 7
         # set targets
-        w7 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
+        w7 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3, is_outside_fail=True)
         targets = trial_parameters['targets']
         for i in range(targets):
             target_stim = copy.copy(trial_parameters['stimulus'])

@@ -2,27 +2,14 @@ from database import Base
 from sqlalchemy import Column, Integer, Float, Boolean, DateTime, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
-#class Event(Base):
-#	__tablename__ = 'event'
-#	event_id = Column(Integer, primary_key=True)
-#	trial_id = Column(Integer, ForeignKey('trial.trial_id'))
-	#event_timestamp = Column(DateTime, nullable=False)
-#	press_xcoor = Column(Integer)
-#	press_ycoor = Column(Integer)
-#	delay = Column(Float)
-
-#	trial = relationship('Trial', back_populates='events')
-
-#	def __repr__(self):
-#		return '<Event(event_id=%s)>' % str(self.event_id)
-
 class WindowObject(Base):
 	__tablename__ = 'window_object'
 	window_object_id = Column(Integer, primary_key=True)
 	is_outcome = Column(Boolean, default=False)
+	is_outside_fail = Column(Boolean, default=False)
 	window_delay = Column(Float, nullable=False)
-	window_transition_type = Column(String)
 	window_timeout = Column(Float, nullable=False)
+	window_transition = Column(String, nullable=True)
 
 	event = relationship('Event', back_populates='window_object', uselist=False)
 
@@ -74,7 +61,7 @@ class Trial(Base):
 	trial_status = Column(String, default='new')
 
 	session = relationship('Session', back_populates='trials')
-	events = relationship('Event', back_populates='trial')
+	events = relationship('Event', back_populates='trial', cascade="all, delete")
 
 	def __repr__(self):
 		return '<Trial(trial_id=%s)>' % self.trial_id
@@ -88,7 +75,7 @@ class Session(Base):
 	session_status = Column(String, default='new')
 
 	task = relationship('Task', back_populates='sessions')
-	trials = relationship('Trial', order_by=Trial.trial_start, back_populates='session', lazy='dynamic')
+	trials = relationship('Trial', order_by=Trial.trial_start, back_populates='session', lazy='dynamic', cascade="all, delete")
 
 	def __repr__(self):
 		return '<Session(session_id=%s)>' % self.session_id
@@ -102,7 +89,7 @@ class Task(Base):
 
 	experiment = relationship('Experiment', back_populates='tasks')
 	template_protocol = relationship('TemplateProtocol', back_populates='tasks')
-	sessions = relationship('Session', order_by=Session.session_start, back_populates='task')
+	sessions = relationship('Session', order_by=Session.session_start, back_populates='task', cascade="all, delete")
 
 	def __repr__(self):
 		return '<Task(task_id=%s>' % str(self.task_id)
@@ -117,7 +104,7 @@ class Experiment(Base):
 
 	animal = relationship('Animal', back_populates='experiments')
 	template = relationship('Template', back_populates='experiments')
-	tasks = relationship('Task', back_populates='experiment')
+	tasks = relationship('Task', back_populates='experiment', cascade="all, delete")
 
 	def __repr__(self):
 		return '<Experiment(experiment_id=%s)>' % str(self.experiment_id)
@@ -166,8 +153,8 @@ class Template(Base):
 	template_id = Column(Integer, primary_key=True)
 	template_name = Column(String, nullable=False)
 
-	protocols = relationship('TemplateProtocol', back_populates='template')
-	experiments = relationship('Experiment', order_by=Experiment.experiment_start, back_populates='template')
+	protocols = relationship('TemplateProtocol', back_populates='template', cascade="all, delete")
+	experiments = relationship('Experiment', order_by=Experiment.experiment_start, back_populates='template', cascade="all, delete")
 
 	def __repr__(self):
 		return '<Template(template_name=%s)>' % self.template_name
