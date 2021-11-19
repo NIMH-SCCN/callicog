@@ -44,18 +44,12 @@ class TaskInterface:
 
 	def initialize_pseudorandom_parameters(self):
 		# define list of pseudorandom parameters
-
-		#ntargets_list = [1]
-		ndistractors_list = [4,5,6,7]
-		#delays_list = [1, 2, 4]
+		ndistractors_list = [3,4]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 		
 		
-		# add them to task
-		#self.__add_pseudorandom_parameter_list('distractor', distractor_list)
-		#self.__add_pseudorandom_parameter_list('targets', ntargets_list)
+
 		self.__add_pseudorandom_parameter_list('ndistractor', ndistractors_list)
-		#self.__add_pseudorandom_parameter_list('delay', delays_list)
 		self.__add_pseudorandom_parameter_list('positions', positions_list)
 #IF I DONT WANT AN ELEMENT TO BE PSEUDORANDOMISED, ADD IT AFTER TRIALS = SELF.__PSEUDORANDOMISE PARAMETERS
 	def generate_trials(self):
@@ -92,19 +86,6 @@ class TaskInterface:
 
 		distractor_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n]
 		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
-		# additional pseudorandom parameters
-		# e.g. Supertask: positions depending on 'targets'
-		#positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
-		#self.__add_pseudorandom_parameter_list('positions', positions_list)
-		
-		#new_trials = []
-		#for trial in trials:
-		#	distractors = trial['distractors']
-		#	C = list(combinations(range(len(positions_list)), distractors))
-		#	for positions in C:
-		#		new_trial = copy.copy(trial)
-		#		new_trial['positions'] = [positions_list[position_index] for position_index in positions]
-		#		new_trials.append(new_trial)
 
 		self.trials = trials
 		

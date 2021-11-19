@@ -46,7 +46,7 @@ class TaskInterface:
 		# define list of pseudorandom parameters
 
 		#ntargets_list = [1]
-		ndistractors_list = [1,2]
+		ndistractors_list = [3,4]
 		#delays_list = [1, 2, 4]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 

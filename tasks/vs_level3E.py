@@ -44,14 +44,12 @@ class TaskInterface:
 
 	def initialize_pseudorandom_parameters(self):
 		# define list of pseudorandom parameters
-
-		#ntargets_list = [1]
-		ndistractors_list = [1,2]
-		#delays_list = [1, 2, 4]
+		ndistractors_list = [5,6]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
+		
+		
 
 		self.__add_pseudorandom_parameter_list('ndistractor', ndistractors_list)
-		#self.__add_pseudorandom_parameter_list('delay', delays_list)
 		self.__add_pseudorandom_parameter_list('positions', positions_list)
 #IF I DONT WANT AN ELEMENT TO BE PSEUDORANDOMISED, ADD IT AFTER TRIALS = SELF.__PSEUDORANDOMISE PARAMETERS
 	def generate_trials(self):
@@ -60,29 +58,34 @@ class TaskInterface:
 		
 		
 
-		yellow_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
-					size=(15,15),
-					color=(1, 1, 0),
-					size_touch= (120,120))
-		blue_arrow_e = Stimulus(shape=StimulusShape.ARROW_E,
-					size=(20,20), 
-					color = (0, 0.7, 1),
-					size_touch=(120,120))
-		blue_arrow_w = Stimulus(shape=StimulusShape.ARROW_W,
-					size=(20,20), 
-					color = (0, 0.7, 1),
-					size_touch=(120,120))
-		yellow_star = Stimulus(shape=StimulusShape.STAR,
-					size=(0.6,0.6),
-					color=(1, 1, 0),
-					size_touch= (120,120))
-		yellow_diamond = Stimulus(shape=StimulusShape.DIAMOND,
-					size=(120,120),
-					color=(1, 1, 0),
-					size_touch= (120,120))
-		distractor_list = [yellow_triangle, blue_arrow_e, blue_arrow_w, yellow_star, yellow_diamond]
-		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
 
+		yellow_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
+					size=(20,20), 
+					color = (1, 1, 0),
+					size_touch=(120,120))
+		yellow_arrow_nw = Stimulus(shape=StimulusShape.ARROW_NW,
+					size=(20,20), 
+					color = (1, 1, 0),
+					size_touch=(120,120))
+		yellow_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
+					size=(20,20), 
+					color = (1, 1, 0),
+					size_touch=(120,120))
+		yellow_arrow_sw = Stimulus(shape=StimulusShape.ARROW_SW,
+					size=(20,20), 
+					color = (1, 1, 0),
+					size_touch=(120,120))
+		blue_arrow_s = Stimulus(shape=StimulusShape.ARROW_S,
+					size=(20,20), 
+					color = (0, 0.7, 1),
+					size_touch=(120,120))
+		blue_arrow_n = Stimulus(shape=StimulusShape.ARROW_N,
+					size=(20,20), 
+					color = (0, 0.7, 1),
+					size_touch=(120,120))
+
+		distractor_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n]
+		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
 
 		self.trials = trials
 		
@@ -115,7 +118,10 @@ class TaskInterface:
 		#target_stim.timeout_gain = 2
 		#target_stim.auto_draw = True
 		w3.add_stimulus(target_stim)
-
+		
+		# set distractors
+		#distractors = self.__randomize_from(self.pseudorandom_parameters['distractors'])
+		#distractor_positions = self.__randomize_from(self.pseudorandom_parameters['positions'], exclude=trial_parameters['positions'])
 		distractor_positions = self.__randomize_from(self.pseudorandom_parameters['positions'], exclude=[trial_parameters['positions']], size=trial_parameters['ndistractor'])
 		for position in distractor_positions: #i in range(trial_parameters['ndistractor']):
 			distractor = self.__randomize_from(self.pseudorandom_parameters['distractors'], size=1)

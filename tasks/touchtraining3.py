@@ -45,7 +45,7 @@ class TaskInterface:
     def initialize_pseudorandom_parameters(self):
         # define list of pseudorandom parameters
 
-        color_list = [(1,0,0), (1,1,0), (0,0.7,1),(1,1,0), (0,0.7,1),(1,0,0), (1,1,0),(1,0,0), (1,1,0)]
+        color_list = [(1,0,0),(1,1,0),(0,0.7,1),(1,1,0),(0,0.7,1),(1,0,0),(1,1,0),(1,0,0),(1,1,0)]
         self.__add_pseudorandom_parameter_list('colours', color_list)
 #IF I DONT WANT AN ELEMENT TO BE PSEUDORANDOMISED, ADD IT AFTER TRIALS = SELF.__PSEUDORANDOMISE PARAMETERS
     def generate_trials(self):
@@ -74,7 +74,7 @@ class TaskInterface:
         # get pseudorandom parameters for the current trial
         trial_parameters = self.trials[trial_index]
         # Window 1
-        w1 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
+        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout=5)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
                      size=(350,350),
                      position=(0, 0))
