@@ -94,7 +94,7 @@ class TaskInterface:
 
 		# Window 3
 		# set targets
-		w3 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout=5)
+		w3 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout=5, is_outside_fail=True)
 		#targets = trial_parameters['targets']
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
 				size=(25,25), 
