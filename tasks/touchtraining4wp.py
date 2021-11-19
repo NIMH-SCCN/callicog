@@ -79,8 +79,13 @@ class TaskInterface:
                      size=(250,250),
                      position=(0, 0))
         w1_square.color = trial_parameters['colours']
+        w1_background = Stimulus(shape=StimulusShape.SQUARE,
+                    size_touch=(900,900))
+
         w1.add_stimulus(w1_square)
+        w1.add_stimulus(w1_background)
         w1_square.outcome = Outcome.SUCCESS
+        w1_background.outcome = Outcome.FAIL
         # Window 2
         w2 = Window(blank=0.5)
 

@@ -45,7 +45,7 @@ class TaskInterface:
     def initialize_pseudorandom_parameters(self):
         # define list of pseudorandom parameters
 
-        color_list = [(1,0,0), (1,1,0), (0,0.7,1),(1,1,0), (0,0.7,1),(1,0,0), (1,1,0),(1,0,0), (1,1,0)]
+        color_list = [(1,0,0),(1,1,0),(0,0.7,1),(1,1,0),(0,0.7,1),(1,0,0),(1,1,0),(1,0,0),(1,1,0)]
         self.__add_pseudorandom_parameter_list('colours', color_list)
 #IF I DONT WANT AN ELEMENT TO BE PSEUDORANDOMISED, ADD IT AFTER TRIALS = SELF.__PSEUDORANDOMISE PARAMETERS
     def generate_trials(self):
