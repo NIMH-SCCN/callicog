@@ -75,15 +75,16 @@ class TaskInterface:
         trial_parameters = self.trials[trial_index]
         # Window 1
         w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True)
-        w1_square = Stimulus(shape=StimulusShape.SQUARE,
-                     size=(250,250),
-                     position=(0, 0))
-        w1_square.color = trial_parameters['colours']
         w1_background = Stimulus(shape=StimulusShape.SQUARE,
                     size= (900,900),
                     color=(0,0,0),
                     size_touch=(900,900),
                     position=(0,0))
+        w1_square = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(250,250),
+                     position=(0, 0))
+        w1_square.color = trial_parameters['colours']
+
         w1.add_stimulus(w1_background)
         w1.add_stimulus(w1_square)
         w1_square.outcome = Outcome.SUCCESS
