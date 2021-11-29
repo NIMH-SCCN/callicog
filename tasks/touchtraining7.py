@@ -94,7 +94,7 @@ class TaskInterface:
 
 		# Window 3
 		# set targets
-		w3 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout=5, is_outside_fail=True)
+		w3 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout =5, is_outside_fail=True)
 		#targets = trial_parameters['targets']
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
 				size=(25,25), 
@@ -102,9 +102,7 @@ class TaskInterface:
 				position= (0,0),
 				size_touch=(160,160))
 		target_stim.outcome = Outcome.SUCCESS
-		#target_stim.after_touch = [{'name': 'hide'}]
-		#target_stim.timeout_gain = 2
-		#target_stim.auto_draw = True
+
 		w3.add_stimulus(target_stim)
 		
 		# Window 8
