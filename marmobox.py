@@ -1,4 +1,4 @@
-from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Event, Template, WindowObject, StimulusObject
+from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Template, WindowObject, StimulusObject
 from task_builder import Progression, Outcome
 from datetime import datetime
 from numpy import random
@@ -136,35 +136,34 @@ class Marmobox:
 				session.session_status = Outcome.FAIL
 			self.db_session.commit()
 
-	def save_trial_events(self, events, trial):
-		for event in events:
-			trial_event = Event(
+	def save_trial_events(self, windows, trial):
+		for window in windows:
+			trial_window = WindowObject(
 				trial=trial,
-				flip_timestamp=event['flip'], 
-				touch_timestamp=event['touch'], 
-				release_timestamp=event['release'],
-				input_xcoor=event['x'],
-				input_ycoor=event['y'])
-			if event['window']:
-				trial_event.window_object = WindowObject(
-					is_outcome=event['window']['is_outcome'],
-					is_outside_fail=event['window']['is_outside_fail'],
-					window_delay=event['window']['delay'],
-					window_transition=event['window']['transition'],
-					window_timeout=event['window']['timeout'])
-			if event['stimulus']:
-				trial_event.stimulus_object = StimulusObject(
-					stimulus_shape=event['stimulus']['shape'],
-					stimulus_size_x=event['stimulus']['size'][0],
-					stimulus_size_y=event['stimulus']['size'][1],
-					stimulus_position_x=event['stimulus']['position'][0],
-					stimulus_position_y=event['stimulus']['position'][1],
-					stimulus_outcome=event['stimulus']['outcome'],
-					stimulus_color_r=event['stimulus']['color'][0],
-					stimulus_color_g=event['stimulus']['color'][1],
-					stimulus_color_b=event['stimulus']['color'][2],
-					stimulus_image_file=event['stimulus']['image'],
-					stimulus_timeout_gain=event['stimulus']['timeout_gain'])
+				is_outcome=window['is_outcome'],
+				is_outside_fail=window['is_outside_fail'],
+				window_delay=window['delay'],
+				window_transition=window['transition'],
+				window_timeout=window['timeout'],
+				flip_timestamp=window['flip'])
+			for stimulus in window['stimuli']:
+				window_stimulus = StimulusObject(
+					window=trial_window,
+					stimulus_shape=stimulus['shape'],
+					stimulus_size_x=stimulus['size'][0],
+					stimulus_size_y=stimulus['size'][1],
+					stimulus_position_x=stimulus['position'][0],
+					stimulus_position_y=stimulus['position'][1],
+					stimulus_outcome=stimulus['outcome'],
+					stimulus_color_r=stimulus['color'][0],
+					stimulus_color_g=stimulus['color'][1],
+					stimulus_color_b=stimulus['color'][2],
+					stimulus_image_file=stimulus['image'],
+					stimulus_timeout_gain=stimulus['timeout_gain'],
+					stimulus_touched=stimulus['touched'],
+					stimulus_flip_timestamp=stimulus['flip'],
+					stimulus_touch_timestamp=stimulus['touch'],
+					stimulus_release_timestamp=stimulus['release']) 
 		#self.db_session.commit()
 
 	def run_target_based_trials(self, current_task, task_interface):
