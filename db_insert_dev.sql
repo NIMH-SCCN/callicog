@@ -10,7 +10,6 @@ INSERT INTO protocol(protocol_name) VALUES('touchtraining1');
 INSERT INTO protocol(protocol_name) VALUES('touchtraining2');
 INSERT INTO protocol(protocol_name) VALUES('touchtraining3');
 INSERT INTO protocol(protocol_name) VALUES('touchtraining4');
-INSERT INTO protocol(protocol_name) VALUES('touchtraining4wp');
 INSERT INTO protocol(protocol_name) VALUES('touchtraining5');
 INSERT INTO protocol(protocol_name) VALUES('touchtraining6');
 INSERT INTO protocol(protocol_name) VALUES('touchtraining7');
