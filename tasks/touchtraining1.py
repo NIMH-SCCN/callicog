@@ -74,7 +74,7 @@ class TaskInterface:
         # get pseudorandom parameters for the current trial
         trial_parameters = self.trials[trial_index]
         # Window 1
-        w1 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
+        w1 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5, is_outside_fail=True)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
                      size=(550,550),
                      position=(0, 0))
