@@ -108,3 +108,10 @@ Install Psychopy:
 	# download wxPython for Debian 10 (buster)
 	wget https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
 	pip install wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
+
+Broadcast IP service:
+
+	sudo systemctl edit --force --full broadcast_ip.service
+	sudo systemctl enable broadcast_ip.service
+	sudo systemctl start broadcast_ip.service
+	sudo systemctl reboot

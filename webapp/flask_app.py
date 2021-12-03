@@ -61,16 +61,14 @@ def getTemplateList():
 @app.route('/trials', methods=['GET', 'POST'])
 def getTrialQueryResults():
 	if request.method == 'GET':
-		return render_template('trials.html', tasks=[])
+		return render_template('trials.html', query_result=[])
 	if request.method == 'POST':
-		animal_id = request.form['animal_id']
-		task_id = request.form['task_id']
-		experiment_id = request.form['experiment_id']
-		if experiment_id == '':
-			return render_template('trials.html', tasks=[])
+		trial_id = request.form['trial_id']
+		stim_shape = request.form['stim_shape']
+		win_delay = request.form['win_delay']
 		
-		tasks = db.query(Task).filter(Task.experiment_id == experiment_id).all()
-		return render_template('trials.html', tasks=tasks)
+		#tasks = db.query(Task).filter(Task.experiment_id == experiment_id).all()
+		return render_template('trials.html', query_result=[])
 
 @app.route('/experiments', methods=['GET', 'POST'])
 def getExperimentList():

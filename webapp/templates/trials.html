@@ -59,25 +59,25 @@
 				<div class="columns">
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Animal</label>
+							<label class="label">Trial</label>
 							<div class="control">
-								<input type="text" name="animal_id" class="input" placeholder="Animal ID">
+								<input type="text" name="trial_id" class="input" placeholder="Trial ID">
 							</div>
 						</div>
 					</div>
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Task</label>
+							<label class="label">Shape</label>
 							<div class="control">
-								<input type="text" name="task_id" class="input" placeholder="Task ID">
+								<input type="text" name="stim_shape" class="input" placeholder="e.g. square">
 							</div>
 						</div>
 					</div>
 					<div class="column is-one-quarter">
 						<div class="field">
-							<label class="label">Experiment</label>
+							<label class="label">Delay</label>
 							<div class="control">
-								<input type="text" name="experiment_id" class="input" placeholder="Experiment ID">
+								<input type="text" name="win_delay" class="input" placeholder="e.g. 0.5">
 							</div>
 						</div>
 					</div>
@@ -90,23 +90,37 @@
 			</form>
 		</div>
 		<div class="section">
-			<h1 class="title">Task data</h1>
+			<h1 class="title">Trial data</h1>
 			<table class="table">
 				<thead>
 					<tr>
-						<th>Order</th>
-						<th>Progression</th>
-						<th>Complete</th>
+						<th>Window</th>
+						<th>Delay</th>
+						<th>Outcome?</th>
+						<th>Timeout</th>
+						<th>Fail?</th>
+						<th>Stimulus</th>
+						<th>Flip</th>
+						<th>Touched?</th>
+						<th>Touch</th>
+						<th>Release</th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
-						<th>Order</th>
-						<th>Progression</th>
-						<th>Complete</th>
+						<th>Window</th>
+						<th>Delay</th>
+						<th>Outcome?</th>
+						<th>Timeout</th>
+						<th>Fail?</th>
+						<th>Stimulus</th>
+						<th>Flip</th>
+						<th>Touched?</th>
+						<th>Touch</th>
+						<th>Release</th>
 					</tr>
 				</tfoot>
-				<tbody>
+				<!--<tbody>
 					{% for task in tasks %}
 					<tr>
 						<td>{{ task.task_order }}</td>
@@ -114,7 +128,7 @@
 						<td>{{ task.complete }}</td>
 					</tr>
 					{% endfor %}
-				</tbody>
+				</tbody>-->
 			</table>
 		</div>
 	</div>
