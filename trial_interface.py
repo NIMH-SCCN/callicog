@@ -72,6 +72,7 @@ class WindowRuntime:
 	def run_window(self, window, ppy_window):
 		window.ppy_window = ppy_window
 		ppy_window.flip()
+		window_flip = datetime.now()
 		print('--- new window!')
 		if window.blank > 0:
 			time.sleep(window.blank)
@@ -83,7 +84,8 @@ class WindowRuntime:
 				stimulus.draw()
 				print('stim drawn')
 			ppy_window.flip()
-		return datetime.now()
+			window_flip = datetime.now()
+		return window_flip
 
 	def get_touch_outcome(self, window, flip_time, ppy_mouse):
 		stimulus, touch_event, outcome = self.__check_touch(window, flip_time, ppy_mouse)
