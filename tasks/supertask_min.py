@@ -94,27 +94,27 @@ class TaskInterface:
         w2 = Window(blank=0.5)
         
         # Window 3
-        w3 = Window(transition=WindowTransition.RELEASE)
+        w3 = Window(transition=WindowTransition.RELEASE, label='encoding')
         w3_stim = copy.copy(trial_parameters['stimulus'])
         w3_stim.position = (random.randint(-615, 615), random.randint(-335, 335))
         w3.add_stimulus(w3_stim)
 
         # Window 4
-        w4 = Window(blank=0.5)
+        w4 = Window(blank=0.5, label='encoding')
 
         # Window 5
-        w5 = Window(transition=WindowTransition.RELEASE)
+        w5 = Window(transition=WindowTransition.RELEASE, label='encoding')
         w5_stim = copy.copy(trial_parameters['stimulus'])
         w5_stim.position = (random.randint(-615, 615), random.randint(-335, 335)) # ???
         w5.add_stimulus(w5_stim)
 
         # Window 6
         w6_blank = trial_parameters['delay']
-        w6 = Window(blank=w6_blank)
+        w6 = Window(blank=w6_blank, label='maintenance')
 
         # Window 7
         # set targets
-        w7 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3, is_outside_fail=True)
+        w7 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3, is_outside_fail=True, label='retrieval')
         targets = trial_parameters['targets']
         for i in range(targets):
             target_stim = copy.copy(trial_parameters['stimulus'])
@@ -136,6 +136,6 @@ class TaskInterface:
             w7.add_stimulus(distractor_stim)
 
         # Window 8
-        w8 = Window(blank=2)
+        w8 = Window(blank=2, label='outcome')
 
         return [w1, w2, w3, w4, w5, w6, w7, w8]

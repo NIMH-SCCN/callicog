@@ -68,6 +68,7 @@ CREATE TABLE window_object(
 	window_object_id SERIAL PRIMARY KEY,
 	is_outcome BOOLEAN DEFAULT FALSE,
 	window_delay NUMERIC NOT NULL,
+	window_label VARCHAR(100) NOT NULL,
 	window_transition VARCHAR(50),
 	window_timeout NUMERIC NOT NULL,
 	is_outside_fail BOOLEAN NOT NULL,

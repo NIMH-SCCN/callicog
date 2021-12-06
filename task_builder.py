@@ -34,12 +34,13 @@ class StimulusShape:
 	TRIANGLE = 'triangle'
 
 class Window:
-	def __init__(self, blank=0, transition=None, is_outcome=False, timeout=0, is_outside_fail=False):
+	def __init__(self, blank=0, transition=None, is_outcome=False, timeout=0, is_outside_fail=False, label=''):
 		self.blank = blank
 		self.transition = transition
 		self.is_outcome = is_outcome
 		self.is_outside_fail = is_outside_fail
 		self.timeout = timeout
+		self.label = label
 		self.active_timeout = timeout
 		self.ppy_window = None
 		self.flip_tstamp = None
@@ -56,6 +57,7 @@ class Window:
 
 	def pack_data(self):
 		return {
+			'label': self.label,
 			'delay': self.blank,
 			'transition': self.transition,
 			'is_outcome': self.is_outcome,

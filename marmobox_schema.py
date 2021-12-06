@@ -9,6 +9,7 @@ class WindowObject(Base):
 	is_outcome = Column(Boolean, default=False)
 	is_outside_fail = Column(Boolean, default=False)
 	window_delay = Column(Float, nullable=False)
+	window_label = Column(String, nullable=True)
 	window_timeout = Column(Float, nullable=False)
 	window_transition = Column(String, nullable=True)
 	flip_timestamp = Column(DateTime, nullable=False)

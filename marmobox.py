@@ -143,6 +143,7 @@ class Marmobox:
 				is_outcome=window['is_outcome'],
 				is_outside_fail=window['is_outside_fail'],
 				window_delay=window['delay'],
+				window_label=window['label'],
 				window_transition=window['transition'],
 				window_timeout=window['timeout'],
 				flip_timestamp=window['flip'])
