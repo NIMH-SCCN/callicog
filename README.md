@@ -62,6 +62,28 @@ Install Debian 10 (Buster) normally, pick SSH server and system utils.
 
 	# disable screenlocker in Session & Startup
 
+### Client computer installation (macOS)
+	
+Create the `callicogenv` virtual environment.
+Make sure the command `python3` points to Python 3.7.
+
+	python3 -m venv callicogenv
+	source callicogenv/bin/activate
+	pip install wheel
+	python -m pip install --upgrade pip
+
+### How to install/uninstall Homebrew in macOS
+
+	sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+	brew update-reset
+
+### PostgreSQL instructions for macOS
+
+	brew install postgresql
+	brew services start postgresql
+	createuser --interactive
+	pip install numpy psycopg2-binary SQLAlchemy flask flask-cors
 
 ### PostgreSQL instructions for Debian Stretch
 
@@ -70,18 +92,6 @@ Install Debian 10 (Buster) normally, pick SSH server and system utils.
 	pip install wheel
 	pip install --upgrade pip
 	pip install numpy psycopg2-binary SQLAlchemy flask flask-cors
-
-### PostgreSQL instructions for macOS
-
-	brew install postgresql
-	brew services start postgresql
-	createuser --interactive
-
-### How to fix Homebrew in macOS (nuke and reinstall)
-
-	sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-	brew update-reset
 
 ### Raspberry Pi Zero headless setup
 
@@ -170,4 +180,3 @@ Broadcast IP service:
 	sudo systemctl start broadcast_ip.service
 	sudo systemctl reboot
 
-	
