@@ -10,7 +10,7 @@ The Mini PC needs an active internet connection via ethernet when installing Lin
 If such is not easily available, you can use a Windows laptop to share internet via ethernet.
 
 - Step 1: Make sure the Windows laptop is connected to the internet via WiFi.
-- Step 2: Share internet by ...
+- Step 2: Go to Settings > Network & Internet > Change adapter options > Right click Wi-Fi > Properties > Sharing > Check "Allow other networks to connect..."
 - Step 3: Connect the Mini PC and the laptop with an ethernet cable.
 
 Restart the Mini PC and boot to BIOS by pression the DEL key. Make USB stick the first boot priority. Save and restart.
