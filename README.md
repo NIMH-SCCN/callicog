@@ -1,6 +1,89 @@
 # CalliCog #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+### Pre installation: create bootable Debian drive
+
+Flash USB with Debian 10.11 (Buster) [ISO file](https://drive.google.com/file/d/1hRkasJ1nOOUxclgPgWfXA9Y2jxiqqZsI/view?usp=sharing) using [balenaEtcher](https://www.balena.io/etcher/).
+
+### Mini PC Debian installation
+
+The Mini PC needs an active internet connection via ethernet when installing Linux.
+If such is not easily available, you can use a Windows laptop to share internet via ethernet.
+
+- Step 1: Make sure the Windows laptop is connected to the internet via WiFi.
+- Step 2: Go to Settings > Network & Internet > Change adapter options > Right click Wi-Fi > Properties > Sharing > Check "Allow other networks to connect..."
+- Step 3: Connect the Mini PC and the laptop with an ethernet cable.
+
+Restart the Mini PC and boot to BIOS by pression the DEL key. Make USB stick the first boot priority. Save and restart.
+Install Debian 10 (Buster) normally, pick SSH server and system utils.
+
+### Mini PC post installation
+
+	su
+	apt update
+	# add contrib non-free to /etc/apt/sources.list
+
+	apt install firmware-iwlwifi firmware-intel-sound firmware-linux firmware-misc-nonfree intel-microcode i965-va-driver-shaders intel-media-va-driver-non-free mesa-utils mesa-utils-extra firmware-realtek
+
+	apt install sudo
+	# add jack ALL=(ALL) ALL to /etc/sudoers
+	exit
+
+	sudo apt install xfce4 xfce4-terminal
+	sudo reboot
+
+	sudo apt install wpasupplicant
+	sudo chmod 0600 /etc/network/interfaces
+
+	sudo nano /etc/network/interfaces
+	# add the following for wifi
+	allow-hotplug wlp1s0
+	iface wlp1s0 inet dhcp
+		wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+	# for wired connection add
+	auto enp2s0
+	iface enp2s0 inet static
+		address 192.168.0.10/24
+	
+	sudo reboot
+
+	# callicog-related installation steps
+	sudo apt install git
+
+	# autologin, modify /etc/lightdm/lightdm.conf, uncomment and add
+	user-session=xfce4
+	autologin-user=jack
+	autologin-user-timeout=0
+
+	# kill remotely
+	ssh -l jack callicog-ip
+	ps -A | grep xfce4-terminal # get pid
+	kill pid
+
+	# disable screenlocker in Session & Startup
+
+### Client computer installation (macOS)
+	
+Create the `callicogenv` virtual environment.
+Make sure the command `python3` points to Python 3.7.
+
+	python3 -m venv callicogenv
+	source callicogenv/bin/activate
+	pip install wheel
+	python -m pip install --upgrade pip
+
+### How to install/uninstall Homebrew in macOS
+
+	sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+	brew update-reset
+
+### PostgreSQL instructions for macOS
+
+	brew install postgresql
+	brew services start postgresql
+	createuser --interactive
+	pip install numpy psycopg2-binary SQLAlchemy flask flask-cors
 
 ### PostgreSQL instructions for Debian Stretch
 
@@ -9,25 +92,6 @@ This README would normally document whatever steps are necessary to get your app
 	pip install wheel
 	pip install --upgrade pip
 	pip install numpy psycopg2-binary SQLAlchemy flask flask-cors
-
-### PostgreSQL instructions for macOS
-
-	brew install postgresql
-	brew services start postgresql
-	createuser --interactive
-
-### How to fix Homebrew in macOS (nuke and reinstall)
-
-	sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-	brew update-reset
-
-### Copy files to Google Drive with `rclone`
-
-Full documentation [here](https://rclone.org/drive/).
-
-	sudo apt-get update
-	sudo apt-get install rclone
 
 ### Raspberry Pi Zero headless setup
 
@@ -88,7 +152,7 @@ Install latest Python 3 version via source package found [here](https://www.pyth
 	sudo make altinstall
 	python3.8 --version
 
-Create the `marmovenv` virtual environment:
+Create the `callicogenv` virtual environment:
 
 	sudo apt install python3-venv python3-pip
 	python3.7 -m venv marmovenv
@@ -108,3 +172,11 @@ Install Psychopy:
 	# download wxPython for Debian 10 (buster)
 	wget https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
 	pip install wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
+
+Broadcast IP service:
+
+	sudo systemctl edit --force --full broadcast_ip.service
+	sudo systemctl enable broadcast_ip.service
+	sudo systemctl start broadcast_ip.service
+	sudo systemctl reboot
+

@@ -34,14 +34,16 @@ class StimulusShape:
 	TRIANGLE = 'triangle'
 
 class Window:
-	def __init__(self, blank=0, transition=None, is_outcome=False, timeout=0, is_outside_fail=False):
+	def __init__(self, blank=0, transition=None, is_outcome=False, timeout=0, is_outside_fail=False, label=''):
 		self.blank = blank
 		self.transition = transition
 		self.is_outcome = is_outcome
 		self.is_outside_fail = is_outside_fail
 		self.timeout = timeout
+		self.label = label
 		self.active_timeout = timeout
 		self.ppy_window = None
+		self.flip_tstamp = None
 		self.stimuli = []
 
 	def add_stimulus(self, stimulus):
@@ -55,11 +57,13 @@ class Window:
 
 	def pack_data(self):
 		return {
-			'is_outcome': self.is_outcome,
+			'label': self.label,
 			'delay': self.blank,
 			'transition': self.transition,
+			'is_outcome': self.is_outcome,
+			'is_outside_fail': self.is_outside_fail,
 			'timeout': self.timeout,
-			'is_outside_fail': self.is_outside_fail
+			'flip': str(self.flip_tstamp) if self.flip_tstamp else None
 		}
 
 class Stimulus:
@@ -77,6 +81,7 @@ class Stimulus:
 		self.ppy_touch_stim = None
 		self.touched = False
 		self.touch_pos = None
+		self.flip_tstamp = None
 		self.touch_tstamp = None
 		self.release_tstamp = None
 
@@ -84,8 +89,9 @@ class Stimulus:
 		self.after_touch = []
 		self.timeout_gain = 0
 
-	def record_touch_data(self, touch_x, touch_y, touch, release):
+	def record_touch_data(self, touch_x, touch_y, flip, touch, release):
 		self.touch_pos = (touch_x, touch_y)
+		self.flip_tstamp = flip
 		self.touch_tstamp = touch
 		self.release_tstamp = release
 
@@ -106,6 +112,11 @@ class Stimulus:
 			'outcome': self.outcome,
 			'color': self.color,
 			'image': self.image,
+			'touched': self.touched,
+			'touch_pos': self.touch_pos,
+			'flip': str(self.flip_tstamp) if self.flip_tstamp else None,
+			'touch': str(self.touch_tstamp) if self.touch_tstamp else None,
+			'release': str(self.release_tstamp) if self.release_tstamp else None,
 			'timeout_gain': self.timeout_gain
 		}
 

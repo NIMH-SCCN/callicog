@@ -72,6 +72,7 @@ class WindowRuntime:
 	def run_window(self, window, ppy_window):
 		window.ppy_window = ppy_window
 		ppy_window.flip()
+		window_flip = datetime.now()
 		print('--- new window!')
 		if window.blank > 0:
 			time.sleep(window.blank)
@@ -83,7 +84,8 @@ class WindowRuntime:
 				stimulus.draw()
 				print('stim drawn')
 			ppy_window.flip()
-		return datetime.now()
+			window_flip = datetime.now()
+		return window_flip
 
 	def get_touch_outcome(self, window, flip_time, ppy_mouse):
 		stimulus, touch_event, outcome = self.__check_touch(window, flip_time, ppy_mouse)
@@ -93,6 +95,7 @@ class WindowRuntime:
 			stimulus.record_touch_data(
 				touch_event['xcoor'],
 				touch_event['ycoor'],
+				flip_time,
 				touch_event['touch_time'],
 				touch_event['release_time'])
 		return outcome
@@ -172,9 +175,11 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 
 	outcome = Outcome.NULL
 
-	events = []
+	trial_data = []
 	for window in windows:
-		flip_time = ppy_runtime.run_window(window, ppy_window)	
+		flip_time = ppy_runtime.run_window(window, ppy_window)
+		window.flip_tstamp = flip_time
+
 		if window.is_outcome:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
 			while not all([target.touched for target in targets]):
@@ -192,16 +197,21 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
 		# save to JSON
-		events.append(pack_event_data(flip=flip_time, window=window.pack_data()))
+		#events.append(pack_event_data(flip=flip_time, window=window.pack_data()))
+
+		window_obj = window.pack_data()
+		window_obj['stimuli'] = []
 		for stimulus in window.stimuli:
-			events.append(pack_event_data(
-				flip=flip_time,
-				stimulus=stimulus.pack_data(),
-				x=stimulus.touch_pos[0] if stimulus.touch_pos else None,
-				y=stimulus.touch_pos[1] if stimulus.touch_pos else None,
-				touch=stimulus.touch_tstamp,
-				release=stimulus.release_tstamp))
+			window_obj['stimuli'].append(stimulus.pack_data())
+			#events.append(pack_event_data(
+			#	flip=flip_time,
+			#	stimulus=stimulus.pack_data(),
+			#	x=stimulus.touch_pos[0] if stimulus.touch_pos else None,
+			#	y=stimulus.touch_pos[1] if stimulus.touch_pos else None,
+			#	touch=stimulus.touch_tstamp,
+			#	release=stimulus.release_tstamp))
+		trial_data.append(window_obj)
 		window.reset()
 
-	return datetime.now(), outcome, events
+	return datetime.now(), outcome, trial_data
 	# this is the last outcome from all windows
