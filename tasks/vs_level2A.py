@@ -75,7 +75,7 @@ class TaskInterface:
 		yellow_star = Stimulus(shape=StimulusShape.STAR,
 					size=(0.7,0.7),
 					color=(1, 1, 0),
-					size_touch= (150,150))
+					size_touch= (160,160))
 		yellow_diamond = Stimulus(shape=StimulusShape.DIAMOND,
 					size=(120,120),
 					color=(1, 1, 0),
