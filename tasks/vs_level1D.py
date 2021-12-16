@@ -63,19 +63,19 @@ class TaskInterface:
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
 					color=(0, 0.7, 1),
-					size_touch= (120,120))
+					size_touch= (160,160))
 		blue_star = Stimulus(shape=StimulusShape.STAR,
-					size=(0.6,0.6),
+					size=(0.7,0.7),
 					color=(0, 0.7, 1),
-					size_touch= (120,120))
+					size_touch= (160,160))
 		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
+					size=(140,140),
+					color=(0, 0.7, 1),
+					size_touch= (160,160))
+		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
 					size=(120,120),
 					color=(0, 0.7, 1),
-					size_touch= (120,120))
-		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
-					size=(150,150),
-					color=(0, 0.7, 1),
-					size_touch= (120,120))
+					size_touch= (160,160))
 
 		distractor_list = [blue_triangle, blue_star, blue_circle, blue_diamond]
 		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
@@ -102,7 +102,7 @@ class TaskInterface:
 		# Window 1
 		w1 = Window(transition=WindowTransition.RELEASE)
 		w1_square = Stimulus(shape=StimulusShape.SQUARE,
-					 size=(100, 100),
+					 size=(200, 200),
 					 color=(-1, -1, -1),
 					 position=(0, 0))
 		w1.add_stimulus(w1_square)
@@ -115,9 +115,9 @@ class TaskInterface:
 		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
 		#targets = trial_parameters['targets']
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
-				size=(20,20), 
+				size=(25,25), 
 				color = (1, 1, 0),
-				size_touch=(120,120))
+				size_touch=(160,160))
 		target_stim.position = trial_parameters['positions']
 		target_stim.outcome = Outcome.SUCCESS
 		#target_stim.after_touch = [{'name': 'hide'}]
