@@ -93,7 +93,7 @@ class TaskInterface:
 		# Window 1
 		w1 = Window(transition=WindowTransition.RELEASE)
 		w1_square = Stimulus(shape=StimulusShape.SQUARE,
-					 size=(100, 100),
+					 size=(200, 200),
 					 color=(-1, -1, -1),
 					 position=(0, 0))
 		w1.add_stimulus(w1_square)
