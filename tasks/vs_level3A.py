@@ -60,29 +60,29 @@ class TaskInterface:
 
 
 		yellow_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
-					size=(20,20), 
+					size=(25,25), 
 					color = (1, 1, 0),
-					size_touch=(120,120))
+					size_touch=(160,160))
 		yellow_arrow_nw = Stimulus(shape=StimulusShape.ARROW_NW,
-					size=(20,20), 
+					size=(25,25), 
 					color = (1, 1, 0),
-					size_touch=(120,120))
+					size_touch=(160,160))
 		yellow_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
-					size=(20,20), 
+					size=(25,25), 
 					color = (1, 1, 0),
-					size_touch=(120,120))
+					size_touch=(160,160))
 		yellow_arrow_sw = Stimulus(shape=StimulusShape.ARROW_SW,
-					size=(20,20), 
+					size=(25,25), 
 					color = (1, 1, 0),
-					size_touch=(120,120))
+					size_touch=(160,160))
 		blue_arrow_s = Stimulus(shape=StimulusShape.ARROW_S,
-					size=(20,20), 
+					size=(25,25), 
 					color = (0, 0.7, 1),
-					size_touch=(120,120))
+					size_touch=(160,160))
 		blue_arrow_n = Stimulus(shape=StimulusShape.ARROW_N,
-					size=(20,20), 
+					size=(25,25), 
 					color = (0, 0.7, 1),
-					size_touch=(120,120))
+					size_touch=(160,160))
 
 		distractor_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n]
 		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
@@ -109,9 +109,9 @@ class TaskInterface:
 		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
 		#targets = trial_parameters['targets']
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
-				size=(20,20), 
+				size=(25,25), 
 				color = (1, 1, 0),
-				size_touch=(120,120))
+				size_touch=(160,160))
 		target_stim.position = trial_parameters['positions']
 		target_stim.outcome = Outcome.SUCCESS
 		#target_stim.after_touch = [{'name': 'hide'}]
