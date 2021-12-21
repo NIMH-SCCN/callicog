@@ -6,8 +6,9 @@ import csv
 from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash, make_response
 from flask_cors import CORS
 from sqlalchemy.orm import scoped_session
+from sqlalchemy.sql import true
 from database import DatabaseSession
-from marmobox_schema import Protocol, Task, Animal, Template, TemplateProtocol, Experiment
+from marmobox_schema import Protocol, Task, Animal, Template, TemplateProtocol, Experiment, Trial
 
 db = DatabaseSession()
 
@@ -61,27 +62,34 @@ def getTemplateList():
 @app.route('/trials', methods=['GET', 'POST'])
 def getTrialQueryResults():
 	if request.method == 'GET':
-		return render_template('trials.html', query_result=[])
+		return render_template('trials.html', windows=[])
 	if request.method == 'POST':
 		trial_id = request.form['trial_id']
 		stim_shape = request.form['stim_shape']
 		win_delay = request.form['win_delay']
-		
-		#tasks = db.query(Task).filter(Task.experiment_id == experiment_id).all()
-		return render_template('trials.html', query_result=[])
+		if trial_id == '':
+			return redirect(request.url)
+		trial_query = db.query(Trial).filter(Trial.trial_id == trial_id).all()
+		if len(trial_query) > 0:
+			trial = trial_query[0]
+			return render_template('trials.html', windows=trial.windows)
+		return render_template('trials.html', windows=[])
 
 @app.route('/experiments', methods=['GET', 'POST'])
 def getExperimentList():
 	all_animals = db.query(Animal).all()
 	all_templates = db.query(Template).all()
 	if request.method == 'GET':
-		experiments = db.query(Experiment).order_by(Experiment.experiment_start).all()	
+		experiments = db.query(Experiment).order_by(Experiment.experiment_start).all()
 	if request.method == 'POST':
 		animal_id = request.form['animal_id']
-		#template_id = request.form['template_id']
-		if animal_id == '':
+		template_id = request.form['template_id']
+		if animal_id == '' or template_id == '':
 			return redirect(request.url)
-		experiments = db.query(Experiment).filter(Experiment.animal_id == animal_id).all()
+		experiments = db.query(Experiment).filter(
+			(true() if animal_id == '0' else Experiment.animal_id == animal_id),
+			(true() if template_id == '0' else Experiment.template_id == template_id)
+		).all()
 	return render_template('experiments.html', experiments=experiments, all_animals=all_animals, all_templates=all_templates)
 
 @app.route('/experiments/detail/<int:id>', methods=['GET'])
@@ -103,6 +111,15 @@ def saveExperiment(id):
 	response.headers['Content-Disposition'] = f'attachment; filename=experiment_{id}_data.csv'
 	response.headers["Content-type"] = "text/csv"
 	return response
+
+@app.route('/experiments/delete/<int:id>')
+def deleteExperiment(id):
+	query_task = db.query(Experiment).filter(Experiment.experiment_id == id).all()
+	if len(query_task) > 0:
+		experiment = query_task[0]
+		db.delete(experiment)
+		db.commit()
+		return redirect('/experiments')
 
 @app.route('/tasks/update/<int:id>', methods=['GET', 'POST'])
 def updateTask(id):

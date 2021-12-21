@@ -49,6 +49,7 @@
 				</p>
 				<ul class="menu-list">
 					<li><a href="/experiments">Experiments</a></li>
+					<li><a href="/trials">Trials</a></li>
 				</ul>
 			</aside>
 		</div>
@@ -70,6 +71,7 @@
 							<div class="control">
 								<div class="select">
 									<select name="animal_id">
+										<option value="0">Show all</option>
 										{% for animal in all_animals %}
 											<option value="{{ animal.animal_id }}">{{ animal.animal_code }}</option>
 										{% endfor %}
@@ -84,6 +86,7 @@
 							<div class="control">
 								<div class="select">
 									<select name="template_id">
+										<option value="0">Show all</option>
 										{% for template in all_templates %}
 											<option value="{{ template.template_id }}">{{ template.template_name }}</option>
 										{% endfor %}
@@ -94,9 +97,9 @@
 					</div>
 				</div>
 				<div class="field is-grouped">
-					<div class="control">
+					<!--<div class="control">
 						<a class="button is-success" href="#">Run</a>
-					</div>
+					</div>-->
 					<div class="control">
 						<button class="button is-link" type="submit">Search</button>
 					</div>
@@ -114,6 +117,7 @@
 						<th>Start</th>
 						<th>End</th>
 						<th>Status</th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tfoot>
@@ -124,6 +128,7 @@
 						<th>Start</th>
 						<th>End</th>
 						<th>Status</th>
+						<th>Action</th>
 					</tr>
 				</tfoot>
 				<tbody>
@@ -132,10 +137,10 @@
 						<td>{{ experiment.experiment_id }}</td>
 						<td>{{ experiment.animal.animal_code }}</td>
 						<td>{{ experiment.template.template_name }}</td>
-						<!--<td><a href="{{ url_for('saveExperiment', id=experiment.experiment_id) }}">{{ experiment.experiment_start }}</a></td>-->
-						<td>{{ experiment.experiment_start }}</td>
+						<td><a href="{{ url_for('saveExperiment', id=experiment.experiment_id) }}">{{ experiment.experiment_start }}</a></td>
 						<td>{{ experiment.experiment_end }}</td>
 						<td>{{ 'ongoing' if experiment.experiment_end == None else 'done' }}</td>
+						<td><a href="{{ url_for('deleteExperiment', id=experiment.experiment_id) }}" onclick="return confirm('This will DELETE all associated tasks. Do you really want to continue?');">Delete</a></td>
 					</tr>
 					{% endfor %}
 				</tbody>
