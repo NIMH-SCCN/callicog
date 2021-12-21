@@ -3,6 +3,7 @@ from datetime import datetime
 from psychopy import visual
 import math
 import time
+from serial import SerialException
 
 class WindowRuntime:
 	def __get_ppy_stim_from_shape(self, shape, ppy_window):
@@ -174,6 +175,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 	ppy_mouse.clickReset()
 
 	outcome = Outcome.NULL
+	box_status = "CalliCog OK"
 
 	trial_data = []
 	for window in windows:
@@ -189,10 +191,16 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			# evaluate window outcome
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
-				box.correct()
+				try:
+					box.correct()
+				except SerialException:
+					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVE.'
 			elif outcome == Outcome.FAIL:
 				print('box: incorrect')
-				box.incorrect()
+				try:
+					box.incorrect()
+				except:
+					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'
 		elif window.blank == 0:
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
@@ -213,5 +221,5 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		trial_data.append(window_obj)
 		window.reset()
 
-	return datetime.now(), outcome, trial_data
+	return datetime.now(), outcome, trial_data, box_status
 	# this is the last outcome from all windows
