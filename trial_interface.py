@@ -119,7 +119,6 @@ class WindowRuntime:
 						touch_event = {
 							'xcoor': position[0],
 							'ycoor': position[1],
-							#'delay': (touch_time - flip_time).total_seconds()
 							'touch_time': touch_time
 						}
 						if window.transition == WindowTransition.TOUCH:
@@ -135,7 +134,6 @@ class WindowRuntime:
 							while ppy_mouse.getPressed()[0]:
 								time.sleep(0.001)
 							release_time = datetime.now()
-							#touch_event['delay'] = (release_time - flip_time).total_seconds()
 							touch_event['release_time'] = release_time
 							print('released')
 							return stimulus, touch_event, stimulus.outcome
@@ -155,19 +153,6 @@ class WindowRuntime:
 				return 0, 0, True
 		touch_time = datetime.now()
 		return touch_time, (touch_time - start).total_seconds(), False
-
-def pack_event_data(stimulus=None, window=None, x=None, y=None, flip=None, touch=None, release=None, timeout=None):
-	event = {
-		'stimulus': stimulus,
-		'window': window,
-		'x': x,
-		'y': y,
-		'flip': str(flip) if flip else None,
-		'touch': str(touch) if touch else None,
-		'release': str(release) if release else None,
-		'timeout': str(timeout) if timeout else None
-	}
-	return event
 
 def run_trial(windows, box, ppy_window, ppy_mouse):
 	ppy_runtime = WindowRuntime()
@@ -197,19 +182,10 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
 		# save to JSON
-		#events.append(pack_event_data(flip=flip_time, window=window.pack_data()))
-
 		window_obj = window.pack_data()
 		window_obj['stimuli'] = []
 		for stimulus in window.stimuli:
 			window_obj['stimuli'].append(stimulus.pack_data())
-			#events.append(pack_event_data(
-			#	flip=flip_time,
-			#	stimulus=stimulus.pack_data(),
-			#	x=stimulus.touch_pos[0] if stimulus.touch_pos else None,
-			#	y=stimulus.touch_pos[1] if stimulus.touch_pos else None,
-			#	touch=stimulus.touch_tstamp,
-			#	release=stimulus.release_tstamp))
 		trial_data.append(window_obj)
 		window.reset()
 

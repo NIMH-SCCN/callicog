@@ -36,10 +36,7 @@ class ClientJob(Thread):
 		return response
 
 	def parse_msg(self, msg):
-		if msg['action'] == 'wait_for_animal': # clean this
-			animal_code = 'MSIMD-2123'#mbox.wait_for_animal(timeout = 3)
-			response = self.pack_response(animal_code)
-		elif msg['action'] == 'run_trial':
+		if msg['action'] == 'run_trial':
 			trial_data = self.mbox_interface.run_trial(msg['trial_params'])
 			response = self.pack_response(trial_data)
 		self.client_socket.send(bytes(json.dumps(response), 'utf8'))
@@ -55,7 +52,6 @@ class ClientJob(Thread):
 					break
 				try:
 					msg = json.loads(buf.decode())
-					#self.parse_msg(msg)
 				except:
 					print('Cannot decode data as JSON. Trying with pickle...')
 					pass

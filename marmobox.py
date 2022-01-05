@@ -79,7 +79,11 @@ class Marmobox:
 			}
 		}
 		self.send_binary(pickle.dumps(message))
-		response = self.receive()
+		try:
+			response = self.receive()
+		except KeyboardInterrupt:
+			print('/ninterrupted, exiting gracefully')
+			return None
 		if response and response['success'] == 1:
 			body = response['body']
 			trial_data = body['data']
@@ -91,9 +95,6 @@ class Marmobox:
 		while not current_task.complete:
 			session = Session(task=current_task, session_start=datetime.now())
 			trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.template_protocol.target_trials)
-
-			#pseudorandom_trials = self.get_fixed_pseudorandom_trials(task_interface, current_task.target_trials)
-			#iter_trials = iter(pseudorandom_trials)
 
 			valid_trials = []
 			while len(valid_trials) < current_task.template_protocol.target_trials:
@@ -111,10 +112,6 @@ class Marmobox:
 				trial_events = trial_data['events']
 				if len(trial_events) > 0:
 					self.save_trial_events(trial_events, new_trial)
-					#event = Event(trial=new_trial, 
-					#	press_xcoor=touch_event['xcoor'],
-					#	press_ycoor=touch_event['ycoor'],
-					#	delay=touch_event['delay'])
 				if new_trial.trial_status == Outcome.NULL:
 					trial_indices.append(next_trial)
 				valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
@@ -181,6 +178,9 @@ class Marmobox:
 
 			new_trial = Trial(session=session, trial_start=datetime.now())
 			trial_data = self.run_trial(trial_windows)
+			if not trial_data:
+				self.db_session.commit()
+				raise Exception # invalid trial, abort
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
 			trial_events = trial_data['events']
@@ -188,10 +188,6 @@ class Marmobox:
 				trial_indices.append(next_trial)
 			if len(trial_events) > 0:
 				self.save_trial_events(trial_events, new_trial)
-				#event = Event(trial=new_trial,
-				#	press_xcoor=touch_event['xcoor'],
-				#	press_ycoor=touch_event['ycoor'],
-				#	delay=touch_event['delay'])
 
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
@@ -222,10 +218,6 @@ class Marmobox:
 				trial_indices.append(next_trial)
 			if len(trial_events) > 0:
 				self.save_trial_events(trial_events, new_trial)
-				#event = Event(trial=new_trial,
-				#	press_xcoor=touch_event['xcoor'],
-				#	press_ycoor=touch_event['ycoor'],
-				#	delay=touch_event['delay'])
 
 			# check if task is over
 			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
@@ -246,21 +238,6 @@ class Marmobox:
 			return trial_subset, iter(trial_subset)
 		return trial_indices, iter_trials
 
-	#def get_fixed_pseudorandom_trials(self, task_interface, target_trials):
-	#	trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
-	#	pseudorandom_trials = []
-	#	for i in range(target_trials):
-	#		while True:
-	#			try:
-	#				next_trial = next(iter_trials)
-	#				#trial_windows = task_interface.build_trial(next_trial)
-	#			except StopIteration:
-	#				trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
-	#				continue
-	#			break
-	#		pseudorandom_trials.append(next_trial)
-	#	return pseudorandom_trials
-
 	def new_experiment(self, animal, template):
 		experiment = Experiment(animal=animal, template=template, experiment_start=datetime.now())
 		for protocol in template.protocols:
@@ -270,6 +247,7 @@ class Marmobox:
 		return experiment
 
 	def continue_task_experiment(self, experiment):
+		exit_code = 0
 		# check tasks
 		open_tasks = [task for task in experiment.tasks if not task.complete] # already sorted
 		if len(open_tasks) == 0:
@@ -288,12 +266,17 @@ class Marmobox:
 			elif progression == Progression.SESSION_BASED:
 				self.run_session_based_trials(current_task, task_interface)
 			elif progression == Progression.TARGET_BASED:
-				self.run_target_based_trials(current_task, task_interface)
+				try:
+					self.run_target_based_trials(current_task, task_interface)
+				except:
+					self.db_session.commit()
+					print('\n\n\ncaught kill signal, experiment interrupted')
+					return
 
 			if current_task.complete:
 				print('task complete')
 			else:
-				print('taks incomplete')
+				print('tasks incomplete')
 
 		if all([task.complete for task in open_tasks]):
 			experiment.experiment_end = datetime.now()
