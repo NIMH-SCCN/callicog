@@ -25,7 +25,7 @@ class Marmobox:
 
 		status = self.receive(self.RX_TIMEOUT)
 		if status:
-			print(status) # status report
+			print(json.dumps(status, indent=2)) # status report, return fail status if arduino fails
 
 	def disconnect(self):
 		self.client_socket.close()
@@ -87,7 +87,7 @@ class Marmobox:
 		if response and response['success'] == 1:
 			body = response['body']
 			trial_data = body['data']
-			print(trial_data)
+			print(json.dumps(trial_data, indent=2))
 			return trial_data
 		return None
 
@@ -161,7 +161,10 @@ class Marmobox:
 					stimulus_touched=stimulus['touched'],
 					stimulus_flip_timestamp=stimulus['flip'],
 					stimulus_touch_timestamp=stimulus['touch'],
-					stimulus_release_timestamp=stimulus['release']) 
+					stimulus_release_timestamp=stimulus['release'])
+				if stimulus['touch_pos']:
+					window_stimulus.stimulus_touch_x = stimulus['touch_pos'][0]
+					window_stimulus.stimulus_touch_y = stimulus['touch_pos'][1]
 		#self.db_session.commit()
 
 	def run_target_based_trials(self, current_task, task_interface):

@@ -91,6 +91,8 @@ CREATE TABLE stimulus_object(
 	stimulus_image_file VARCHAR(100),
 	stimulus_timeout_gain NUMERIC,
 	stimulus_touched BOOLEAN DEFAULT FALSE,
+	stimulus_touch_x INTEGER,
+	stimulus_touch_y INTEGER,
 	stimulus_flip_timestamp TIMESTAMP,
 	stimulus_touch_timestamp TIMESTAMP,
 	stimulus_release_timestamp TIMESTAMP,

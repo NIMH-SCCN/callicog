@@ -48,6 +48,7 @@
 				</p>
 				<ul class="menu-list">
 					<li><a href="/experiments">Experiments</a></li>
+					<li><a href="/trials">Trials</a></li>
 				</ul>
 			</aside>
 		</div>
@@ -99,11 +100,12 @@
 						<th>Outcome?</th>
 						<th>Timeout</th>
 						<th>Fail?</th>
-						<th>Stimulus</th>
 						<th>Flip</th>
+						<th>Stimulus</th>
 						<th>Touched?</th>
 						<th>Touch</th>
 						<th>Release</th>
+						<th>Label</th>
 					</tr>
 				</thead>
 				<tfoot>
@@ -113,22 +115,46 @@
 						<th>Outcome?</th>
 						<th>Timeout</th>
 						<th>Fail?</th>
-						<th>Stimulus</th>
 						<th>Flip</th>
+						<th>Stimulus</th>
 						<th>Touched?</th>
 						<th>Touch</th>
 						<th>Release</th>
+						<th>Label</th>
 					</tr>
 				</tfoot>
-				<!--<tbody>
-					{% for task in tasks %}
-					<tr>
-						<td>{{ task.task_order }}</td>
-						<td>{{ task.progression }}</td>
-						<td>{{ task.complete }}</td>
-					</tr>
+				<tbody>
+					{% for window in windows %}
+						<tr>
+							<td>{{ 'delay' if window.window_transition == None else window.window_transition }}</td>
+							<td>{{ '' if window.window_delay == 0 else window.window_delay }}</td>
+							<td>{{ 'Yes' if window.is_outcome else 'No' }}</td>
+							<td>{{ '' if window.window_timeout == 0 else window.window_timeout }}</td>
+							<td>{{ 'Yes' if window.is_outside_fail else 'No' }}</td>
+							<td>{{ '' if window.flip_timestamp == None else window.flip_timestamp }}</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>{{ '' if window.window_label == None else window.window_label }}</td>
+						</tr>
+						{% for stimulus in window.stimuli %}
+							<tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>{{ '' if window.flip_timestamp == None else window.flip_timestamp }}</td>
+								<td>{{ stimulus.stimulus_shape }}</td>
+								<td>{{ 'Yes' if stimulus.stimulus_touched else 'No' }}</td>
+								<td>{{ '' if stimulus.stimulus_touch_timestamp == None else stimulus.stimulus_touch_timestamp }}</td>
+								<td>{{ '' if stimulus.stimulus_release_timestamp == None else stimulus.stimulus_release_timestamp }}</td>
+								<td>{{ '' if window.window_label == None else window.window_label }}</td>
+							</tr>
+						{% endfor %}
 					{% endfor %}
-				</tbody>-->
+				</tbody>
 			</table>
 		</div>
 	</div>

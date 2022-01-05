@@ -15,7 +15,7 @@ class WindowObject(Base):
 	flip_timestamp = Column(DateTime, nullable=False)
 
 	trial = relationship('Trial', back_populates='windows')
-	stimuli = relationship('StimulusObject', back_populates='window')
+	stimuli = relationship('StimulusObject', back_populates='window', cascade="all, delete")
 
 	def __repr__(self):
 		return '<WindowObject(window_object_id=%s)>' % str(self.window_object_id)
@@ -36,6 +36,8 @@ class StimulusObject(Base):
 	stimulus_image_file = Column(String)
 	stimulus_timeout_gain = Column(Float)
 	stimulus_touched = Column(Boolean, default=False)
+	stimulus_touch_x = Column(Integer)
+	stimulus_touch_y = Column(Integer)
 	stimulus_flip_timestamp = Column(DateTime)
 	stimulus_touch_timestamp = Column(DateTime)
 	stimulus_release_timestamp = Column(DateTime)
@@ -70,7 +72,7 @@ class Trial(Base):
 	trial_status = Column(String, default='new')
 
 	session = relationship('Session', back_populates='trials')
-	windows = relationship('WindowObject', back_populates='trial')
+	windows = relationship('WindowObject', back_populates='trial', cascade="all, delete")
 	#events = relationship('Event', back_populates='trial', cascade="all, delete")
 
 	def __repr__(self):
