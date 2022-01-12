@@ -46,7 +46,7 @@ class TaskInterface:
 		# define list of pseudorandom parameters
 
 		#ntargets_list = [1]
-		ndistractors_list = [5]
+		ndistractors_list = [7]
 		#delays_list = [1, 2, 4]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 
@@ -60,29 +60,38 @@ class TaskInterface:
 		
 		
 
-		yellow_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
+		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
-					color=(1, 1, 0),
+					color=(0, 0.7, 1),
 					size_touch= (160,160))
-		blue_arrow_e = Stimulus(shape=StimulusShape.ARROW_E,
-					size=(25,25), 
-					color = (0, 0.7, 1),
-					size_touch=(160,160))
-		blue_arrow_w = Stimulus(shape=StimulusShape.ARROW_W,
-					size=(25,25), 
-					color = (0, 0.7, 1),
-					size_touch=(160,160))
-		yellow_star = Stimulus(shape=StimulusShape.STAR,
+		blue_star = Stimulus(shape=StimulusShape.STAR,
 					size=(0.7,0.7),
-					color=(1, 1, 0),
+					color=(0, 0.7, 1),
 					size_touch= (160,160))
-		yellow_diamond = Stimulus(shape=StimulusShape.DIAMOND,
+		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
+					size=(140,140),
+					color=(0, 0.7, 1),
+					size_touch= (160,160))
+		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
 					size=(120,120),
-					color=(1, 1, 0),
+					color=(0, 0.7, 1),
 					size_touch= (160,160))
-		distractor_list = [yellow_triangle, blue_arrow_e, blue_arrow_w, yellow_star, yellow_diamond]
-		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
 
+		distractor_list = [blue_triangle, blue_star, blue_circle, blue_diamond]
+		self.__add_pseudorandom_parameter_list('distractors', distractor_list)
+		# additional pseudorandom parameters
+		# e.g. Supertask: positions depending on 'targets'
+		#positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
+		#self.__add_pseudorandom_parameter_list('positions', positions_list)
+		
+		#new_trials = []
+		#for trial in trials:
+		#	distractors = trial['distractors']
+		#	C = list(combinations(range(len(positions_list)), distractors))
+		#	for positions in C:
+		#		new_trial = copy.copy(trial)
+		#		new_trial['positions'] = [positions_list[position_index] for position_index in positions]
+		#		new_trials.append(new_trial)
 
 		self.trials = trials
 		
@@ -115,7 +124,10 @@ class TaskInterface:
 		#target_stim.timeout_gain = 2
 		#target_stim.auto_draw = True
 		w3.add_stimulus(target_stim)
-
+		
+		# set distractors
+		#distractors = self.__randomize_from(self.pseudorandom_parameters['distractors'])
+		#distractor_positions = self.__randomize_from(self.pseudorandom_parameters['positions'], exclude=trial_parameters['positions'])
 		distractor_positions = self.__randomize_from(self.pseudorandom_parameters['positions'], exclude=[trial_parameters['positions']], size=trial_parameters['ndistractor'])
 		for position in distractor_positions: #i in range(trial_parameters['ndistractor']):
 			distractor = self.__randomize_from(self.pseudorandom_parameters['distractors'], size=1)

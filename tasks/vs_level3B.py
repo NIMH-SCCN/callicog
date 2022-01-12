@@ -44,7 +44,7 @@ class TaskInterface:
 
 	def initialize_pseudorandom_parameters(self):
 		# define list of pseudorandom parameters
-		ndistractors_list = [2,3]
+		ndistractors_list = [2]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 		
 		
