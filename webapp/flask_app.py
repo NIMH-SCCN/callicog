@@ -9,14 +9,24 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.sql import true
 from database import DatabaseSession
 from marmobox_schema import Protocol, Task, Animal, Template, TemplateProtocol, Experiment, Trial
+from datetime import datetime
+
+DATE_FORMAT = '%d/%m/%Y'
+TIME_FORMAT = '%H:%M:%S'
 
 db = DatabaseSession()
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "secret"
 
 CORS(app)
 app.session = scoped_session(DatabaseSession, scopefunc=_app_ctx_stack.__ident_func__)
+
+def isDateValid(datetime_string, format_string):
+	try:
+		datetime.strptime(datetime_string, format_string)
+	except:
+		return False
+	return True
 
 @app.route('/animals', methods=['GET', 'POST'])
 def getAnimalList():
@@ -84,12 +94,36 @@ def getExperimentList():
 	if request.method == 'POST':
 		animal_id = request.form['animal_id']
 		template_id = request.form['template_id']
-		if animal_id == '' or template_id == '':
+		start_date = request.form['start_date']
+		start_time = request.form['start_time']
+		end_date = request.form['end_date']
+		end_time = request.form['end_time']
+		experiment_id = request.form['experiment_id']
+
+		start_format = DATE_FORMAT
+		end_format = DATE_FORMAT
+		if start_time == '':
+			start_datetime = start_date
+		else:
+			start_datetime = (start_date + '-' + start_time)
+			start_format = DATE_FORMAT + '-' + TIME_FORMAT
+		if end_time == '':
+			end_datetime = end_date
+		else:
+			end_datetime = (end_date + '-' + end_time)
+			end_format = DATE_FORMAT + '-' + TIME_FORMAT
+
+		if (start_datetime == '' or isDateValid(start_datetime, start_format)) and (end_datetime == '' or 
+			isDateValid(end_datetime, end_format)):
+			experiments = db.query(Experiment).filter(
+				(true() if animal_id == '0' else Experiment.animal_id == animal_id),
+				(true() if template_id == '0' else Experiment.template_id == template_id),
+				(true() if start_datetime == '' else Experiment.experiment_start >= datetime.strptime(start_datetime, start_format)),
+				(true() if end_datetime == '' else Experiment.experiment_end <= datetime.strptime(end_datetime, end_format)),
+				(true() if experiment_id == '' else Experiment.experiment_id == experiment_id)
+			).all()
+		else:
 			return redirect(request.url)
-		experiments = db.query(Experiment).filter(
-			(true() if animal_id == '0' else Experiment.animal_id == animal_id),
-			(true() if template_id == '0' else Experiment.template_id == template_id)
-		).all()
 	return render_template('experiments.html', experiments=experiments, all_animals=all_animals, all_templates=all_templates)
 
 @app.route('/experiments/detail/<int:id>', methods=['GET'])

@@ -96,6 +96,52 @@
 						</div>
 					</div>
 				</div>
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Start</label>
+							<div class="columns">
+								<div class="column is-half">
+									<div class="control">
+										<input type="text" name="start_date" class="input" placeholder="dd/mm/YYYY">
+									</div>
+								</div>
+								<div class="column is-half">
+									<div class="control">
+										<input type="text" name="start_time" class="input" placeholder="HH:MM:SS">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">End</label>
+							<div class="columns">
+								<div class="column is-half">
+									<div class="control">
+										<input type="text" name="end_date" class="input" placeholder="dd/mm/YYYY">
+									</div>
+								</div>
+								<div class="column is-half">
+									<div class="control">
+										<input type="text" name="end_time" class="input" placeholder="HH:MM:SS">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Experiment ID</label>
+							<div class="control">
+								<input type="text" name="experiment_id" class="input" placeholder="e.g. 36">
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="field is-grouped">
 					<!--<div class="control">
 						<a class="button is-success" href="#">Run</a>
@@ -137,8 +183,8 @@
 						<td>{{ experiment.experiment_id }}</td>
 						<td>{{ experiment.animal.animal_code }}</td>
 						<td>{{ experiment.template.template_name }}</td>
-						<td><a href="{{ url_for('saveExperiment', id=experiment.experiment_id) }}">{{ experiment.experiment_start }}</a></td>
-						<td>{{ experiment.experiment_end }}</td>
+						<td><a href="{{ url_for('saveExperiment', id=experiment.experiment_id) }}">{{ experiment.experiment_start.strftime('%d/%m/%Y-%H:%M:%S') }}</a></td>
+						<td>{{ experiment.experiment_end.strftime('%d/%m/%Y-%H:%M:%S') }}</td>
 						<td>{{ 'ongoing' if experiment.experiment_end == None else 'done' }}</td>
 						<td><a href="{{ url_for('deleteExperiment', id=experiment.experiment_id) }}" onclick="return confirm('This will DELETE all associated tasks. Do you really want to continue?');">Delete</a></td>
 					</tr>
