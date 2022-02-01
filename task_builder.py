@@ -48,6 +48,7 @@ class Window:
 		self.transition = transition
 		self.is_outcome = is_outcome
 		self.is_outside_fail = is_outside_fail
+		self.fail_position = None
 		self.timeout = timeout
 		self.label = label
 		self.active_timeout = timeout
@@ -71,6 +72,7 @@ class Window:
 			'transition': self.transition,
 			'is_outcome': self.is_outcome,
 			'is_outside_fail': self.is_outside_fail,
+			'fail_position': self.fail_position,
 			'timeout': self.timeout,
 			'flip': str(self.flip_tstamp) if self.flip_tstamp else None
 		}

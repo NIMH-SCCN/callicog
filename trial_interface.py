@@ -99,6 +99,8 @@ class WindowRuntime:
 				flip_time,
 				touch_event['touch_time'],
 				touch_event['release_time'])
+		elif window.is_outside_fail:
+			window.fail_position = (touch_event['xcoor'], touch_event['ycoor'])
 		return outcome
 
 	def __check_touch(self, window, flip_time, ppy_mouse):
@@ -139,6 +141,12 @@ class WindowRuntime:
 							print('released')
 							return stimulus, touch_event, stimulus.outcome
 				print('outside, waiting for release')
+				position = ppy_mouse.getPos()
+				touch_event = {
+					'xcoor': position[0],
+					'ycoor': position[1],
+					'touch_time': touch_time
+				}
 				while ppy_mouse.getPressed()[0]:
 					time.sleep(0.001)
 				print('released')
