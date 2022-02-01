@@ -8,6 +8,13 @@ CREATE TABLE protocol (
 	protocol_name VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE protocol_parameter (
+	protocol_parameter_id SERIAL PRIMARY KEY,
+	parameter_name VARCHAR(50) NOT NULL,
+	protocol_id INTEGER NOT NULL,
+	FOREIGN KEY (protocol_id) REFERENCES protocol(protocol_id)
+);
+
 CREATE TABLE template (
 	template_id SERIAL PRIMARY KEY,
 	template_name VARCHAR(50) NOT NULL
@@ -96,21 +103,22 @@ CREATE TABLE stimulus_object(
 	stimulus_flip_timestamp TIMESTAMP,
 	stimulus_touch_timestamp TIMESTAMP,
 	stimulus_release_timestamp TIMESTAMP,
-	window_object_id INTEGER NOT NULL,
+	window_object_id INTEGER,
 	FOREIGN KEY (window_object_id) REFERENCES window_object(window_object_id)
 );
 
---CREATE TABLE event(
---	event_id SERIAL PRIMARY KEY,
---	trial_id INTEGER NOT NULL,
---	flip_timestamp TIMESTAMP,
---	touch_timestamp TIMESTAMP,
---	release_timestamp TIMESTAMP,
---	input_xcoor INTEGER,
---	input_ycoor INTEGER,
---	stimulus_object_id INTEGER,
---	window_object_id INTEGER,
---	FOREIGN KEY (stimulus_object_id) REFERENCES stimulus_object(stimulus_object_id),
---	FOREIGN KEY (window_object_id) REFERENCES window_object(window_object_id),
---	FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
---);
+CREATE TABLE trial_parameter(
+	trial_parameter_id SERIAL PRIMARY KEY,
+	protocol_parameter_id INTEGER NOT NULL,
+	parameter_value VARCHAR(200),
+	stimulus_object_id INTEGER,
+	trial_id INTEGER NOT NULL,
+	FOREIGN KEY (stimulus_object_id) REFERENCES stimulus_object(stimulus_object_id),
+	FOREIGN KEY (protocol_parameter_id) REFERENCES protocol_parameter(protocol_parameter_id),
+	FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
+);
+
+# used if window_object_id has the not null constraint for stimulus_object table
+alter table stimulus_object alter window_object_id drop not null;
+alter table window_object add column outside_fail_position_x INTEGER;
+alter table window_object add column outside_fail_position_y INTEGER;

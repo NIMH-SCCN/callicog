@@ -164,6 +164,7 @@
 						<th>End</th>
 						<th>Status</th>
 						<th>Action</th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tfoot>
@@ -175,6 +176,7 @@
 						<th>End</th>
 						<th>Status</th>
 						<th>Action</th>
+						<th>Action</th>
 					</tr>
 				</tfoot>
 				<tbody>
@@ -183,10 +185,12 @@
 						<td>{{ experiment.experiment_id }}</td>
 						<td>{{ experiment.animal.animal_code }}</td>
 						<td>{{ experiment.template.template_name }}</td>
-						<td><a href="{{ url_for('saveExperiment', id=experiment.experiment_id) }}">{{ experiment.experiment_start.strftime('%d/%m/%Y-%H:%M:%S') }}</a></td>
-						<td>{{ experiment.experiment_end.strftime('%d/%m/%Y-%H:%M:%S') }}</td>
+						<!--<td><a href="{{ url_for('saveExperiment', id=experiment.experiment_id) }}">{{ experiment.experiment_start.strftime('%d/%m/%Y-%H:%M:%S') }}</a></td>-->
+						<td><a href="{{ url_for('getExperimentDetails', id=experiment.experiment_id) }}">{{ experiment.experiment_start.strftime('%d/%m/%Y-%H:%M:%S') }}</a></td>
+						<td>{% if experiment.experiment_end %} {{ experiment.experiment_end.strftime('%d/%m/%Y-%H:%M:%S') }} {% endif %}</td>
 						<td>{{ 'ongoing' if experiment.experiment_end == None else 'done' }}</td>
 						<td><a href="{{ url_for('deleteExperiment', id=experiment.experiment_id) }}" onclick="return confirm('This will DELETE all associated tasks. Do you really want to continue?');">Delete</a></td>
+						<td><a href="{{ url_for('saveExperiment', id=experiment.experiment_id) }}">Export</a></td>
 					</tr>
 					{% endfor %}
 				</tbody>

@@ -97,6 +97,7 @@ class Marmobox:
 			trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.template_protocol.target_trials)
 
 			valid_trials = []
+			next_trial = None
 			while len(valid_trials) < current_task.template_protocol.target_trials:
 				if len(task_interface.trials) > 0:
 					try:
@@ -125,7 +126,7 @@ class Marmobox:
 					task_parameters = current_task.template_protocol.protocol.parameters
 					self.save_trial_events(trial_events, new_trial, trial_config, task_parameters)
 					
-				if new_trial.trial_status == Outcome.NULL:
+				if next_trial and new_trial.trial_status == Outcome.NULL:
 					trial_indices.append(next_trial)
 				#valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
 				valid_trials = [trial for trial in session.trials if trial.trial_status != Outcome.NULL]
@@ -161,8 +162,8 @@ class Marmobox:
 						stimulus_shape = parameter_value.shape,
 						stimulus_size_x=parameter_value.size[0],
 						stimulus_size_y=parameter_value.size[1],
-						#stimulus_position_x=parameter_value.position[0],
-						#stimulus_position_y=parameter_value.position[1],
+						stimulus_position_x=(None if not parameter_value.position else parameter_value.position[0]),
+						stimulus_position_y=(None if not parameter_value.position else parameter_value.position[1]),
 						stimulus_color_r=parameter_value.color[0],
 						stimulus_color_g=parameter_value.color[1],
 						stimulus_color_b=parameter_value.color[2]
@@ -174,6 +175,8 @@ class Marmobox:
 				trial=trial,
 				is_outcome=window['is_outcome'],
 				is_outside_fail=window['is_outside_fail'],
+				outside_fail_position_x=(None if not window['fail_position'] else window['fail_position'][0]),
+				outside_fail_position_y=(None if not window['fail_position'] else window['fail_position'][1]),
 				window_delay=window['delay'],
 				window_label=window['label'],
 				window_transition=window['transition'],
@@ -205,7 +208,8 @@ class Marmobox:
 	def run_target_based_trials(self, current_task, task_interface):
 		session = Session(task=current_task, session_start=datetime.now())
 		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.template_protocol.target_trials)
-		
+		next_trial = None
+
 		while not current_task.complete:
 			if len(task_interface.trials) > 0:
 				try:
@@ -228,7 +232,7 @@ class Marmobox:
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
 			trial_events = trial_data['events']
-			if new_trial.trial_status == Outcome.NULL:
+			if next_trial and new_trial.trial_status == Outcome.NULL:
 				trial_indices.append(next_trial)
 			if len(trial_events) > 0:
 				trial_config = task_interface.get_trial_config(next_trial)
@@ -246,6 +250,7 @@ class Marmobox:
 	def run_rolling_average_trials(self, current_task, task_interface):
 		session = Session(task=current_task, session_start=datetime.now())
 		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+		next_trial = None
 
 		while not current_task.complete:
 			if len(task_interface.trials) > 0:
@@ -269,7 +274,7 @@ class Marmobox:
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
 			trial_events = trial_data['events']
-			if new_trial.trial_status == Outcome.NULL:
+			if next_trial and new_trial.trial_status == Outcome.NULL:
 				trial_indices.append(next_trial)
 			if len(trial_events) > 0:
 				trial_config = task_interface.get_trial_config(next_trial)
