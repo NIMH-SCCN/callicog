@@ -133,7 +133,10 @@ class Session(Base):
 		return len([trial for trial in self.trials if trial.trial_status == Outcome.NULL])
 
 	def getSuccessRate(self):
-		return self.getHits() / self.getTrials() * 100
+		n_trials = self.getTrials()
+		if n_trials > 0:
+			return self.getHits() / self.getTrials() * 100
+		return 0
 
 class Task(Base):
 	__tablename__ = 'task'
