@@ -1,5 +1,5 @@
-from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Template, WindowObject, StimulusObject
-from task_builder import Progression, Outcome
+from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Template, WindowObject, StimulusObject, TrialParameter
+from task_builder import Progression, Outcome, Parameter, Stimulus
 from datetime import datetime
 from numpy import random
 import socket
@@ -98,23 +98,37 @@ class Marmobox:
 
 			valid_trials = []
 			while len(valid_trials) < current_task.template_protocol.target_trials:
-				try:
-					next_trial = next(iter_trials)
-					trial_windows = task_interface.build_trial(next_trial)
-				except StopIteration:
-					trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
-					continue
+				if len(task_interface.trials) > 0:
+					try:
+						next_trial = next(iter_trials)
+						trial_parameters = task_interface.trials[next_trial]
+						trial_windows = task_interface.build_trial(trial_parameters)
+					except StopIteration:
+						trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+						continue
+				else:
+					trial_windows = task_interface.build_trial()
 
 				new_trial = Trial(session=session, trial_start=datetime.now())
 				trial_data = self.run_trial(trial_windows)
+				if not trial_data:
+					self.db_session.commit()
+					print('Invalid trial, aborting...')
+					raise Exception
+
 				new_trial.trial_status = trial_data['trial_outcome']
 				new_trial.trial_end = trial_data['trial_end']
 				trial_events = trial_data['events']
+
 				if len(trial_events) > 0:
-					self.save_trial_events(trial_events, new_trial)
+					trial_config = task_interface.get_trial_config(next_trial)
+					task_parameters = current_task.template_protocol.protocol.parameters
+					self.save_trial_events(trial_events, new_trial, trial_config, task_parameters)
+					
 				if new_trial.trial_status == Outcome.NULL:
 					trial_indices.append(next_trial)
-				valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
+				#valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
+				valid_trials = [trial for trial in session.trials if trial.trial_status != Outcome.NULL]
 
 			# all trials, included null repetitions, complete
 			session.session_end = datetime.now()
@@ -133,7 +147,28 @@ class Marmobox:
 				session.session_status = Outcome.FAIL
 			self.db_session.commit()
 
-	def save_trial_events(self, windows, trial):
+	def save_trial_events(self, windows, trial, trial_config, task_parameters):
+		# save trial parameters
+		if len(task_parameters) > 0 and len(trial_config) > 0:
+			for task_param in task_parameters:
+				parameter_value = trial_config[task_param.parameter_name]
+				trial_parameter = TrialParameter(
+					trial=trial,
+					protocol_parameter=task_param
+				)
+				if isinstance(parameter_value, Stimulus):
+					trial_parameter.stimulus = StimulusObject(
+						stimulus_shape = parameter_value.shape,
+						stimulus_size_x=parameter_value.size[0],
+						stimulus_size_y=parameter_value.size[1],
+						#stimulus_position_x=parameter_value.position[0],
+						#stimulus_position_y=parameter_value.position[1],
+						stimulus_color_r=parameter_value.color[0],
+						stimulus_color_g=parameter_value.color[1],
+						stimulus_color_b=parameter_value.color[2]
+					)
+				else:
+					trial_parameter.parameter_value = str(parameter_value)
 		for window in windows:
 			trial_window = WindowObject(
 				trial=trial,
@@ -170,31 +205,39 @@ class Marmobox:
 	def run_target_based_trials(self, current_task, task_interface):
 		session = Session(task=current_task, session_start=datetime.now())
 		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.template_protocol.target_trials)
-
+		
 		while not current_task.complete:
-			try:
-				next_trial = next(iter_trials)
-				trial_windows = task_interface.build_trial(next_trial)
-			except StopIteration:
-				trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
-				continue
+			if len(task_interface.trials) > 0:
+				try:
+					next_trial = next(iter_trials)
+					trial_parameters = task_interface.trials[next_trial]
+					trial_windows = task_interface.build_trial(trial_parameters)
+				except StopIteration:
+					trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+					continue
+			else:
+				trial_windows = task_interface.build_trial()
 
 			new_trial = Trial(session=session, trial_start=datetime.now())
 			trial_data = self.run_trial(trial_windows)
 			if not trial_data:
 				self.db_session.commit()
-				raise Exception # invalid trial, abort
+				print('Invalid trial, aborting...')
+				raise Exception
+
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
 			trial_events = trial_data['events']
 			if new_trial.trial_status == Outcome.NULL:
 				trial_indices.append(next_trial)
 			if len(trial_events) > 0:
-				self.save_trial_events(trial_events, new_trial)
+				trial_config = task_interface.get_trial_config(next_trial)
+				task_parameters = current_task.template_protocol.protocol.parameters
+				self.save_trial_events(trial_events, new_trial, trial_config, task_parameters)
 
 			# check if task is over
-			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
-			#success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
+			#valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
+			valid_trials = [trial for trial in session.trials if trial.trial_status != Outcome.NULL]
 			if len(valid_trials) == current_task.template_protocol.target_trials:
 				session.session_end = datetime.now()
 				current_task.complete = True
@@ -205,25 +248,36 @@ class Marmobox:
 		trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
 
 		while not current_task.complete:
-			try:
-				next_trial = next(iter_trials)
-				trial_windows = task_interface.build_trial(next_trial)
-			except StopIteration:
-				trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
-				continue
+			if len(task_interface.trials) > 0:
+				try:
+					next_trial = next(iter_trials)
+					trial_parameters = task_interface.trials[next_trial]
+					trial_windows = task_interface.build_trial(trial_parameters)
+				except StopIteration:
+					trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
+					continue
+			else:
+				trial_windows = task_interface.build_trial()
 
 			new_trial = Trial(session=session, trial_start=datetime.now())
 			trial_data = self.run_trial(trial_windows)
+			if not trial_data:
+				self.db_session.commit()
+				print('Invalid trial, aborting...')
+				raise Exception
+
 			new_trial.trial_status = trial_data['trial_outcome']
 			new_trial.trial_end = trial_data['trial_end']
 			trial_events = trial_data['events']
 			if new_trial.trial_status == Outcome.NULL:
 				trial_indices.append(next_trial)
 			if len(trial_events) > 0:
-				self.save_trial_events(trial_events, new_trial)
+				trial_config = task_interface.get_trial_config(next_trial)
+				task_parameters = current_task.template_protocol.protocol.parameters
+				self.save_trial_events(trial_events, new_trial, trial_config, task_parameters)
 
 			# check if task is over
-			valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
+			valid_trials = [trial for trial in session.trials if trial.trial_status != Outcome.NULL]
 			if len(valid_trials) >= current_task.template_protocol.rolling_window_size:
 				window = valid_trials[-current_task.template_protocol.rolling_window_size:]
 				success_trials = sum([1 for trial in window if trial.trial_status == Outcome.SUCCESS])

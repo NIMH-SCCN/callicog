@@ -3,6 +3,15 @@ from datetime import datetime
 import time
 import math
 
+class Parameter:
+	POSITION = 'position'
+	TARGET = 'target'
+	DISTRACTOR = 'distractor'
+	DELAY = 'delay'
+	COLOR = 'color'
+	DISTRACTOR_NUMBER = 'distractor_number'
+	TARGET_NUMBER = 'target_number'
+
 class Progression:
 	SESSION_BASED = 'session_based'
 	ROLLING_AVERAGE = 'rolling_average'

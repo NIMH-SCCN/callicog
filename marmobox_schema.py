@@ -1,6 +1,7 @@
 from database import Base
 from sqlalchemy import Column, Integer, Float, Boolean, DateTime, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
+from task_builder import Outcome
 
 class WindowObject(Base):
 	__tablename__ = 'window_object'
@@ -43,25 +44,13 @@ class StimulusObject(Base):
 	stimulus_release_timestamp = Column(DateTime)
 
 	window = relationship('WindowObject', back_populates='stimuli')
+	trial_parameter = relationship('TrialParameter', back_populates='stimulus')
 
 	def __repr__(self):
 		return '<StimulusObject(stimulus_object_id=%s)>' % str(self.stimulus_object_id)
 
-#class Event(Base):
-#	__tablename__ = 'event'
-#	event_id = Column(Integer, primary_key=True)
-#	trial_id = Column(Integer, ForeignKey('trial.trial_id'))
-#	flip_timestamp = Column(DateTime, nullable=True)
-#	touch_timestamp = Column(DateTime, nullable=True)
-#	release_timestamp = Column(DateTime, nullable=True)
-#	input_xcoor = Column(Integer, nullable=True)
-#	input_ycoor = Column(Integer, nullable=True)
-#	stimulus_object_id = Column(Integer, ForeignKey('stimulus_object.stimulus_object_id'))
-#	window_object_id = Column(Integer, ForeignKey('window_object.window_object_id'))
-
-#	trial = relationship('Trial', back_populates='events')
-#	stimulus_object = relationship('StimulusObject', back_populates='event')
-#	window_object = relationship('WindowObject', back_populates='event')
+	def getStimulusSummary(self):
+		return f'{self.stimulus_shape}, color=({self.stimulus_color_r},{self.stimulus_color_g},{self.stimulus_color_b})'
 
 class Trial(Base):
 	__tablename__ = 'trial'
@@ -72,11 +61,41 @@ class Trial(Base):
 	trial_status = Column(String, default='new')
 
 	session = relationship('Session', back_populates='trials')
-	windows = relationship('WindowObject', back_populates='trial', cascade="all, delete")
-	#events = relationship('Event', back_populates='trial', cascade="all, delete")
+	windows = relationship('WindowObject', back_populates='trial', cascade='all, delete')
+	parameters = relationship('TrialParameter', back_populates='trial', cascade='all, delete')
 
 	def __repr__(self):
 		return '<Trial(trial_id=%s)>' % self.trial_id
+
+	def getTargets(self):
+		return len([stimulus for window in self.windows for stimulus in window.stimuli if window.is_outcome and stimulus.stimulus_outcome == Outcome.SUCCESS])
+
+	def getDistractors(self):
+		return len([stimulus for window in self.windows for stimulus in window.stimuli if window.is_outcome and stimulus.stimulus_outcome == Outcome.FAIL])
+
+
+class TrialParameter(Base):
+	__tablename__ = 'trial_parameter'
+	trial_parameter_id = Column(Integer, primary_key=True)
+	protocol_parameter_id = Column(Integer, ForeignKey('protocol_parameter.protocol_parameter_id'))
+	parameter_value = Column(String, nullable=True)
+	stimulus_object_id = Column(Integer, ForeignKey('stimulus_object.stimulus_object_id'), nullable=True)
+	trial_id = Column(Integer, ForeignKey('trial.trial_id'), nullable=False)
+
+	trial = relationship('Trial', back_populates='parameters')
+	stimulus = relationship('StimulusObject', back_populates='trial_parameter')
+	protocol_parameter = relationship('ProtocolParameter', back_populates='trial_parameters')
+
+	def __repr__(self):
+		return '<TrialParameter(trial_parameter_id=%s)>' % self.trial_parameter_id
+
+	def getParameterValue(self):
+		if self.parameter_value:
+			return self.parameter_value
+		elif self.stimulus:
+			return self.stimulus.getStimulusSummary()
+		else:
+			return ''
 
 class Session(Base):
 	__tablename__ = 'session'
@@ -87,10 +106,32 @@ class Session(Base):
 	session_status = Column(String, default='new')
 
 	task = relationship('Task', back_populates='sessions')
-	trials = relationship('Trial', order_by=Trial.trial_start, back_populates='session', lazy='dynamic', cascade="all, delete")
+	trials = relationship('Trial', order_by=Trial.trial_start, back_populates='session', cascade="all, delete")
 
 	def __repr__(self):
 		return '<Session(session_id=%s)>' % self.session_id
+
+	def getDuration(self):
+		if self.session_start and self.session_end:
+			duration_secs = (self.session_end - self.session_start).total_seconds()
+			return f'{duration_secs // 60} min {duration_secs % 60} sec'
+		else:
+			return ''
+
+	def getTrials(self):
+		return len([trial for trial in self.trials if trial.trial_status != 'new'])
+
+	def getHits(self):
+		return len([trial for trial in self.trials if trial.trial_status == Outcome.SUCCESS])
+
+	def getFails(self):
+		return len([trial for trial in self.trials if trial.trial_status == Outcome.FAIL])
+
+	def getNulls(self):
+		return len([trial for trial in self.trials if trial.trial_status == Outcome.NULL])
+
+	def getSuccessRate(self):
+		return self.getHits() / self.getTrials() * 100
 
 class Task(Base):
 	__tablename__ = 'task'
@@ -104,7 +145,7 @@ class Task(Base):
 	sessions = relationship('Session', order_by=Session.session_start, back_populates='task', cascade="all, delete")
 
 	def __repr__(self):
-		return '<Task(task_id=%s>' % str(self.task_id)
+		return '<Task(task_id=%s)>' % str(self.task_id)
 
 class Experiment(Base):
 	__tablename__ = 'experiment'
@@ -120,6 +161,9 @@ class Experiment(Base):
 
 	def __repr__(self):
 		return '<Experiment(experiment_id=%s)>' % str(self.experiment_id)
+
+	def getCompletion(self):
+		return sum([True for task in self.tasks if task.complete]) / len(self.tasks) * 100
 
 class Animal(Base):
 	__tablename__ = 'animal'
@@ -156,9 +200,22 @@ class Protocol(Base):
 	protocol_name = Column(String, nullable=False)
 
 	templates = relationship('TemplateProtocol', back_populates='protocol') # not very useful, but kept here
+	parameters = relationship('ProtocolParameter', back_populates='protocol')
 
 	def __repr__(self):
 		return '<Protocol(protocol_name=%s)>' % self.protocol_name
+
+class ProtocolParameter(Base):
+	__tablename__ = 'protocol_parameter'
+	protocol_parameter_id = Column(Integer, primary_key=True)
+	parameter_name = Column(String, nullable=False)
+	protocol_id = Column(Integer, ForeignKey('protocol.protocol_id'))
+
+	protocol = relationship('Protocol', back_populates='parameters')
+	trial_parameters = relationship('TrialParameter', back_populates='protocol_parameter')
+
+	def __repr__(self):
+		return '<ProtocolParameter(protocol_parameter_id=%s)>' % self.protocol_parameter_id
 
 class Template(Base):
 	__tablename__ = 'template'
@@ -170,21 +227,3 @@ class Template(Base):
 
 	def __repr__(self):
 		return '<Template(template_name=%s)>' % self.template_name
-
-#TemplateProtocol = Table('template_protocol', Base.metadata,
-#	Column('template_protocol_id', Integer, primary_key=True),
-#	Column('template_id', Integer, ForeignKey('template.template_id')),
-#	Column('protocol_id', Integer, ForeignKey('protocol.protocol_id')),
-#	Column('task_order', Integer, nullable=False))
-
-#Animal.experiments = relationship('Experiment', order_by=Experiment.experiment_start, back_populates='animal')
-#Protocol.experiments = relationship('Experiment', order_by=Experiment.experiment_start, back_populates='protocol')
-#Protocol.levels  = relationship('Level', order_by=Level.level_number, back_populates='protocol')
-#Experiment.sessions = relationship('Session', order_by=Session.session_number, back_populates='experiment')
-#Session.trials = relationship('Trial', order_by=Trial.trial_number, back_populates='session')
-#Trial.events = relationship('Event', order_by=Event.event_timestamp, back_populates='trial')
-
-# t = Template(template_name='t1')
-# a = TemplateProtocol(task_order=1)
-# a.protocol = db.query(Protocol).all()[0]
-# t.protocols.append(a)

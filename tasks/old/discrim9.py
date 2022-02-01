@@ -52,8 +52,8 @@ class TaskInterface:
     def get_trial(self, trial_index):
         trials = self.__pseudorandomize_parameters()
         # additional pseudorandom parameters (e.g. supertask - positions depending on targets)
-        print('trials are ' + str(trials))
-        print('list contains ' + str(trials.count) + 'elements')
+        #print('trials are ' + str(trials))
+        #print('list contains ' + str(trials.count) + 'elements')
         return trials[trial_index]
 
 
@@ -70,8 +70,8 @@ class TaskInterface:
         
         # Window 2
         w2 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=2)
-        reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = '/media/sf_callicog/tasks/images/composite8-1.jpg', color = (1,1,1), size_touch=(250,250)) #will need to change path
-        penalty_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = '/media/sf_callicog/tasks/images/composite8-2.jpg', color = (1,1,1), size_touch=(250,250)) #will need to change path
+        reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = '/media/sf_callicog/tasks/images/composite12-1.jpg', color = (1,1,1), size_touch=(250,250)) #will need to change path
+        penalty_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = '/media/sf_callicog/tasks/images/composite12-2.jpg', color = (1,1,1), size_touch=(250,250)) #will need to change path
         reward_stim.position = trial_parameters['position']
         penalty_stim.position = self.__randomize_from(self.pseudorandom_parameters['position'], exclude=[trial_parameters['position']])
         reward_stim.outcome = Outcome.SUCCESS
