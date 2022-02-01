@@ -26,7 +26,7 @@ class TaskInterface(TaskStructure):
         reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite5-1.jpg', color = (1,1,1), size_touch=(250,250)) #will need to change path
         penalty_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite5-2.jpg', color = (1,1,1), size_touch=(250,250)) #will need to change path
         reward_stim.position = trial_parameters[Parameter.POSITION]
-        penalty_stim.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION], exclude=[trial_parameters[Parameter.POSITION]])[0]
+        penalty_stim.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0]
         reward_stim.outcome = Outcome.SUCCESS
         penalty_stim.outcome = Outcome.FAIL
         w2.add_stimulus(reward_stim)	
