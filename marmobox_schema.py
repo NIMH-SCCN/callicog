@@ -9,6 +9,8 @@ class WindowObject(Base):
 	trial_id = Column(Integer, ForeignKey('trial.trial_id'))
 	is_outcome = Column(Boolean, default=False)
 	is_outside_fail = Column(Boolean, default=False)
+	outside_fail_position_x = Column(Integer, nullable=True)
+	outside_fail_position_y = Column(Integer, nullable=True)
 	window_delay = Column(Float, nullable=False)
 	window_label = Column(String, nullable=True)
 	window_timeout = Column(Float, nullable=False)
@@ -131,7 +133,10 @@ class Session(Base):
 		return len([trial for trial in self.trials if trial.trial_status == Outcome.NULL])
 
 	def getSuccessRate(self):
-		return self.getHits() / self.getTrials() * 100
+		n_trials = self.getTrials()
+		if n_trials > 0:
+			return self.getHits() / self.getTrials() * 100
+		return 0
 
 class Task(Base):
 	__tablename__ = 'task'

@@ -96,6 +96,7 @@
 			<table class="table">
 				<thead>
 					<tr>
+						<th>Trial ID</th>
 						<th>Window</th>
 						<th>Delay</th>
 						<th>Outcome?</th>
@@ -111,6 +112,7 @@
 				</thead>
 				<tfoot>
 					<tr>
+						<th>Trial ID</th>
 						<th>Window</th>
 						<th>Delay</th>
 						<th>Outcome?</th>
@@ -125,34 +127,38 @@
 					</tr>
 				</tfoot>
 				<tbody>
-					{% for window in windows %}
-						<tr>
-							<td>{{ 'delay' if window.window_transition == None else window.window_transition }}</td>
-							<td>{{ '' if window.window_delay == 0 else window.window_delay }}</td>
-							<td>{{ 'Yes' if window.is_outcome else 'No' }}</td>
-							<td>{{ '' if window.window_timeout == 0 else window.window_timeout }}</td>
-							<td>{{ 'Yes' if window.is_outside_fail else 'No' }}</td>
-							<td>{{ '' if window.flip_timestamp == None else window.flip_timestamp }}</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td>{{ '' if window.window_label == None else window.window_label }}</td>
-						</tr>
-						{% for stimulus in window.stimuli %}
+					{% for trial in trials %}
+						{% for window in trial.windows %}
 							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
+								<td>{{ trial.trial_id }}</td>
+								<td>{{ 'delay' if window.window_transition == None else window.window_transition }}</td>
+								<td>{{ '' if window.window_delay == 0 else window.window_delay }}</td>
+								<td>{{ 'Yes' if window.is_outcome else 'No' }}</td>
+								<td>{{ '' if window.window_timeout == 0 else window.window_timeout }}</td>
+								<td>{{ 'Yes' if window.is_outside_fail else 'No' }}</td>
 								<td>{{ '' if window.flip_timestamp == None else window.flip_timestamp }}</td>
-								<td>{{ stimulus.stimulus_shape }}</td>
-								<td>{{ 'Yes' if stimulus.stimulus_touched else 'No' }}</td>
-								<td>{{ '' if stimulus.stimulus_touch_timestamp == None else stimulus.stimulus_touch_timestamp }}</td>
-								<td>{{ '' if stimulus.stimulus_release_timestamp == None else stimulus.stimulus_release_timestamp }}</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
 								<td>{{ '' if window.window_label == None else window.window_label }}</td>
 							</tr>
+							{% for stimulus in window.stimuli %}
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td>{{ '' if window.flip_timestamp == None else window.flip_timestamp }}</td>
+									<td>{{ stimulus.stimulus_shape }}</td>
+									<td>{{ 'Yes' if stimulus.stimulus_touched else 'No' }}</td>
+									<td>{{ '' if stimulus.stimulus_touch_timestamp == None else stimulus.stimulus_touch_timestamp }}</td>
+									<td>{{ '' if stimulus.stimulus_release_timestamp == None else stimulus.stimulus_release_timestamp }}</td>
+									<td>{{ '' if window.window_label == None else window.window_label }}</td>
+								</tr>
+							{% endfor %}
 						{% endfor %}
 					{% endfor %}
 				</tbody>

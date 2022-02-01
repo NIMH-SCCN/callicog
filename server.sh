@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python marmobox_listener.py ttyACM0 --fullscreen
+python marmobox_listener.py ttyACM0 --dummy

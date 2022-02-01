@@ -28,7 +28,7 @@ Install Debian 10 (Buster) normally, pick SSH server and system utils.
 	# add jack ALL=(ALL) ALL to /etc/sudoers
 	exit
 
-	sudo apt install xfce4 xfce4-terminal
+	sudo apt install xfce4 xfce4-terminal curl
 	sudo reboot
 
 	sudo apt install wpasupplicant

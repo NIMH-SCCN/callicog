@@ -18,6 +18,8 @@ RETURNS TABLE(experiment_id INTEGER
 	,is_outcome VARCHAR(50)
 	,timeout NUMERIC
 	,out_fail VARCHAR(50)
+	,out_fail_pos_x INTEGER
+	,out_fail_pos_y INTEGER
 	,eeg_label VARCHAR(50)
 	,stimulus_id INTEGER
 	,shape VARCHAR(50)
@@ -55,6 +57,8 @@ select ex.experiment_id as experiment_id
 ,(case when wo.is_outcome then 'yes' else 'no' end) as is_outcome
 ,nullif(wo.window_timeout, 0) as timeout
 ,(case when wo.is_outside_fail then 'yes' else 'no' end) as out_fail
+,wo.outside_fail_position_x as out_fail_pos_x
+,wo.outside_fail_position_y as out_fail_pos_y
 ,wo.window_label as eeg_label
 ,so.stimulus_object_id as stimulus_id
 ,so.stimulus_shape as shape

@@ -8,7 +8,7 @@ from flask_cors import CORS
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.sql import true
 from database import DatabaseSession
-from marmobox_schema import Protocol, Task, Animal, Template, TemplateProtocol, Experiment, Trial
+from marmobox_schema import Protocol, Task, Animal, Template, TemplateProtocol, Experiment, Trial, TrialParameter, ProtocolParameter, StimulusObject
 from datetime import datetime
 
 DATE_FORMAT = '%d/%m/%Y'
@@ -72,18 +72,41 @@ def getTemplateList():
 @app.route('/trials', methods=['GET', 'POST'])
 def getTrialQueryResults():
 	if request.method == 'GET':
-		return render_template('trials.html', windows=[])
+		return render_template('trials.html', trials=[])
 	if request.method == 'POST':
 		trial_id = request.form['trial_id']
 		stim_shape = request.form['stim_shape']
 		win_delay = request.form['win_delay']
-		if trial_id == '':
-			return redirect(request.url)
-		trial_query = db.query(Trial).filter(Trial.trial_id == trial_id).all()
-		if len(trial_query) > 0:
-			trial = trial_query[0]
-			return render_template('trials.html', windows=trial.windows)
-		return render_template('trials.html', windows=[])
+
+		if trial_id != '':
+			trial_query = db.query(Trial).filter(Trial.trial_id == trial_id).all()
+			if len(trial_query) > 0:
+				return render_template('trials.html', trials=trial_query)
+		if stim_shape != '':
+			stim_shape_query = db.query(Trial).join(TrialParameter, StimulusObject).filter(
+				TrialParameter.stimulus != None,
+				StimulusObject.stimulus_shape == stim_shape
+			).all()
+			if len(stim_shape_query) > 0:
+				return render_template('trials.html', trials=stim_shape_query)
+		if win_delay != '':
+			win_delay_query = db.query(Trial).join(TrialParameter, ProtocolParameter).filter(
+				ProtocolParameter.parameter_name == 'delay',
+				TrialParameter.parameter_value == win_delay
+			).all()
+			if len(win_delay_query) > 0:
+				return render_template('trials.html', trials=win_delay_query)
+		
+		#query_result = stim_shape_query.intersect(win_delay_query)
+		return render_template('trials.html', trials=[])
+
+@app.route('/experiments/detail/<int:id>', methods=['GET'])
+def getExperimentDetails(id):
+	query_exp = db.query(Experiment).filter(Experiment.experiment_id == id).all()
+	if len(query_exp) > 0:
+		experiment = query_exp[0]
+		if request.method == 'GET':
+			return render_template('experiment_details.html', experiment=experiment)
 
 @app.route('/experiments', methods=['GET', 'POST'])
 def getExperimentList():
@@ -125,14 +148,6 @@ def getExperimentList():
 		else:
 			return redirect(request.url)
 	return render_template('experiments.html', experiments=experiments, all_animals=all_animals, all_templates=all_templates)
-
-@app.route('/experiments/detail/<int:id>', methods=['GET'])
-def getExperimentDetails(id):
-	query_exp = db.query(Experiment).filter(Experiment.experiment_id == id).all()
-	if len(query_exp) > 0:
-		experiment = query_exp[0]
-		if request.method == 'GET':
-			return render_template('experiment_details.html', experiment=experiment)
 
 @app.route('/experiments/save/<int:id>', methods=['GET'])
 def saveExperiment(id):
