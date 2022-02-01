@@ -99,7 +99,7 @@ class WindowRuntime:
 				flip_time,
 				touch_event['touch_time'],
 				touch_event['release_time'])
-		elif window.is_outside_fail:
+		elif window.is_outside_fail and touch_event:
 			window.fail_position = (touch_event['xcoor'], touch_event['ycoor'])
 		return outcome
 
