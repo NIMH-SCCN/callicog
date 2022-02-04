@@ -337,7 +337,7 @@ w1_stim.position = (random.randint(-615, 615), random.randint(-335, 335))
 w1.add_stimulus(w1_stim)
 ```
 
-Remember to **copy.copy()** all stimulus variables when adding them to windows.
+Remember to `copy.copy()` all stimulus variables when adding them to windows.
 Window objects can have the following parameters:
 
 - `transition` (default=`None`). Controls whether to trigger the next window with a touch or release. Possible values: `WindowTransition.RELEASE` and `WindowTransition.TOUCH`.
