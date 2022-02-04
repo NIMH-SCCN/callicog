@@ -194,7 +194,7 @@
 		pip install wheel
 		python -m pip install --upgrade pip
 
-3. Deal with Homebrew in macOS :S
+3. Deal with Homebrew in macOS :grimacing:
 
 	To uninstall:
 
