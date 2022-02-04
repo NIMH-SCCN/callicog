@@ -1,1 +1,1 @@
-source ~/marmovenv/bin/activate && cd ~/callicog && bash server.sh
+source ~/callicogenv/bin/activate && cd ~/callicog && bash server.sh

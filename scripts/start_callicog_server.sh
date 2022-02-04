@@ -1,3 +1,3 @@
 #!/bin/bash
 
-source ~/marmovenv/bin/activate && cd ~/callicog && ./server.sh
+source ~/callicogenv/bin/activate && cd ~/callicog && ./server.sh

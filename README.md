@@ -1,182 +1,231 @@
 # CalliCog #
 
-### Pre installation: create bootable Debian drive
+### Server installation (mini PC)
 
-Flash USB with Debian 10.11 (Buster) [ISO file](https://drive.google.com/file/d/1hRkasJ1nOOUxclgPgWfXA9Y2jxiqqZsI/view?usp=sharing) using [balenaEtcher](https://www.balena.io/etcher/).
+1. Flash USB with Debian 10.11 (Buster) [ISO file](https://drive.google.com/file/d/1hRkasJ1nOOUxclgPgWfXA9Y2jxiqqZsI/view?usp=sharing) using [balenaEtcher](https://www.balena.io/etcher/).
 
-### Mini PC Debian installation
+2. The Mini PC needs an active Internet connection via Ethernet when installing Debian. You can use a Windows laptop with WiFi to achieve this.
 
-The Mini PC needs an active internet connection via ethernet when installing Linux.
-If such is not easily available, you can use a Windows laptop to share internet via ethernet.
+	- Step 2: Go to Settings > Network & Internet > Change adapter options > Right click Wi-Fi > Properties > Sharing > Check "Allow other networks to connect..."
+	- Step 3: Connect the Mini PC and the laptop with an Ethernet cable.
 
-- Step 1: Make sure the Windows laptop is connected to the internet via WiFi.
-- Step 2: Go to Settings > Network & Internet > Change adapter options > Right click Wi-Fi > Properties > Sharing > Check "Allow other networks to connect..."
-- Step 3: Connect the Mini PC and the laptop with an ethernet cable.
+3. Restart the Mini PC and boot to BIOS by pression the DEL key. Make USB stick the first boot priority. Save and restart.
+4. Install Debian 10 (Buster) normally, pick SSH server and system utils. Some tips:
 
-Restart the Mini PC and boot to BIOS by pression the DEL key. Make USB stick the first boot priority. Save and restart.
-Install Debian 10 (Buster) normally, pick SSH server and system utils.
+	- Use 'Graphical Install'.
+	- Say no to 'Detect hardware from removable media'.
+	- Pick 'Australia' for location and 'American English' for keyboard layout.
+	- Pick a relevant hostname and domain (e.g. `callicog3` and `callicog.net`).
+	- When choosing the media destination, select 'Use entire disk' and a drive that is not the USB stick.
+	- Choose `ftp.au.debian.org` for the installation mirror.
+	- From the software list, pick 'SSH server' and 'standard system utilities' ONLY.
 
-### Mini PC post installation
+5. Restart and change back the BIOS boot priority. Unplug USB stick.
 
-	su
-	apt update
-	# add contrib non-free to /etc/apt/sources.list
+### Server post-installation
 
-	apt install firmware-iwlwifi firmware-intel-sound firmware-linux firmware-misc-nonfree intel-microcode i965-va-driver-shaders intel-media-va-driver-non-free mesa-utils mesa-utils-extra firmware-realtek
+1. Add non-free repositories to Debian.
 
-	apt install sudo
-	# add jack ALL=(ALL) ALL to /etc/sudoers
-	exit
+		su
+		apt update
+		nano /etc/apt/sources.list
 
-	sudo apt install xfce4 xfce4-terminal curl
-	sudo reboot
+	It should look like this:
 
-	sudo apt install wpasupplicant
-	sudo chmod 0600 /etc/network/interfaces
+		deb http://ftp.au.debian.org/debian/ buster main contrib non-free
+		deb-src http://ftp.au.debian.org/debian/ buster main contrib non-free
 
-	sudo nano /etc/network/interfaces
-	# add the following for wifi
-	allow-hotplug wlp1s0
-	iface wlp1s0 inet dhcp
+		deb http://security.debian.org/debian-security buster/updates main contrib non-free
+		deb-src http://security.debian.org/debian-security buster/updates main contrib non-free
+
+		deb http://ftp.au.debian.org/debian/ buster-updates main contrib non-free
+		deb-src http://ftp.au.debian.org/debian/ buster-updates main contrib non-free
+
+2. Execute the following:
+
+		apt install firmware-iwlwifi firmware-intel-sound firmware-linux firmware-misc-nonfree intel-microcode i965-va-driver-shaders intel-media-va-driver-non-free mesa-utils mesa-utils-extra firmware-realtek
+
+3. Add the line `jack ALL=(ALL) ALL` for user `jack` to sudoers file.
+
+		apt install sudo
+		nano /etc/sudoers
+		exit
+
+4. Install more packages.
+
+		sudo apt install xfce4 xfce4-terminal xfce4-power-manager curl git
+		sudo reboot
+
+5. Clone `callicog `repository.
+		
+		cd ~
+		git clone https://github.com/Bourne-Lab-ARMI/callicog.git
+
+6. Add a WiFi interface. Edit `/etc/network/interfaces`
+		
+		sudo apt install wpasupplicant
+		sudo chmod 0600 /etc/network/interfaces
+		sudo nano /etc/network/interfaces
+
+	And add the following:
+
+		allow-hotplug wlp1s0
+		iface wlp1s0 inet dhcp
 		wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 
-	# for wired connection add
-	auto enp2s0
-	iface enp2s0 inet static
+	For a wired connection add:
+
+		auto enp2s0
+		iface enp2s0 inet static
 		address 192.168.0.10/24
+
+	Or any other relevant static IP address.
+
+	The file `wpa_supplicant.conf` does not exist yet. Copy it from the repository.
+
+		sudo cp ~/callicog/installation/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+
+	Restart.
 	
-	sudo reboot
+		sudo reboot
 
-	# callicog-related installation steps
-	sudo apt install git
+7. You should have Internet via WiFi.
 
-	# autologin, modify /etc/lightdm/lightdm.conf, uncomment and add
-	user-session=xfce4
-	autologin-user=jack
-	autologin-user-timeout=0
+8. Configure Debian for autologin. Remember that the file `lightdm.conf` contains instructions for the `jack` user.
 
-	# kill remotely
-	ssh -l jack callicog-ip
-	ps -A | grep xfce4-terminal # get pid
-	kill pid
+		sudo cp ~/callicog/installation/lightdm.conf /etc/lightdm/lightdm.conf
 
-	# disable screenlocker in Session & Startup
+9. Copy useful scripts to the HOME directory.
+		
+		cp ~/callicog/scripts/broadcastIP_slack.sh ~
+		cp ~/callicog/scripts/start_callicog_server.sh ~
+		cp ~/callicog/scripts/changeres.sh ~
+		cp ~/callicog/scripts/flush.sh ~
+		cp ~/callicog/scripts/kill_callicog.sh ~
+		cp ~/callicog/scripts/start_vncserver.sh ~
 
-### Client computer installation (macOS)
+10. Disable screenlocker in 'Session & Startup' setting.
+
+11. Install CalliCog.
+
+		cd ~
+		sudo apt install python3-venv python3-pip
+		python3.7 -m venv callicogenv
+		source callicogenv/bin/activate
+		pip install wheel
+		python -m pip install --upgrade pip
+
+	Install PsychoPy.
+
+		sudo apt-get install libsdl2-dev
+		python -m pip install --upgrade Pillow
+		pip install pyserial numpy
+		pip install matplotlib
+		pip install pyqt5==5.14
+		pip install psychopy --no-deps
+		pip install pyyaml requests freetype-py pandas python-bidi pyglet json-tricks scipy packaging future imageio
+
+	Download the `wxPython` package from [here](https://drive.google.com/file/d/1sSObbJR2PSWKPJ76bHksWlHL9MY3J2xJ/view?usp=sharing). Put it in the HOME directory.
+		
+		pip install ~/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
+
+12. Make the mini PC broadcast its eduroam IP address to the Slack [channel](https://marmobox.slack.com).
+
+		sudo systemctl edit --force --full broadcast_ip.service
+
+	Add the following lines:
+
+		[Unit]
+		Description=Broadcast IP to Slack service
+		Wants=network-online.target
+		After=network-online.target
+		[Service]
+		Type=simple
+		User=jack
+		WorkingDirectory=/home/jack
+		ExecStart=/home/jack/broadcastIP_slack.sh
+		RestartSec=30
+		Restart=on-failure
+		[Install]
+		WantedBy=multi-user.target
+
+	Save and exit the file.
+
+		sudo systemctl enable broadcast_ip.service
+		sudo systemctl start broadcast_ip.service
+		sudo systemctl reboot
+
+	The Slack message contains the username `Callicog (192.168.0.20)` by default. Change it accordingly by modifying the `broadcastIP_slack.sh` file.
+
+		nano ~/broadcastIP_slack.sh
+
+	Change the `username` value in the payload.
+
+13. Make Callicog launch on startup.
+		
+		mkdir ~/.config/autostart
+		cp ~/callicog/installation/callicog.desktop ~/.config/autostart
+
+14. You can also add a CalliCog shortcut to the desktop bottom panel.
+
+15. Make the mini PC stream with VNC. Install the server.
+
+		sudo apt install x11vnc
+
+	Change the IP address in the file `~/start_vncserver.sh`. The first IP is the static Ethernet IP of the mini PC. The second is the CalliCog client (e.g. iMac).
+
+### Client installation (macOS)
+
+1. Clone the repository.
+
+		cd ~
+		git clone https://github.com/Bourne-Lab-ARMI/callicog.git
+
+2. Create a Ptyhon3 virtual environment. Change the command `python3.X` to the Python 3 version installed in macOS.
+
+		python3.X -m venv callicogenv
+		source callicogenv/bin/activate
+		pip install wheel
+		python -m pip install --upgrade pip
+
+3. Deal with Homebrew in macOS :S
+
+	To uninstall:
+
+		sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
+
+	To install:
+
+		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+		brew update-reset
+
+4. Install PostgreSQL in macOS.
+
+		brew install postgresql
+		brew services start postgresql
+
+	Create a database super user:
+
+		createuser --interactive
+
+	Install dependencies for web app:
 	
-Create the `callicogenv` virtual environment.
-Make sure the command `python3` points to Python 3.7.
+		source ~/callicogenv/bin/activate
+		pip install numpy psycopg2-binary SQLAlchemy flask flask-cors
 
-	python3 -m venv callicogenv
-	source callicogenv/bin/activate
-	pip install wheel
-	python -m pip install --upgrade pip
+	To install in a Debian client:
 
-### How to install/uninstall Homebrew in macOS
+		sudo apt-get install postgresql postgresql-client
+		sudo -u postgres createuser --interactive
 
-	sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh)"
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-	brew update-reset
+5. If the `createuser` command does not work, nor `psql`, you may need to lanch PostgreSQL manually:
 
-### PostgreSQL instructions for macOS
+		/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
 
-	brew install postgresql
-	brew services start postgresql
-	createuser --interactive
-	pip install numpy psycopg2-binary SQLAlchemy flask flask-cors
+	A shortcut can be found in the repository.
 
-### PostgreSQL instructions for Debian Stretch
+		cp ~/callicog/scripts/start_postgresql.sh ~
 
-	sudo apt-get install postgresql postgresql-client
-	sudo -u postgres createuser --interactive
-	pip install wheel
-	pip install --upgrade pip
-	pip install numpy psycopg2-binary SQLAlchemy flask flask-cors
 
-### Raspberry Pi Zero headless setup
 
-Insert SD card and in the `boot` partition create the file `wpa_supplicant.conf` and include this:
-
-	country=AU
-	ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-	update_config=1
-	network={
-		ssid="MyWiFiNetwork"
-		psk="aVeryStrongPassword"
-		key_mgmt=WPA-PSK
-	}
-
-Create another empty file called `ssh`.
-
-### Raspberry Pi Zero Camera V2 setup
-	
-	sudo raspi-config # Interfacing -> Enable Camera
-	ls /lib/modules/`uname -r`/kernel/drivers/media/platform/bcm2835 # check V4L2 kernel module
-	raspivid --width 640 --height 360 --framerate 24 --bitrate 750000 --qp 20 --timeout $((10*1000)) --output vid.h264
-
-### Install `motion` to livestream
-
-	wget https://github.com/Motion-Project/motion/releases/download/release-4.1.1/pi_jessie_motion_4.1.1-1_armhf.deb
-	sudo apt-get install gdebi-core
-	sudo gdebi pi_jessie_motion_4.1.1-1_armhf.deb
-	mkdir ~/.motion && cp /etc/motion/motion.conf ~/.motion/motion.conf
-	mkdir ~/motionvid
-	nano ~/.motion/motion.conf
-
-More info regardin the configuration file [here](https://www.bouvet.no/bouvet-deler/utbrudd/building-a-motion-activated-security-camera-with-the-raspberry-pi-zero).
-
-### Install OpenCV in the Raspberry Pi Zero
-
-Full documentation [here](https://towardsdatascience.com/installing-opencv-in-pizero-w-8e46bd42a3d3)
-
-### Install firmata and pyfirmata
-
-Under Linux, give current user access to COM ports:
-
-	sudo gpasswd --add ${USER} dialout
-
-Upload Standard Firmata code from Arduino IDE. Then execute `pip install pyfirmata`.
-
-### Intel MiniPC setup
-
-Install latest Python 3 version via source package found [here](https://www.python.org/downloads/source/):
-
-	sudo apt-get update
-	sudo apt-get upgrade
-	sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev curl libbz2-dev liblzma-dev
-	curl -O [python-tarxz-url]
-	tar -xf Python-3.8.6.tar.xz
-	cd Python-3.8.6
-	./configure --enable-optimizations
-	make -j `nproc`
-	sudo make altinstall
-	python3.8 --version
-
-Create the `callicogenv` virtual environment:
-
-	sudo apt install python3-venv python3-pip
-	python3.7 -m venv marmovenv
-	source marmovenv/bin/activate
-	pip install wheel
-	python -m pip install --upgrade pip
-
-Install Psychopy:
-
-	sudo apt-get install libsdl2-dev
-	python -m pip install --upgrade Pillow
-	pip install pyserial numpy
-	pip install matplotlib
-	pip install pyqt5==5.14
-	pip install psychopy --no-deps
-	pip install pyyaml requests freetype-py pandas python-bidi pyglet json-tricks scipy packaging future imageio
-	# download wxPython for Debian 10 (buster)
-	wget https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
-	pip install wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
-
-Broadcast IP service:
-
-	sudo systemctl edit --force --full broadcast_ip.service
-	sudo systemctl enable broadcast_ip.service
-	sudo systemctl start broadcast_ip.service
-	sudo systemctl reboot
 
