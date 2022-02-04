@@ -338,7 +338,7 @@ w1.add_stimulus(w1_stim)
 ```
 
 Remember to `copy.copy()` all stimulus variables when adding them to windows.
-Window objects can have the following parameters:
+Window objects can have the following user-defined parameters:
 
 - `transition` (default=`None`). Controls whether to trigger the next window with a touch or release. Possible values: `WindowTransition.RELEASE` and `WindowTransition.TOUCH`.
 - `blank` (default=`0`). Defines the duration (in seconds) of a blank window.
@@ -358,7 +358,7 @@ w2_square = Stimulus(shape=StimulusShape.SQUARE,
 w2.add_stimulus(w1_square)
 ```
 
-Stimulus objects can have the following user-define parameters:
+Stimulus objects can have the following user-defined parameters:
 
 - `shape`. Must be a member of `StimulusShape`. The values are defined in the file `task_builder.py` and more can be added.
 - `size`. Must be a tuple of two elements (e.g. (100, 100)). Refers to the width and height (in pixels) of the stimuli. PsychoPy automatically adjusts depending on the geometry (e.g. circle taking 100 as its radius).
