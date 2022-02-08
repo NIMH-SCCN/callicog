@@ -8,7 +8,7 @@ from flask_cors import CORS
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.sql import true
 from database import DatabaseSession
-from marmobox_schema import Protocol, Task, Animal, Template, TemplateProtocol, Experiment, Trial, TrialParameter, ProtocolParameter, StimulusObject
+from marmobox_schema import Protocol, Task, Animal, Template, TemplateProtocol, Experiment, Trial, TrialParameter, ProtocolParameter, StimulusObject, WindowObject
 from datetime import datetime
 
 DATE_FORMAT = '%d/%m/%Y'
@@ -75,30 +75,45 @@ def getTrialQueryResults():
 		return render_template('trials.html', trials=[])
 	if request.method == 'POST':
 		trial_id = request.form['trial_id']
-		stim_shape = request.form['stim_shape']
-		win_delay = request.form['win_delay']
+		session_id = request.form['session_id']
+		experiment_id = request.form['experiment_id']
 
-		if trial_id != '':
-			trial_query = db.query(Trial).filter(Trial.trial_id == trial_id).all()
-			if len(trial_query) > 0:
-				return render_template('trials.html', trials=trial_query)
-		if stim_shape != '':
-			stim_shape_query = db.query(Trial).join(TrialParameter, StimulusObject).filter(
-				TrialParameter.stimulus != None,
-				StimulusObject.stimulus_shape == stim_shape
-			).all()
-			if len(stim_shape_query) > 0:
-				return render_template('trials.html', trials=stim_shape_query)
-		if win_delay != '':
-			win_delay_query = db.query(Trial).join(TrialParameter, ProtocolParameter).filter(
-				ProtocolParameter.parameter_name == 'delay',
-				TrialParameter.parameter_value == win_delay
-			).all()
-			if len(win_delay_query) > 0:
-				return render_template('trials.html', trials=win_delay_query)
-		
-		#query_result = stim_shape_query.intersect(win_delay_query)
-		return render_template('trials.html', trials=[])
+		template_name = request.form['template_name']
+		task_name = request.form['task_name']
+		animal_code = request.form['animal_code']
+
+		trial_start = request.form['trial_start']
+		trial_end = request.form['trial_end']
+		timeout = request.form['timeout']
+
+		ntargets = request.form['ntargets']
+		ndistractors = request.form['ndistractors']
+		outcome = request.form['outcome']
+
+		target_shape = request.form['target_shape']
+		target_color = request.form['target_color']
+		trial_delay = request.form['trial_delay']
+
+		query_result = db.execute('select * from query_trials(:param_trial_id, :param_session_id, :param_experiment_id, :param_template_name, :param_task_name, :param_animal_code, :param_trial_start, :param_trial_end, :param_timeout, :param_ntargets, :param_ndistractors, :param_outcome, :param_target_shape, :param_target_color, :param_trial_delay);',
+			{
+				'param_trial_id': (None if trial_id == '' else trial_id),
+				'param_session_id': (None if session_id == '' else session_id),
+				'param_experiment_id': (None if experiment_id == '' else experiment_id),
+				'param_template_name': (None if template_name == '' else template_name),
+				'param_task_name': (None if task_name == '' else task_name),
+				'param_animal_code': (None if animal_code == '' else animal_code),
+				'param_trial_start': (None if trial_start == '' else trial_start),
+				'param_trial_end': (None if trial_end == '' else trial_end),
+				'param_timeout': (None if timeout == '' else timeout),
+				'param_ntargets': (None if ntargets == '' else ntargets),
+				'param_ndistractors': (None if ndistractors == '' else ndistractors),
+				'param_outcome': (None if outcome == '' else outcome),
+				'param_target_shape': (None if target_shape == '' else target_shape),
+				'param_target_color': (None if target_color == '' else target_color),
+				'param_trial_delay': (None if trial_delay == '' else trial_delay)
+			})
+		return render_template('trials.html', trials=query_result)
+	return render_template('trials.html', trials=[])
 
 @app.route('/experiments/detail/<int:id>', methods=['GET'])
 def getExperimentDetails(id):
