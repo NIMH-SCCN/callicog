@@ -11,6 +11,7 @@ class Parameter:
 	DELAY = 'delay'
 	COLOR = 'color'
 	DISTRACTOR_NUMBER = 'distractor_number'
+	DISTRACTOR_NUMBER2 = 'distractor_number2'
 	TARGET_NUMBER = 'target_number'
 
 class Progression:

@@ -12,6 +12,7 @@ class TaskInterface(TaskStructure):
 
 	def init_parameters(self):
 		ndistractors_list = [1, 2, 3,4]
+		ndistractors_list2 = [2,3]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 		yellow_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15, 15),
@@ -42,6 +43,7 @@ class TaskInterface(TaskStructure):
 		self.add_parameter(Parameter.DISTRACTOR, distractor_list, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR2,distractor_list2, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR_NUMBER, ndistractors_list)
+		self.add_parameter(Parameter.DISTRACTOR_NUMBER2, ndistractors_list2)
 		self.add_parameter(Parameter.POSITION, positions_list)
 
 	def generate_trials(self):
@@ -75,7 +77,7 @@ class TaskInterface(TaskStructure):
 		tasklist = ["1A", "1B", "2A", "2B"]
 		task_randomiser = random.Random(tasklist)
 		if task_randomiser == "1A":
-			distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=1)
+			distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
 			for position in distractor_positions:
 				distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=1)
 				distractor_stim = copy.copy(distractor[0])
@@ -84,7 +86,7 @@ class TaskInterface(TaskStructure):
 				w3.add_stimulus(distractor_stim)
 		
 		elif task_randomiser == "1B":
-			distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=2)
+			distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
 			for position in distractor_positions:
 				distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=1)
 				distractor_stim = copy.copy(distractor[0])
@@ -93,7 +95,7 @@ class TaskInterface(TaskStructure):
 				w3.add_stimulus(distractor_stim)
 
 		elif task_randomiser == "2A":
-			distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=1)
+			distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER2])
 			for position in distractor_positions:
 					distractor2 = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR2]['values'], size=1)
 					distractor_stim = copy.copy(distractor2[0])
@@ -102,7 +104,7 @@ class TaskInterface(TaskStructure):
 					w3.add_stimulus(distractor_stim) 
 		
 		else:
-			distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=2)
+			distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER2])
 			for position in distractor_positions:
 					distractor2 = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR2]['values'], size=2)
 					distractor_stim = copy.copy(distractor2[0])
