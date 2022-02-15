@@ -7,6 +7,7 @@ class Parameter:
 	POSITION = 'position'
 	TARGET = 'target'
 	DISTRACTOR = 'distractor'
+	DISTRACTOR2 = 'distractor2'
 	DELAY = 'delay'
 	COLOR = 'color'
 	DISTRACTOR_NUMBER = 'distractor_number'
