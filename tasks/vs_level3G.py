@@ -9,7 +9,7 @@ class TaskInterface(TaskStructure):
 		self.init_parameters()
 
 	def init_parameters(self):
-		ndistractors_list = [6, 7]
+		ndistractors_list = [6]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 
 		yellow_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
