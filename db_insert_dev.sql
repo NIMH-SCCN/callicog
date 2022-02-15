@@ -1,5 +1,6 @@
 INSERT INTO animal(animal_code) VALUES('monkey1');
 INSERT INTO protocol(protocol_name) VALUES('arrowtouchtraining');
+INSERT INTO protocol(protocol_name) VALUES('test_mixtask');
 INSERT INTO protocol(protocol_name) VALUES('supertask_min');
 INSERT INTO protocol(protocol_name) VALUES('dmts');
 INSERT INTO protocol(protocol_name) VALUES('touchtraining1');
