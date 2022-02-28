@@ -81,13 +81,14 @@ class Window:
 		}
 
 class Stimulus:
-	def __init__(self, shape, size, size_touch=None, position=None, outcome=None, color=None, window=None, image=None):
+	def __init__(self, shape, size, size_touch=None, position=None, outcome=None, color=None, window=None, image=None, colorSpace=None):
 		self.shape = shape
 		self.size = size
 		self.size_touch = size_touch
 		self.position = position
 		self.outcome = outcome
 		self.color = color
+		self.colorSpace = colorSpace
 		self.window = window
 		self.image = image
 
