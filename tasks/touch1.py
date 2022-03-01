@@ -19,7 +19,7 @@ class TaskInterface(TaskStructure):
         # Window 1
         w1 = Window(transition=WindowTransition.TOUCH, is_outcome=True, is_outside_fail=True)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
-                     size=300,
+                     size=(300,300),
                      position=(0, 0), colorSpace='rgb255')
         w1_square.color = trial_parameters[Parameter.COLOR]
         w1.add_stimulus(w1_square)
