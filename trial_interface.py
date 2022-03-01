@@ -8,7 +8,7 @@ from serial import SerialException
 class WindowRuntime:
 	def __get_ppy_stim_from_shape(self, shape, ppy_window):
 		if shape == StimulusShape.SQUARE:
-			return visual.Rect(win=ppy_window, colorSpace='rgb')
+			return visual.Rect(win=ppy_window, colorSpace='rgb255')
 		elif shape == StimulusShape.CIRCLE:
 			return visual.Circle(win=ppy_window, colorSpace='rgb')
 		elif shape == StimulusShape.STAR:
