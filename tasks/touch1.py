@@ -9,7 +9,7 @@ class TaskInterface(TaskStructure):
         self.init_parameters()
 
     def init_parameters(self):
-        color_list = [(0,0,1), (1,0,0), (1,1,0)]
+        color_list = [(0,0,255), (255,0,0), (255,255,0)]
         self.add_parameter(Parameter.COLOR, color_list)
 
     def generate_trials(self):
@@ -20,7 +20,7 @@ class TaskInterface(TaskStructure):
         w1 = Window(transition=WindowTransition.TOUCH, is_outcome=True, is_outside_fail=True)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
                      size=(1280,720),
-                     position=(0, 0))
+                     position=(0, 0), colorSpace='rgb255')
         w1_square.color = trial_parameters[Parameter.COLOR]
         w1.add_stimulus(w1_square)
         w1_square.outcome = Outcome.SUCCESS

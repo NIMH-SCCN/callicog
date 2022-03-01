@@ -81,7 +81,7 @@ class Window:
 		}
 
 class Stimulus:
-	def __init__(self, shape, size, size_touch=None, position=None, outcome=None, color=None, window=None, image=None):
+	def __init__(self, shape, size, size_touch=None, position=None, outcome=None, color=None, window=None, image=None, colorSpace=None):
 		self.shape = shape
 		self.size = size
 		self.size_touch = size_touch
@@ -90,6 +90,7 @@ class Stimulus:
 		self.color = color
 		self.window = window
 		self.image = image
+		self.colorSpace = colorSpace
 
 		self.ppy_show_stim = None
 		self.ppy_touch_stim = None
