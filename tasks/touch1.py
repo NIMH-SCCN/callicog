@@ -9,7 +9,7 @@ class TaskInterface(TaskStructure):
         self.init_parameters()
 
     def init_parameters(self):
-        color_list = [(0,0,1), (1,0,0), (1,1,0)]
+        color_list = [(0,0,255), (255,0,0), (255,255,0)]
         self.add_parameter(Parameter.COLOR, color_list)
 
     def generate_trials(self):
