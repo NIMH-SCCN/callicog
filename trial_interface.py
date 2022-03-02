@@ -211,7 +211,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		
 	# Penalty timeout. Touch or window data is not currently recorded.
 	box_status = str(penalty_timeout)
-	if penalty_timeout == True:
+	if outcome == Outcome.FAIL:
 		flip_time = ppy_runtime.run_window(windows[-1], ppy_window)
 		windows[-1].flip_tstamp = flip_time
 		windows[-1].reset()
