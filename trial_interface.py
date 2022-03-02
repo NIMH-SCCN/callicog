@@ -126,8 +126,8 @@ class WindowRuntime:
 						}
 						if window.transition == WindowTransition.TOUCH:
 							print(f'in object, on touch, waiting for release')
-							#while ppy_mouse.getPressed()[0]:
-							#	time.sleep(0.001)
+							while ppy_mouse.getPressed()[0]:
+								time.sleep(0.001)
 							release_time = datetime.now()
 							touch_event['release_time'] = release_time
 							print('released')
@@ -158,7 +158,7 @@ class WindowRuntime:
 		start = datetime.now()
 		while not ppy_mouse.getPressed()[0]:
 			time.sleep(0.001)
-			if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout:
+			if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: # Here, the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - need to fix (JS (02/03/2022))
 				return 0, 0, True
 		touch_time = datetime.now()
 		return touch_time, (touch_time - start).total_seconds(), False
