@@ -174,6 +174,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 	for window in windows[:-1]:
 		flip_time = ppy_runtime.run_window(window, ppy_window)
 		window.flip_tstamp = flip_time
+		penalty_timeout = False
 
 		if window.is_outcome:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
@@ -185,6 +186,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
 				penalty_timeout = False
+				print('penalty timeout is ' + str(penalty_timeout))
 				try:
 					box.correct()
 				except SerialException:
@@ -192,6 +194,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			elif outcome == Outcome.FAIL:
 				print('box: incorrect')
 				penalty_timeout = True
+				print('penalty timeout is ' + str(penalty_timeout))
 				try:
 					box.incorrect()
 				except:
@@ -207,7 +210,8 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			window_obj['stimuli'].append(stimulus.pack_data())
 		trial_data.append(window_obj)
 		window.reset()
-
+		
+	print('penalty timeout is ' + str(penalty_timeout))
 	# Penalty timeout. Touch or window data is not currently recorded.
 	if penalty_timeout == True:
 		flip_time = ppy_runtime.run_window(windows[-1], ppy_window)
