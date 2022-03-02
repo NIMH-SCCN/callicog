@@ -28,7 +28,7 @@ class WindowRuntime:
 			arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
 			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
 		elif shape == StimulusShape.IMAGE:
-			return visual.ImageStim(win=ppy_window, colorSpace='rgb255')
+			return visual.ImageStim(win=ppy_window, colorSpace='rgb')
 		elif shape == StimulusShape.ARROW_E:
 			arrow_vertices = [(4, 0), (0,-3), (0,-1), (-3,-1), (-3, 1), (0, 1), (0, 3)]
 			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
@@ -171,7 +171,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 	box_status = "CalliCog OK"
 
 	trial_data = []
-	for window in windows:
+	for window in windows[:-1]:
 		flip_time = ppy_runtime.run_window(window, ppy_window)
 		window.flip_tstamp = flip_time
 
@@ -184,16 +184,19 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			# evaluate window outcome
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
+				penalty_timeout = False
 				try:
 					box.correct()
 				except SerialException:
 					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVE.'
 			elif outcome == Outcome.FAIL:
 				print('box: incorrect')
+				penalty_timeout = True
 				try:
 					box.incorrect()
 				except:
-					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'
+					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'			
+
 		elif window.blank == 0:
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
@@ -204,6 +207,12 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			window_obj['stimuli'].append(stimulus.pack_data())
 		trial_data.append(window_obj)
 		window.reset()
+
+	# Penalty timeout. Touch or window data is not currently recorded.
+	if penalty_timeout == True:
+		flip_time = ppy_runtime.run_window(windows[-1], ppy_window)
+		windows[-1].flip_tstamp = flip_time
+		windows[-1].reset()
 
 	return datetime.now(), outcome, trial_data, box_status
 	# this is the last outcome from all windows
