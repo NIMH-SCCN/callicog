@@ -174,7 +174,6 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 	for window in windows[:-1]:
 		flip_time = ppy_runtime.run_window(window, ppy_window)
 		window.flip_tstamp = flip_time
-		penalty_timeout = False
 
 		if window.is_outcome:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
@@ -206,11 +205,12 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			window_obj['stimuli'].append(stimulus.pack_data())
 		trial_data.append(window_obj)
 		window.reset()
-
-		return datetime.now(), outcome, trial_data, box_status 	# this is the last outcome from all windows
 		
-	# Penalty timeout. NB: touch or window data is not currently recorded, nor displayed in terminal.
+	# Penalty timeout. NB: touch or window data is not currently recorded, nor the added delay displayed in terminal.
 	if outcome == Outcome.FAIL:
 		flip_time = ppy_runtime.run_window(windows[-1], ppy_window)
 		windows[-1].flip_tstamp = flip_time
 		windows[-1].reset()
+
+	return datetime.now(), outcome, trial_data, box_status
+	# this is the last outcome from all windows
