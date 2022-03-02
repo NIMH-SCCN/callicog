@@ -186,7 +186,6 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
 				penalty_timeout = False
-				box_status = str(penalty_timeout)
 				try:
 					box.correct()
 				except SerialException:
@@ -194,7 +193,6 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			elif outcome == Outcome.FAIL:
 				print('box: incorrect')
 				penalty_timeout = True
-				box_status = str(penalty_timeout)
 				try:
 					box.incorrect()
 				except:
@@ -212,6 +210,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		window.reset()
 		
 	# Penalty timeout. Touch or window data is not currently recorded.
+	box_status = str(penalty_timeout)
 	if penalty_timeout == True:
 		flip_time = ppy_runtime.run_window(windows[-1], ppy_window)
 		windows[-1].flip_tstamp = flip_time
