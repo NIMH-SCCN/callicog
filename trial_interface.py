@@ -194,6 +194,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			elif outcome == Outcome.FAIL:
 				print('box: incorrect')
 				penalty_timeout = True
+				box_status = str(penalty_timeout)
 				try:
 					box.incorrect()
 				except:
