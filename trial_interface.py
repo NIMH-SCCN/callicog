@@ -185,14 +185,12 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			# evaluate window outcome
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
-				penalty_timeout = False
 				try:
 					box.correct()
 				except SerialException:
 					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVE.'
 			elif outcome == Outcome.FAIL:
 				print('box: incorrect')
-				penalty_timeout = True
 				try:
 					box.incorrect()
 				except:
@@ -208,13 +206,11 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			window_obj['stimuli'].append(stimulus.pack_data())
 		trial_data.append(window_obj)
 		window.reset()
+
+		return datetime.now(), outcome, trial_data, box_status 	# this is the last outcome from all windows
 		
-	# Penalty timeout. Touch or window data is not currently recorded.
-	box_status = str(penalty_timeout)
+	# Penalty timeout. NB: touch or window data is not currently recorded, nor displayed in terminal.
 	if outcome == Outcome.FAIL:
 		flip_time = ppy_runtime.run_window(windows[-1], ppy_window)
 		windows[-1].flip_tstamp = flip_time
 		windows[-1].reset()
-
-	return datetime.now(), outcome, trial_data, box_status
-	# this is the last outcome from all windows
