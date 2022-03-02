@@ -24,7 +24,10 @@ class TaskInterface(TaskStructure):
         w1_square.color = trial_parameters[Parameter.COLOR]
         w1.add_stimulus(w1_square)
         w1_square.outcome = Outcome.SUCCESS
+        
         # Window 2
         w2 = Window(blank=0.5)
 
-        return [w1, w2]
+        pw = Window(blank=0)
+
+        return [w1, w2, pw]
