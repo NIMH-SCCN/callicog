@@ -126,8 +126,8 @@ class WindowRuntime:
 						}
 						if window.transition == WindowTransition.TOUCH:
 							print(f'in object, on touch, waiting for release')
-							while ppy_mouse.getPressed()[0]:
-								time.sleep(0.001)
+							#while ppy_mouse.getPressed()[0]:
+							#	time.sleep(0.001)
 							release_time = datetime.now()
 							touch_event['release_time'] = release_time
 							print('released')
