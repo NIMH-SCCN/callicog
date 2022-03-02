@@ -17,7 +17,7 @@ class TaskInterface(TaskStructure):
 
     def build_trial(self, trial_parameters={}):
         # Window 1
-        w1 = Window(transition=WindowTransition.TOUCH, is_outcome=True, is_outside_fail=True)
+        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
                      size=(700,700),
                      position=(0, 0))
@@ -28,6 +28,7 @@ class TaskInterface(TaskStructure):
         # Window 2
         w2 = Window(blank=0.5)
 
+        # Penalty window (n/a)
         pw = Window(blank=0)
 
         return [w1, w2, pw]
