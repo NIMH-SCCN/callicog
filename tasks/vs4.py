@@ -145,4 +145,8 @@ class TaskInterface(TaskStructure):
 		# Window 8
 		w4 = Window(blank=2)
 
-		return [w1, w2, w3, w4]
+		#penalty window
+		pw = Window(blank=3)
+		
+
+		return [w1, w2, w3, w4, pw]
