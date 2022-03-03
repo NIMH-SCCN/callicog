@@ -102,7 +102,7 @@ class TaskInterface(TaskStructure):
 
 		# Window 3
 		# set targets
-		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
+		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
 				size=(25, 25),
 				color=(1, 1, 0),
