@@ -71,4 +71,6 @@ class TaskInterface(TaskStructure):
 		# Window 8
 		w4 = Window(blank=2)
 
-		return [w1, w2, w3, w4]
+		pw = Window(blank=2)   
+
+		return [w1, w2, w3, w4, pw]
