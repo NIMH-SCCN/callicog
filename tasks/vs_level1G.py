@@ -14,15 +14,15 @@ class TaskInterface(TaskStructure):
 
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
-					color=(0, 0.7, 1),
+					color=(255,255,255),
 					size_touch= (160,160))
 		blue_star = Stimulus(shape=StimulusShape.STAR,
 					size=(0.7,0.7),
-					color=(0, 0.7, 1),
+					color=(255, 255, 0),
 					size_touch= (160,160))
 		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
 					size=(140,140),
-					color=(0, 0.7, 1),
+					color=(255, 0, 255),
 					size_touch= (160,160))
 		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
 					size=(120,120),
