@@ -11,7 +11,7 @@ class TaskInterface(TaskStructure):
 		self.init_parameters()
 
 	def init_parameters(self):
-		ndistractors_list = [1, 2, 3, 4]
+		ndistractors_list = [1, 2, 3]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
@@ -115,21 +115,14 @@ class TaskInterface(TaskStructure):
 		distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
 		if len(distractor_positions) == 1:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR3]['values'], size=1)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR2]['values'], size=1)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
 		elif len(distractor_positions) == 2:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR2]['values'], size=2)
-					distractor_stim = copy.copy(distractor[0])
-					distractor_stim.position = position
-					distractor_stim.outcome = Outcome.FAIL
-					w3.add_stimulus(distractor_stim)
-		elif len(distractor_positions) == 4:
-				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=4)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=2)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
@@ -145,4 +138,8 @@ class TaskInterface(TaskStructure):
 		# Window 8
 		w4 = Window(blank=2)
 
-		return [w1, w2, w3, w4]
+		#penalty window
+		pw = Window(blank=3)
+		
+
+		return [w1, w2, w3, w4, pw]
