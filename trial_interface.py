@@ -26,7 +26,7 @@ class WindowRuntime:
 			return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb')
 		elif shape == StimulusShape.ARROW_N:
 			arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
-			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb')
+			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='dkl')
 		elif shape == StimulusShape.IMAGE:
 			return visual.ImageStim(win=ppy_window, colorSpace='rgb')
 		elif shape == StimulusShape.ARROW_E:

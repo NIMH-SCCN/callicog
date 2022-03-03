@@ -53,7 +53,7 @@ class TaskInterface(TaskStructure):
 		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
 				size=(25,25), 
-				color = (255, 255, 0),
+				color = (0,0,1),
 				size_touch=(160,160))
 		target_stim.position = trial_parameters[Parameter.POSITION]
 		target_stim.outcome = Outcome.SUCCESS
