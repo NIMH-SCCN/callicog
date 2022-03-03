@@ -9,6 +9,8 @@ class Parameter:
 	DISTRACTOR = 'distractor'
 	DISTRACTOR2 = 'distractor2'
 	DISTRACTOR3 = 'distractor3'
+	DISTRACTOR4 = 'distractor4'
+	DISTRACTOR41 = 'distractor41'
 	DELAY = 'delay'
 	COLOR = 'color'
 	DISTRACTOR_NUMBER = 'distractor_number'
