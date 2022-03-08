@@ -25,12 +25,25 @@ class TaskInterface(TaskStructure):
 					size=(140,140),
 					color=(0, 0.7, 1),
 					size_touch= (160,160))
+
 		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
 					size=(120,120),
 					color=(0, 0.7, 1),
 					size_touch= (160,160))
 		yellow_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
+					color=(1, 1, 0),
+					size_touch= (160,160))
+		yellow_circle = Stimulus(shape=StimulusShape.CIRCLE,
+					size=(140,140),
+					color=(1, 1, 1),
+					size_touch= (160,160))
+		yellow_star = Stimulus(shape=StimulusShape.STAR,
+					size=(0.7,0.7),
+					color=(1, 1, 0),
+					size_touch= (160,160))
+		yellow_diamond = Stimulus(shape=StimulusShape.DIAMOND,
+					size=(120,120),
 					color=(1, 1, 0),
 					size_touch= (160,160))
 		blue_arrow_e = Stimulus(shape=StimulusShape.ARROW_E,
@@ -41,21 +54,26 @@ class TaskInterface(TaskStructure):
 					size=(25,25), 
 					color = (0, 0.7, 1),
 					size_touch=(160,160))
-		yellow_star = Stimulus(shape=StimulusShape.STAR,
-					size=(0.7,0.7),
-					color=(1, 1, 0),
-					size_touch= (160,160))
-		yellow_diamond = Stimulus(shape=StimulusShape.DIAMOND,
-					size=(120,120),
-					color=(1, 1, 0),
-					size_touch= (160,160))
-		yellow_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
-					size=(25,25), 
-					color = (1, 1, 0),
-					size_touch=(160,160))
+
 		blue_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
 					size=(25,25), 
 					color = (0, 0.7, 1),
+					size_touch=(160,160))
+		blue_arrow_sw = Stimulus(shape=StimulusShape.ARROW_SW,
+					size=(25,25), 
+					color = (0,0.7,1),
+					size_touch=(160,160))
+		blue_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
+					size=(25,25), 
+					color = (0,0.7,1),
+					size_touch=(160,160))
+		blue_arrow_nw = Stimulus(shape=StimulusShape.ARROW_NW,
+					size=(25,25), 
+					color = (0,0.7,1),
+					size_touch=(160,160))
+		yellow_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
+					size=(25,25), 
+					color = (1, 1, 0),
 					size_touch=(160,160))
 		yellow_arrow_nw = Stimulus(shape=StimulusShape.ARROW_NW,
 					size=(25,25), 
@@ -69,10 +87,7 @@ class TaskInterface(TaskStructure):
 					size=(25,25), 
 					color = (1, 1, 0),
 					size_touch=(160,160))
-		blue_arrow_sw = Stimulus(shape=StimulusShape.ARROW_SW,
-					size=(25,25), 
-					color = (0,0.7,1),
-					size_touch=(160,160))
+
 		blue_arrow_s = Stimulus(shape=StimulusShape.ARROW_S,
 					size=(25,25), 
 					color = (0, 0.7, 1),
@@ -87,16 +102,20 @@ class TaskInterface(TaskStructure):
 					size_touch=(160,160))
 		
 		level1_list = [blue_triangle, blue_star, blue_circle, blue_diamond]
-		level2_list = [yellow_triangle,  blue_arrow_w, yellow_star, yellow_diamond, blue_arrow_sw, blue_arrow_ne]
-		level3_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n, blue_arrow_n, blue_arrow_s]
-		level4_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_se, yellow_arrow_s]
-		level4_list1 = [yellow_arrow_s]
+		level2_list1 = [blue_arrow_w, blue_arrow_e, blue_arrow_sw, blue_arrow_ne, blue_arrow_se , blue_arrow_nw]
+		level2_list2 = [yellow_triangle,  yellow_star, yellow_diamond, yellow_circle]
+		level3_list1 = [blue_arrow_n, blue_arrow_s]
+		level3_list2 = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw]
+		level4_list = [yellow_arrow_s, yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw]
 
-		self.add_parameter(Parameter.DISTRACTOR, level1_list, pseudorandom=False)
-		self.add_parameter(Parameter.DISTRACTOR2,level2_list, pseudorandom=False)
-		self.add_parameter(Parameter.DISTRACTOR3,level3_list, pseudorandom=False)
-		self.add_parameter(Parameter.DISTRACTOR4,level4_list, pseudorandom=False)
-		self.add_parameter(Parameter.DISTRACTOR41,level4_list1, pseudorandom=False)
+		self.add_parameter(Parameter.DISTRACTOR1, level1_list, pseudorandom=False)
+		self.add_parameter(Parameter.DISTRACTOR21, level2_list1, pseudorandom=False)
+		self.add_parameter(Parameter.DISTRACTOR22, level2_list2, pseudorandom=False)
+		self.add_parameter(Parameter.DISTRACTOR31, level3_list1, pseudorandom=False)
+		self.add_parameter(Parameter.DISTRACTOR32, level3_list2, pseudorandom=False)
+		self.add_parameter(Parameter.DISTRACTOR4, level4_list, pseudorandom=False)
+	
+
 		self.add_parameter(Parameter.DISTRACTOR_NUMBER, ndistractors_list)
 		self.add_parameter(Parameter.POSITION, positions_list)
 
