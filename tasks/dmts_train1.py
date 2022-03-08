@@ -23,27 +23,32 @@ class TaskInterface(TaskStructure):
 	def build_trial(self, trial_parameters={}):
 		# Window 1
 		w1 = Window(transition=WindowTransition.RELEASE)
-		w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(250, 250), color=(0, 0, 0), position=(0, 0))
-		w1.add_stimulus(w1_square)
+		w1_sample = copy.copy(trial_parameters(Parameter.TARGET))
+		w1_sample.position = (0,0)
+		w1.add_stimulus(w1_sample)
 
 		# Window 2
 		w2 = Window(blank=0.5)
 
 		# Window 3
 		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
-		sample = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite4-1.jpg', color = (1,1,1), size_touch=(250,250))
-		sample.position = trial_parameters[Parameter.POSITION]
-		sample.outcome = Outcome.SUCCESS
-		distractor = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite4-2.jpg', color = (1,1,1), size_touch=(250,250))
-		distractor.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0] #index required as variable is a list
-		distractor.outcome = Outcome.FAIL
-		w3.add_stimulus(sample)
-		w3.add_stimulus(distractor)
+		w3_sample = copy.copy(trial_parameters[Parameter.TARGET])
+		w3_sample.position = trial_parameters[Parameter.POSITION]
+		w3_sample.outcome = Outcome.SUCCESS
+		
+		w3_distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.TARGET]['values'], exclude=[trial_parameters[Parameter.TARGET]])[0]
+		w3_distractor.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0]
+		#w3_distractor = w3_distractor[0]
+		#w3_distractor.position = w3_distractor.position[0]
+		w3_distractor.outcome = Outcome.FAIL
 
-		# Window 3
-		w3 = Window(blank=0.5)
+		w3.add_stimulus(w3_sample)
+		w3.add_stimulus(w3_distractor)
+
+		# Window 4
+		w4 = Window(blank=0.5)
 		
 		# Penalty window - conditional
 		pw = Window(blank=1.5)
 
-		return [w1, w2, w3, pw]
+		return [w1, w2, w3, w4, pw]

@@ -10,7 +10,7 @@ class WindowRuntime:
 		if shape == StimulusShape.SQUARE:
 			return visual.Rect(win=ppy_window, colorSpace='rgb255')
 		elif shape == StimulusShape.CIRCLE:
-			return visual.Circle(win=ppy_window, colorSpace='rgb')
+			return visual.Circle(win=ppy_window, colorSpace='rgb255')
 		elif shape == StimulusShape.STAR:
 			star_vertices = []
 			outer_radius = 131
