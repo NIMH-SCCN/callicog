@@ -13,7 +13,12 @@ class TaskInterface(TaskStructure):
 		yellow_circle = Stimulus(shape=StimulusShape.CIRCLE, size = (250,250), color=(255,255,0), size_touch=(250,250))
 		blue_star = Stimulus(shape=StimulusShape.STAR, size = (1,1), color = (0,0,255), size_touch=(250,250))
 		stimulus_list = [red_diamond, yellow_circle, blue_star]
-		position_list = [(-382.5, 0), (382.5, 0), (0,0)]
+
+		# Positions are listed as [sample_pos,distractor_pos]
+		left = (-382.5, 0)
+		right = (382.5, 0)
+		centre = (0,0)
+		position_list = [[left, centre],[left,right],[centre,left],[centre,right],[right,left],[right,centre]]
 		
 		self.add_parameter(Parameter.POSITION, position_list)
 		self.add_parameter(Parameter.TARGET, stimulus_list)
@@ -43,11 +48,11 @@ class TaskInterface(TaskStructure):
 		# Window 5
 		w5 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
 		w5_sample = copy.copy(trial_parameters[Parameter.TARGET])
-		w5_sample.position = trial_parameters[Parameter.POSITION]
+		w5_sample.position = trial_parameters[Parameter.POSITION][0]
 		w5_sample.outcome = Outcome.SUCCESS
 		
 		w5_distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.TARGET]['values'], exclude=[trial_parameters[Parameter.TARGET]])[0]
-		w5_distractor.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0]
+		w5_distractor.position = trial_parameters[Parameter.POSITION][1]
 		w5_distractor.outcome = Outcome.FAIL
 
 		w5.add_stimulus(w5_sample)
