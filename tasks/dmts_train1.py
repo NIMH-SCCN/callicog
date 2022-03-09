@@ -38,8 +38,6 @@ class TaskInterface(TaskStructure):
 		
 		w3_distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.TARGET]['values'], exclude=[trial_parameters[Parameter.TARGET]])[0]
 		w3_distractor.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0]
-		#w3_distractor = w3_distractor[0]
-		#w3_distractor.position = w3_distractor.position[0]
 		w3_distractor.outcome = Outcome.FAIL
 
 		w3.add_stimulus(w3_sample)
