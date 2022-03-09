@@ -9,7 +9,7 @@ class TaskInterface(TaskStructure):
 		self.init_parameters()
 
 	def init_parameters(self):
-		red_diamond = Stimulus(shape=StimulusShape.DIAMOND, size=(176.78,176.78), color=(255,0,0), size_touch=(250,250))
+		red_diamond = Stimulus(shape=StimulusShape.DIAMOND, size=(176.78,176.78), color=(0,0,255), size_touch=(250,250))
 		yellow_circle = Stimulus(shape=StimulusShape.CIRCLE, size = (250,250), color=(255,255,0), size_touch=(250,250))
 		blue_star = Stimulus(shape=StimulusShape.STAR, size = (1,1), color = (-1,-1,0), size_touch=(250,250))
 		stimulus_list = [red_diamond, yellow_circle, blue_star]
