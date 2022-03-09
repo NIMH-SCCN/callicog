@@ -21,7 +21,7 @@ class WindowRuntime:
 				star_vertices.append([x,y]); x = inner_radius*math.cos(math.radians(126+vertex*72))
 				y = inner_radius*math.sin(math.radians(126+vertex*72))
 				star_vertices.append([x,y])
-			return visual.ShapeStim(win=ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb255')
+			return visual.ShapeStim(win=ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb')
 		elif shape == StimulusShape.DIAMOND:
 			return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb255')
 		elif shape == StimulusShape.ARROW_N:
