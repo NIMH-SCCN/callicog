@@ -3,14 +3,22 @@ from datetime import datetime
 import time
 import math
 
+from pkg_resources import Distribution
+
 class Parameter:
 	POSITION = 'position'
 	TARGET = 'target'
 	DISTRACTOR = 'distractor'
+	DISTRACTOR1 = 'distractor1'
 	DISTRACTOR2 = 'distractor2'
 	DISTRACTOR3 = 'distractor3'
-	DISTRACTOR4 = 'distractor4'
 	DISTRACTOR41 = 'distractor41'
+	#new system that I am testing right now
+	DISTRACTOR21 = 'distractor21'
+	DISTRACTOR22 = 'distractor22'
+	DISTRACTOR31 = 'distractor31'
+	DISTRACTOR32 = 'distractor32'
+	DISTRACTOR4 = 'distractor4'
 	DELAY = 'delay'
 	COLOR = 'color'
 	DISTRACTOR_NUMBER = 'distractor_number'
