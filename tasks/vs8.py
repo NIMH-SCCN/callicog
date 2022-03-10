@@ -23,11 +23,11 @@ class TaskInterface(TaskStructure):
 					size_touch= (160,160))
 		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
 					size=(140,140),
-					color=(0, 0.7, 1),
+					color=(127, 216, 255),
 					size_touch= (160,160))
 		yellow_circle = Stimulus(shape=StimulusShape.CIRCLE,
 					size=(140,140),
-					color=(1, 1, 0),
+					color=(255, 255, 127),
 					size_touch= (160,160))
 		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
 					size=(120,120),
