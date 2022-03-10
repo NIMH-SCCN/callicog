@@ -23,7 +23,7 @@ class WindowRuntime:
 				star_vertices.append([x,y])
 			return visual.ShapeStim(win=ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb')
 		elif shape == StimulusShape.DIAMOND:
-			return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb')
+			return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb255')
 		elif shape == StimulusShape.ARROW_N:
 			arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
 			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb')
