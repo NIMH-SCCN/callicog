@@ -11,7 +11,8 @@ class TaskInterface(TaskStructure):
 		self.init_parameters()
 
 	def init_parameters(self):
-		ndistractors_list = [2,1,5,4]
+		#n distractors list how many variable distractors there can be 
+		ndistractors_list = [1, 2, 4, 5]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
@@ -130,6 +131,7 @@ class TaskInterface(TaskStructure):
 
 		# set distractors
 		distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
+		#selecting a number from ndistractors_list to determine how many positions need to be generated for the distractors
 		if len(distractor_positions) == 1:
 				for position in distractor_positions:
 					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR41]['values'], size=1)
