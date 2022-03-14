@@ -12,7 +12,7 @@ class TaskInterface(TaskStructure):
 
 	def init_parameters(self):
 		#n distractors list how many variable distractors there can be 
-		ndistractors_list = [1, 3, 4, 5]
+		ndistractors_list = [2, 3, 4, 6]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
@@ -134,7 +134,7 @@ class TaskInterface(TaskStructure):
 		#selecting a number from ndistractors_list to determine how many positions need to be generated for the distractors
 		if len(distractor_positions) == 1:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR41]['values'], size=1)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR41]['values'], size=2)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
@@ -146,9 +146,9 @@ class TaskInterface(TaskStructure):
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
-		elif len(distractor_positions) == 5:
+		elif len(distractor_positions) == 6:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=5)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=6)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL

@@ -93,7 +93,7 @@ class TaskInterface(TaskStructure):
 		
 		level1_list = [blue_triangle, blue_star, blue_circle, blue_diamond,blue_triangle, blue_star, blue_circle, blue_diamond]
 		level2_list = [yellow_triangle, blue_arrow_e, blue_arrow_w, yellow_star, yellow_diamond, blue_arrow_ne, blue_arrow_sw, yellow_circle]
-		level3_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n,blue_arrow_n,blue_arrow_s]
+		level3_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n, blue_arrow_n, blue_arrow_s]
 		level41_list = [yellow_arrow_s,yellow_arrow_s]
 
 		self.add_parameter(Parameter.DISTRACTOR, level1_list, pseudorandom=False)
@@ -132,14 +132,14 @@ class TaskInterface(TaskStructure):
 		# set distractors
 		distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
 		#selecting a number from ndistractors_list to determine how many positions need to be generated for the distractors
-		if len(distractor_positions) == 2:
+		if len(distractor_positions) == 1:
 				for position in distractor_positions:
 					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR41]['values'], size=2)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
-		elif len(distractor_positions) == 2:
+		elif len(distractor_positions) == 3:
 				for position in distractor_positions:
 					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR3]['values'], size=3)
 					distractor_stim = copy.copy(distractor[0])
