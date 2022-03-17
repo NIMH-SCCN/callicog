@@ -45,7 +45,7 @@ class TaskInterface(TaskStructure):
 		w3.add_stimulus(w3_sample)
 
 		# Window 4
-		w4_blank = trial_parameters(Parameter.DELAY)
+		w4_blank = trial_parameters[Parameter.DELAY]
 		w4 = Window(blank=w4_blank)
 
 		# Window 5
