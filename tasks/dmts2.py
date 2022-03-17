@@ -13,7 +13,8 @@ class TaskInterface(TaskStructure):
 		yellow_circle = Stimulus(shape=StimulusShape.CIRCLE, size = (250,250), color=(255,255,0), size_touch=(250,250))
 		blue_star = Stimulus(shape=StimulusShape.STAR, size = (1,1), color = (0,0,255), size_touch=(250,250))
 		stimulus_list = [red_diamond, yellow_circle, blue_star]
-
+		delay_list = [0.5, 1, 2, 4, 8]
+		
 		# Positions are listed as [sample_pos,distractor_pos]
 		left = (-382.5, 0)
 		right = (382.5, 0)
@@ -22,6 +23,7 @@ class TaskInterface(TaskStructure):
 		
 		self.add_parameter(Parameter.POSITION, position_list)
 		self.add_parameter(Parameter.TARGET, stimulus_list)
+		self.add_parameter(Parameter.DELAY, delay_list)
 
 	def generate_trials(self):
 		self.trials = self.pseudorandomize_parameters()
@@ -43,7 +45,8 @@ class TaskInterface(TaskStructure):
 		w3.add_stimulus(w3_sample)
 
 		# Window 4
-		w4 = Window(blank=0.5)
+		w4_blank = trial_parameters(Parameter.DELAY)
+		w4 = Window(blank=w4_blank)
 
 		# Window 5
 		w5 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
