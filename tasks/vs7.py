@@ -87,16 +87,18 @@ class TaskInterface(TaskStructure):
 					size_touch=(160,160))
 		
 		level1_list = [blue_triangle, blue_star, blue_circle, blue_diamond]
+		#all blue
 		level2_list = [yellow_triangle,  blue_arrow_w, yellow_star, yellow_diamond, blue_arrow_sw, blue_arrow_ne]
+		#half blue half yellow
 		level3_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n, blue_arrow_n, blue_arrow_s]
-		level4_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_se, yellow_arrow_s]
-		level4_list1 = [yellow_arrow_s]
+		#half  blue half yellow
+		level4_list = [yellow_arrow_s]
+		#all yellow
 
 		self.add_parameter(Parameter.DISTRACTOR, level1_list, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR2,level2_list, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR3,level3_list, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR4,level4_list, pseudorandom=False)
-		self.add_parameter(Parameter.DISTRACTOR41,level4_list1, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR_NUMBER, ndistractors_list)
 		self.add_parameter(Parameter.POSITION, positions_list)
 
@@ -120,7 +122,7 @@ class TaskInterface(TaskStructure):
 		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
 				size=(25, 25),
-				color=(1, 1, 0),
+				color=(255, 255, 100),
 				size_touch=(160, 160))
 		target_stim.position = trial_parameters[Parameter.POSITION]
 		target_stim.outcome = Outcome.SUCCESS
@@ -130,7 +132,7 @@ class TaskInterface(TaskStructure):
 		distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
 		if len(distractor_positions) == 1:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR41]['values'], size=1)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR4]['values'], size=1)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
@@ -142,16 +144,16 @@ class TaskInterface(TaskStructure):
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
-		elif len(distractor_positions) == 4:
+		elif len(distractor_positions) == 3:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=4)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR2]['values'], size=3)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
 		else:
 				for position in distractor_positions:
-					distractor2 = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR2]['values'], size=3)
+					distractor2 = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=4)
 					distractor_stim = copy.copy(distractor2[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
