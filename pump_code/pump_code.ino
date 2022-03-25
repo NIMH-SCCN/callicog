@@ -3,6 +3,7 @@
 
 #define DIR 9
 #define STEP 8
+#define ENA 2
 
 #include <SPI.h>
 
@@ -31,7 +32,9 @@ void setup() {
   //Motor setup
   pinMode(DIR, OUTPUT);
   pinMode(STEP, OUTPUT);
+  pinMode(ENA, OUTPUT);
   digitalWrite(DIR, HIGH);
+  digitalWrite(ENA, HIGH);
   //digitalWrite(STEP, LOW);
 }
 
@@ -49,7 +52,9 @@ void loop() {
 
 void correct(int frequency, int volume, int duration_ms, float dosage_amount) {
   playTone(frequency, volume, duration_ms);
+  digitalWrite(ENA, LOW);
   pump(dosage_amount);
+  digitalWrite(ENA, HIGH);
 }
 
 void incorrect(int frequency, int volume, int duration_ms) {
