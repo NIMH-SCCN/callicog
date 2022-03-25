@@ -11,7 +11,7 @@ class TaskInterface(TaskStructure):
 		self.init_parameters()
 
 	def init_parameters(self):
-		ndistractors_list = [2, 3, 4, 5]
+		ndistractors_list = [3, 5, 6, 7]
 		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
@@ -100,7 +100,7 @@ class TaskInterface(TaskStructure):
 		#half blue half yellow
 		level3_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n, blue_arrow_n, blue_arrow_s]
 		#half  blue half yellow
-		level4_list = [yellow_arrow_s, yellow_arrow_s]
+		level4_list = [yellow_arrow_s, yellow_arrow_s, yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_s, yellow_arrow_s,]
 		#all yellow
 
 		self.add_parameter(Parameter.DISTRACTOR, level1_list, pseudorandom=False)
@@ -138,30 +138,30 @@ class TaskInterface(TaskStructure):
 
 		# set distractors
 		distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
-		if len(distractor_positions) == 2:
+		if len(distractor_positions) == 3:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR4]['values'], size=2)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR4]['values'], size=3)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
-		elif len(distractor_positions) == 3:
+		elif len(distractor_positions) == 5:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR3]['values'], size=3)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR3]['values'], size=5)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
-		elif len(distractor_positions) == 4:
+		elif len(distractor_positions) == 6:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR2]['values'], size=4)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR2]['values'], size=6)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
 		else:
 				for position in distractor_positions:
-					distractor2 = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=5)
+					distractor2 = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=7)
 					distractor_stim = copy.copy(distractor2[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
