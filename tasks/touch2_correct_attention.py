@@ -20,7 +20,7 @@ class TaskInterface(TaskStructure):
         w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
                      size=(700,350),
-                     position=(0, 545))
+                     position=(0, 185))
         w1_square.color = trial_parameters[Parameter.COLOR]
         w1.add_stimulus(w1_square)
         w1_square.outcome = Outcome.SUCCESS
