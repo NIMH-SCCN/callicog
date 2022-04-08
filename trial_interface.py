@@ -175,7 +175,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		flip_time = ppy_runtime.run_window(window, ppy_window)
 		window.flip_tstamp = flip_time
 
-		if window.is_outcome:
+		if window.is_outcome or window.timeout != None:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
 			while not all([target.touched for target in targets]):
 				outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
