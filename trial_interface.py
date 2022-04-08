@@ -198,7 +198,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 					box.incorrect()
 				except:
 					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'
-			elif outcome == Outcome.NULL:
+			elif window.is_outcome == False:
 				pass	
 
 		elif window.blank == 0:
