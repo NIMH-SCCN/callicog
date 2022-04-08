@@ -39,7 +39,7 @@ class TaskInterface(TaskStructure):
 		w2 = Window(blank=0.5) 
 
 		# Window 3
-		w3 = Window(transition=WindowTransition.RELEASE, label = 'encoding')
+		w3 = Window(transition=WindowTransition.RELEASE, label = 'encoding', timeout=2, is_outcome=True)
 		w3_sample = copy.copy(trial_parameters[Parameter.TARGET])
 		w3_sample.position = (0,0)
 		w3.add_stimulus(w3_sample)
