@@ -177,7 +177,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 
 		if window.is_outcome:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
-			while not all([target.touched for target in targets]):
+			while not all([target.touched for target in targets]) or outcome == Outcome.NULL:
 				outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 				if (outcome == Outcome.FAIL) or (outcome == Outcome.NULL):
 					break
@@ -193,7 +193,10 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 				try:
 					box.incorrect()
 				except:
-					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'			
+					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'
+			elif outcome == Outcome.NULL:
+				print('test worked')
+				pass			
 
 		elif window.blank == 0:
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
@@ -205,9 +208,6 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			window_obj['stimuli'].append(stimulus.pack_data())
 		trial_data.append(window_obj)
 		window.reset()
-		
-		if outcome == Outcome.NULL:
-			break
 
 	# Penalty timeout. NB: touch or window data is not currently recorded, nor the added delay displayed in terminal.
 	if outcome == Outcome.FAIL:

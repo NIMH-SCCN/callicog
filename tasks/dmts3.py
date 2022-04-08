@@ -43,6 +43,7 @@ class TaskInterface(TaskStructure):
 		w3_sample = copy.copy(trial_parameters[Parameter.TARGET])
 		w3_sample.position = (0,0)
 		w3.add_stimulus(w3_sample)
+		w3.sample.outcome = Outcome.NULL
 
 		# Window 4
 		w4_blank = trial_parameters[Parameter.DELAY]
