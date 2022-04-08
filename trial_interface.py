@@ -206,6 +206,9 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		trial_data.append(window_obj)
 		window.reset()
 		
+		if outcome == Outcome.NULL:
+			break
+
 	# Penalty timeout. NB: touch or window data is not currently recorded, nor the added delay displayed in terminal.
 	if outcome == Outcome.FAIL:
 		flip_time = ppy_runtime.run_window(windows[-1], ppy_window)
