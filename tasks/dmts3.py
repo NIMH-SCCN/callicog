@@ -30,7 +30,7 @@ class TaskInterface(TaskStructure):
 
 	def build_trial(self, trial_parameters={}):
 		# Window 1
-		w1 = Window(transition=WindowTransition.TOUCH)
+		w1 = Window(transition=WindowTransition.TOUCH, label = 'outcome')
 		w1_sample = copy.copy(trial_parameters[Parameter.TARGET])
 		w1_sample.position = (0,0)
 		w1.add_stimulus(w1_sample)
