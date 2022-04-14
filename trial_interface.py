@@ -194,6 +194,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			# evaluate window outcome
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
+				print('foo foo')
 				try:
 					box.correct()
 				except SerialException:
