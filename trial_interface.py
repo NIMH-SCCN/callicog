@@ -174,6 +174,10 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 	for window in windows[:-1]:
 		flip_time = ppy_runtime.run_window(window, ppy_window)
 		window.flip_tstamp = flip_time
+		if window.flip_tstamp == None:
+			print('no flip time')
+		else:
+			print('flip time')
 
 		if window.is_outcome or window.timeout > 0:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
