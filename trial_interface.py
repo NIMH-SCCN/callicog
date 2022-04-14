@@ -179,6 +179,8 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		else:
 			print('flip time')
 
+		print('foo')
+
 		if window.is_outcome or window.timeout > 0:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
 			while not all([target.touched for target in targets]):
