@@ -219,12 +219,12 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		print('window stimuli: ' + str(window.stimuli))
 				
 		print('window.blank is {}'.format(str(window.blank)))
-		if window.blank > 0:
-			print('window.blank > 0')
-			try:
-				window_obj['stimuli'].append({'label': '', 'delay': '', 'transition': '', 'is_outcome': '', 'is_outside_fail': '', 'fail_position': '', 'timeout': '','flip': window.flip_tstamp}) #test
-			except:
-				print('not appending')	
+		#if window.blank > 0:
+			#print('window.blank > 0')
+			#try:
+			#	window_obj['stimuli'].append({'label': '', 'delay': '', 'transition': '', 'is_outcome': '', 'is_outside_fail': '', 'fail_position': '', 'timeout': '','flip': window.flip_tstamp}) #test
+			#except:
+				#print('not appending')	
 
 		trial_data.append(window_obj)
 		print('new window_obj')
