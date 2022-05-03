@@ -87,7 +87,7 @@ class WindowRuntime:
 				print('stim drawn')
 			ppy_window.flip()
 			window_flip = datetime.now()
-		print('flip time is {window_flip}')
+		print('flip time is {}'.format(str(window_flip)))
 		return window_flip
 
 	def get_touch_outcome(self, window, flip_time, ppy_mouse):
