@@ -203,7 +203,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			elif window.is_outcome == False:
 				pass	
 
-		elif window.blank == 0:
+		elif window.blank is not None: #test
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
 		# save to JSON
