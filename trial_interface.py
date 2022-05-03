@@ -217,6 +217,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			window_obj['stimuli'].append(stimulus.pack_data())
 		trial_data.append(window_obj)
 		print('new window_obj')
+		print(window_obj)
 		window.reset()
 
 		if outcome == Outcome.NULL: #new
