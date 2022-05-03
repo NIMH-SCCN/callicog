@@ -75,6 +75,7 @@ class WindowRuntime:
 		ppy_window.flip()
 		window_flip = datetime.now()
 		print('--- new window!')
+		print('hello from inside foo')
 		if window.blank > 0:
 			time.sleep(window.blank)
 			print(f'blank for {window.blank} seconds')
@@ -86,7 +87,6 @@ class WindowRuntime:
 				print('stim drawn')
 			ppy_window.flip()
 			window_flip = datetime.now()
-		print('hello from inside foo')
 		print('flip time is {window_flip}')
 		return window_flip
 
