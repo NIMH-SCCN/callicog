@@ -210,11 +210,13 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		print('flip time is {}'.format(str(flip_time)))
 		# save to JSON
 		window_obj = window.pack_data()
+		print('initial window_obj')
 		print(window_obj)
 		window_obj['stimuli'] = []
 		for stimulus in window.stimuli:
 			window_obj['stimuli'].append(stimulus.pack_data())
 		trial_data.append(window_obj)
+		print('new window_obj')
 		window.reset()
 
 		if outcome == Outcome.NULL: #new
