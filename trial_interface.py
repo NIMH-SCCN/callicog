@@ -75,7 +75,6 @@ class WindowRuntime:
 		ppy_window.flip()
 		window_flip = datetime.now()
 		print('--- new window!')
-		print('hello from inside foo')
 		if window.blank > 0:
 			time.sleep(window.blank)
 			print(f'blank for {window.blank} seconds')
@@ -87,12 +86,11 @@ class WindowRuntime:
 				print('stim drawn')
 			ppy_window.flip()
 			window_flip = datetime.now()
-		print('flip time is {}'.format(str(window_flip)))
 		return window_flip
 
 	def get_touch_outcome(self, window, flip_time, ppy_mouse):
 		stimulus, touch_event, outcome = self.__check_touch(window, flip_time, ppy_mouse)
-		if stimulus:
+		if stimulus: #NB: flip time is recorded here (JS 3/5/2022)
 			if len(stimulus.after_touch) > 0:
 				stimulus.on_touch()
 			stimulus.record_touch_data(
@@ -101,6 +99,8 @@ class WindowRuntime:
 				flip_time,
 				touch_event['touch_time'],
 				touch_event['release_time'])
+		elif not stimulus: #test
+			stimulus.record_touch_data(flip_time) #test
 		elif window.is_outside_fail and touch_event:
 			window.fail_position = (touch_event['xcoor'], touch_event['ycoor'])
 		return outcome
@@ -176,12 +176,6 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 	for window in windows[:-1]:
 		flip_time = ppy_runtime.run_window(window, ppy_window)
 		window.flip_tstamp = flip_time
-		if window.flip_tstamp == None:
-			print('no flip time')
-		else:
-			print('flip time')
-
-		print('foo')
 
 		if window.is_outcome or window.timeout > 0:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
@@ -193,10 +187,9 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			if window.timeout > 0:
 				outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
-			# evaluate window outcome
+			# evaluate window outcome - this is likely where the bug is currently (JS 3/5/2022)
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
-				print('foo foo')
 				try:
 					box.correct()
 				except SerialException:
