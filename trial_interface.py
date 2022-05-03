@@ -216,6 +216,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		print('window.flip_tstamp is {}'.format(str(window.flip_tstamp)))
 		for stimulus in window.stimuli:
 			window_obj['stimuli'].append(stimulus.pack_data())
+		print('window stimuli: ' + str(window.stimuli))
 		if window.stimuli == None: #test
 			window_obj['stimuli'].append({'flip': window.flip_tstamp}) #tes
 		trial_data.append(window_obj)
