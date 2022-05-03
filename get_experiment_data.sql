@@ -72,7 +72,7 @@ select ex.experiment_id as experiment_id
 ,'(' || so.stimulus_color_r || ',' || so.stimulus_color_g || ',' || so.stimulus_color_b || ')' as color_rgb
 ,so.stimulus_timeout_gain as timeout_gain
 ,(case when so.stimulus_touched is not null then (case when so.stimulus_touched then 'yes' else 'no' end) else null end) as touched
-,so.stimulus_flip_timestamp as flip
+,(case when so.stimulus_flip_timestamp is not null then so.stimulus_flip_timestamp else wo.window_flip_timestamp) as flip
 ,so.stimulus_touch_timestamp as touch
 ,so.stimulus_release_timestamp as release
 ,so.stimulus_touch_x as touch_x
