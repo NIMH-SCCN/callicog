@@ -99,8 +99,8 @@ class WindowRuntime:
 				flip_time,
 				touch_event['touch_time'],
 				touch_event['release_time'])
-		elif not stimulus: #test
-			stimulus.record_touch_data(flip_time) #test
+		#elif not stimulus: #test
+			#stimulus.record_touch_data(flip_time) #test
 		elif window.is_outside_fail and touch_event:
 			window.fail_position = (touch_event['xcoor'], touch_event['ycoor'])
 		return outcome
@@ -210,11 +210,10 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		print('flip time is {}'.format(str(flip_time)))
 		# save to JSON
 		window_obj = window.pack_data()
+		print(window_obj)
 		window_obj['stimuli'] = []
 		for stimulus in window.stimuli:
 			window_obj['stimuli'].append(stimulus.pack_data())
-		if window.stimuli == None: #test
-			window_obj['stimuli'].append(stimulus.pack_data()) #test
 		trial_data.append(window_obj)
 		window.reset()
 
