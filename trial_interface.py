@@ -203,14 +203,18 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			elif window.is_outcome == False:
 				pass	
 
-		elif window.blank is not None: #test
+		elif window.blank == 0:
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
+
+		print('flip time is {}'.format(str(flip_time)))
 		# save to JSON
 		window_obj = window.pack_data()
 		window_obj['stimuli'] = []
 		for stimulus in window.stimuli:
 			window_obj['stimuli'].append(stimulus.pack_data())
+		if window.stimuli == None: #test
+			window_obj['stimuli'].append(stimulus.pack_data()) #test
 		trial_data.append(window_obj)
 		window.reset()
 
