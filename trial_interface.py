@@ -187,6 +187,8 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			if window.timeout > 0:
 				outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
+			print(str(outcome))
+
 			# evaluate window outcome - this is likely where the bug is currently (JS 3/5/2022)
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
@@ -217,14 +219,6 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		for stimulus in window.stimuli:
 			window_obj['stimuli'].append(stimulus.pack_data())
 		print('window stimuli: ' + str(window.stimuli))
-				
-		print('window.blank is {}'.format(str(window.blank)))
-		#if window.blank > 0:
-			#print('window.blank > 0')
-			#try:
-			#	window_obj['stimuli'].append({'label': '', 'delay': '', 'transition': '', 'is_outcome': '', 'is_outside_fail': '', 'fail_position': '', 'timeout': '','flip': window.flip_tstamp}) #test
-			#except:
-				#print('not appending')	
 
 		trial_data.append(window_obj)
 		print('new window_obj')
