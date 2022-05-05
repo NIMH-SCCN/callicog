@@ -209,22 +209,13 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
 
-		print('flip time is {}'.format(str(flip_time)))
 		# save to JSON
 		window_obj = window.pack_data()
-		print('initial window_obj')
-		print(window_obj)
 		window_obj['stimuli'] = []
-		print('window.flip_tstamp is {}'.format(str(window.flip_tstamp)))
 		for stimulus in window.stimuli:
 			window_obj['stimuli'].append(stimulus.pack_data())
-		print('window stimuli: ' + str(window.stimuli))
-
 		trial_data.append(window_obj)
-		print('new window_obj')
-		print(window_obj)
 		window.reset()
-
 		if outcome == Outcome.NULL: #new
 			break #new
 
