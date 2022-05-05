@@ -90,7 +90,7 @@ class WindowRuntime:
 
 	def get_touch_outcome(self, window, flip_time, ppy_mouse):
 		stimulus, touch_event, outcome = self.__check_touch(window, flip_time, ppy_mouse)
-		if stimulus: #NB: flip time is recorded here (JS 3/5/2022)
+		if stimulus:
 			if len(stimulus.after_touch) > 0:
 				stimulus.on_touch()
 			stimulus.record_touch_data(
@@ -189,8 +189,9 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 
 			print(str(outcome))
 
-			# evaluate window outcome - this is likely where the bug is currently (JS 3/5/2022)
-			if outcome == Outcome.SUCCESS:
+			if window.is_outcome == False:
+				pass
+			elif outcome == Outcome.SUCCESS:
 				print('box: correct')
 				try:
 					box.correct()
@@ -202,8 +203,7 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 					box.incorrect()
 				except:
 					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'
-			elif window.is_outcome == False:
-				pass	
+	
 
 		elif window.blank == 0:
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
