@@ -62,9 +62,9 @@ class TaskInterface(TaskStructure):
 		w5.add_stimulus(w5_distractor)
 
 		# Window 6
-		w6 = Window(blank=0.5, label = 'outcome')
+		w6 = Window(blank=0.5, label = 'outcome1')
 		
 		# Penalty window - conditional
-		pw = Window(blank=1.5, label = 'outcome')
+		pw = Window(blank=1.5, label = 'outcome2')
 
 		return [w1, w2, w3, w4, w5, w6, pw]
