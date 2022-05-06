@@ -219,11 +219,12 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 
 	# Penalty timeout. NB: touch or window data is not currently recorded, nor the added delay displayed in terminal.
 	if outcome == Outcome.FAIL:
-		flip_time = ppy_runtime.run_window(windows[-1], ppy_window)
-		windows[-1].flip_tstamp = flip_time
-		windows[-1].reset()
-		window_obj = windows[-1].pack_data() #testing
+		penalty_window = windows[-1]
+		flip_time = ppy_runtime.run_window(penalty_window, ppy_window)
+		penalty_window.flip_tstamp = flip_time
+		window_obj = penalty_window.pack_data() #testing
 		trial_data.append(window_obj) #testing
+		penalty_window.reset()
 
 	return datetime.now(), outcome, trial_data, box_status
 	# this is the last outcome from all windows
