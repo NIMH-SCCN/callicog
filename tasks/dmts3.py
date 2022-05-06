@@ -65,7 +65,7 @@ class TaskInterface(TaskStructure):
 		w6 = Window(blank=1.0, label = 'outcome1')
 
 		# Window 7 - placeholder for eeg timing
-		w7 = Window(blank=0, label = 'outcome2')
+		w7 = Window(blank=0.00000001, label = 'outcome2')
 		
 		# Penalty window - conditional
 		pw = Window(blank=1.0)
