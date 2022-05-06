@@ -62,9 +62,12 @@ class TaskInterface(TaskStructure):
 		w5.add_stimulus(w5_distractor)
 
 		# Window 6
-		w6 = Window(blank=0.5, label = 'outcome1')
+		w6 = Window(blank=1.0, label = 'outcome1')
+
+		# Window 7 - placeholder for eeg timing
+		w7 = Window(blank=0, label = 'outcome2')
 		
 		# Penalty window - conditional
-		pw = Window(blank=1.5, label = 'outcome2')
+		pw = Window(blank=1.0)
 
-		return [w1, w2, w3, w4, w5, w6, pw]
+		return [w1, w2, w3, w4, w5, w6, w7, pw]
