@@ -177,19 +177,14 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 		flip_time = ppy_runtime.run_window(window, ppy_window)
 		window.flip_tstamp = flip_time
 
-		if window.is_outcome or window.timeout > 0:
+		if window.is_outcome:
 			targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
 			while not all([target.touched for target in targets]):
 				outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 				if (outcome == Outcome.FAIL) or (outcome == Outcome.NULL):
 					break
-			
-			if window.timeout > 0:
-				outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 
-			if window.is_outcome == False:
-				pass
-			elif outcome == Outcome.SUCCESS:
+			if outcome == Outcome.SUCCESS:
 				print('box: correct')
 				try:
 					box.correct()
@@ -201,7 +196,11 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 					box.incorrect()
 				except:
 					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'
-	
+			elif outcome == Outcome.NULL:
+				pass
+
+		elif window.timeout > 0 and not window.is_outcome:
+			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)	
 
 		elif window.blank == 0:
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
