@@ -18,14 +18,14 @@ class TaskInterface(TaskStructure):
 	def build_trial(self, trial_parameters={}):
 		# Window 1
 		w1 = Window(transition=WindowTransition.RELEASE)
-		w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(250, 250), color=(0, 0, 0), position=(0, 0))
+		w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(250, 250), color=[-1, -1, -1], position=(0, 0))
 		w1.add_stimulus(w1_square)
 
 		# Window 2
 		# set targets
 		w2 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=2)
-		reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite1-1.jpg', color = (1,1,1), size_touch=(250,250))
-		penalty_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite1-2.jpg', color = (1,1,1), size_touch=(250,250))
+		reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite1-1.jpg', color = [1,1,1], size_touch=(250,250))
+		penalty_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite1-2.jpg', color = [1,1,1], size_touch=(250,250))
 		reward_stim.position = trial_parameters[Parameter.POSITION]
 		reward_stim.outcome = Outcome.SUCCESS
 		penalty_stim.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0] #index required as variable is a list

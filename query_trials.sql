@@ -94,7 +94,7 @@ with ttable as
 	and (param_experiment_id is null or ex.experiment_id = param_experiment_id)
 	and (param_template_name is null or te.template_name = param_template_name)
 	and (param_animal_code is null or an.animal_code = param_animal_code)
-	and ((param_trial_start is null and param_trial_end is null) or (tr.trial_start >= param_trial_start and tr.trial_start =< param_trial_end))
+	and ((param_trial_start is null and param_trial_end is null) or (tr.trial_start >= param_trial_start and tr.trial_start <= param_trial_end))
 )
 select * from ttable tt
 where (param_ntargets is null or tt.ntargets = param_ntargets)

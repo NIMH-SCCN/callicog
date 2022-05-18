@@ -10,7 +10,7 @@ class WindowRuntime:
 		if shape == StimulusShape.SQUARE:
 			return visual.Rect(win=ppy_window, colorSpace='rgb')
 		elif shape == StimulusShape.CIRCLE:
-			return visual.Circle(win=ppy_window, colorSpace='rgb255')
+			return visual.Circle(win=ppy_window, colorSpace='rgb')
 		elif shape == StimulusShape.STAR:
 			star_vertices = []
 			outer_radius = 131
@@ -21,14 +21,14 @@ class WindowRuntime:
 				star_vertices.append([x,y]); x = inner_radius*math.cos(math.radians(126+vertex*72))
 				y = inner_radius*math.sin(math.radians(126+vertex*72))
 				star_vertices.append([x,y])
-			return visual.ShapeStim(win=ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb255')
+			return visual.ShapeStim(win=ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb')
 		elif shape == StimulusShape.DIAMOND:
-			return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb255')
+			return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb')
 		elif shape == StimulusShape.ARROW_N:
 			arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
 			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
 		elif shape == StimulusShape.IMAGE:
-			return visual.ImageStim(win=ppy_window, colorSpace='rgb255')
+			return visual.ImageStim(win=ppy_window, colorSpace='rgb')
 		elif shape == StimulusShape.ARROW_E:
 			arrow_vertices = [(4, 0), (0,-3), (0,-1), (-3,-1), (-3, 1), (0, 1), (0, 3)]
 			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
@@ -99,6 +99,8 @@ class WindowRuntime:
 				flip_time,
 				touch_event['touch_time'],
 				touch_event['release_time'])
+		#elif not stimulus: #test
+			#stimulus.record_touch_data(flip_time) #test
 		elif window.is_outside_fail and touch_event:
 			window.fail_position = (touch_event['xcoor'], touch_event['ycoor'])
 		return outcome
@@ -181,22 +183,28 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 				outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
 				if (outcome == Outcome.FAIL) or (outcome == Outcome.NULL):
 					break
-			# evaluate window outcome
+
 			if outcome == Outcome.SUCCESS:
 				print('box: correct')
 				try:
 					box.correct()
 				except SerialException:
-					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVE.'
+					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'
 			elif outcome == Outcome.FAIL:
 				print('box: incorrect')
 				try:
 					box.incorrect()
 				except:
-					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'			
+					box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'
+			elif outcome == Outcome.NULL:
+				pass
+
+		elif window.timeout > 0 and not window.is_outcome:
+			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)	
 
 		elif window.blank == 0:
 			outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
+
 
 		# save to JSON
 		window_obj = window.pack_data()
@@ -205,12 +213,17 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 			window_obj['stimuli'].append(stimulus.pack_data())
 		trial_data.append(window_obj)
 		window.reset()
-		
-	# Penalty timeout. NB: touch or window data is not currently recorded, nor the added delay displayed in terminal.
+		if outcome == Outcome.NULL: #new
+			break #new
+
+	# Penalty timeout
 	if outcome == Outcome.FAIL:
-		flip_time = ppy_runtime.run_window(windows[-1], ppy_window)
-		windows[-1].flip_tstamp = flip_time
-		windows[-1].reset()
+		penalty_window = windows[-1]
+		flip_time = ppy_runtime.run_window(penalty_window, ppy_window)
+		penalty_window.flip_tstamp = flip_time
+		#window_obj = penalty_window.pack_data() 	#add to record window data
+		#trial_data.append(window_obj) 	#add to record window data
+		penalty_window.reset()
 
 	return datetime.now(), outcome, trial_data, box_status
 	# this is the last outcome from all windows

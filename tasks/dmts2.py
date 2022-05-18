@@ -11,7 +11,7 @@ class TaskInterface(TaskStructure):
 	def init_parameters(self):
 		red_diamond = Stimulus(shape=StimulusShape.DIAMOND, size=(176.78,176.78), color=(1,-1,-1), size_touch=(250,250))
 		yellow_circle = Stimulus(shape=StimulusShape.CIRCLE, size = (250,250), color=(1,1,-1), size_touch=(250,250))
-		blue_star = Stimulus(shape=StimulusShape.STAR, size = (1,1), color = (0,0,255), size_touch=(250,250))
+		blue_star = Stimulus(shape=StimulusShape.STAR, size = (1,1), color = (-1,-1,1), size_touch=(250,250))
 		stimulus_list = [red_diamond, yellow_circle, blue_star]
 		delay_list = [0.5, 1, 2, 4, 8]
 		
@@ -39,7 +39,7 @@ class TaskInterface(TaskStructure):
 		w2 = Window(blank=0.5)
 
 		# Window 3
-		w3 = Window(transition=WindowTransition.RELEASE)
+		w3 = Window(transition=WindowTransition.RELEASE, timeout=2)
 		w3_sample = copy.copy(trial_parameters[Parameter.TARGET])
 		w3_sample.position = (0,0)
 		w3.add_stimulus(w3_sample)
