@@ -98,15 +98,15 @@ class TaskInterface(TaskStructure):
 					color = (120, 216, 255),
 					size_touch=(160,160))
 		
-		blue_shapes = [blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond]
-		yellow_shapes = [yellow_triangle, yellow_star, yellow_diamond, yellow_circle,yellow_triangle, yellow_star, yellow_diamond, yellow_circle,]
-		blue_arrows = [blue_arrow_s, blue_arrow_n, blue_arrow_n, blue_arrow_s, blue_arrow_ne, blue_arrow_nw, blue_arrow_ne, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_se, blue_arrow_sw, blue_arrow_e, blue_arrow_s, blue_arrow_e, blue_arrow_s ]
-		yellow_arrows = [yellow_arrow_s, yellow_arrow_s, yellow_arrow_ne,yellow_arrow_ne,yellow_arrow_nw, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_sw]
+		blueshapes = [blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond]
+		yellowshapes = [yellow_triangle, yellow_star, yellow_diamond, yellow_circle,yellow_triangle, yellow_star, yellow_diamond, yellow_circle,]
+		bluearrows = [blue_arrow_s, blue_arrow_n, blue_arrow_n, blue_arrow_s, blue_arrow_ne, blue_arrow_nw, blue_arrow_ne, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_se, blue_arrow_sw, blue_arrow_e, blue_arrow_s, blue_arrow_e, blue_arrow_s ]
+		yellowarrows = [yellow_arrow_s, yellow_arrow_s, yellow_arrow_ne,yellow_arrow_ne,yellow_arrow_nw, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_sw]
 
-		self.add_parameter(Parameter.BLUESHAPES, blue_shapes, pseudorandom=False)
-		self.add_parameter(Parameter.YELLOWSHAPES,yellow_shapes, pseudorandom=False)
-		self.add_parameter(Parameter.BLUEARROWS,blue_arrows, pseudorandom=False)
-		self.add_parameter(Parameter.YELLOWARROWS,yellow_arrows, pseudorandom=False)
+		self.add_parameter(Parameter.BLUESHAPES, blueshapes, pseudorandom=False)
+		self.add_parameter(Parameter.YELLOWSHAPES,yellowshapes, pseudorandom=False)
+		self.add_parameter(Parameter.BLUEARROWS,bluearrows, pseudorandom=False)
+		self.add_parameter(Parameter.YELLOWARROWS,yellowarrows, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR_NUMBER, ndistractors_list)
 		self.add_parameter(Parameter.POSITION, positions_list)
 
@@ -143,6 +143,7 @@ class TaskInterface(TaskStructure):
 					blue_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWS]['values'], size=7)
 					yellow_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.YELLOWARROWS]['values'], size=7)
 					distractor = blue_dis+yellow_dis
+					print(distractor)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
@@ -152,6 +153,7 @@ class TaskInterface(TaskStructure):
 					blue_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWS]['values'], size=7)
 					yellow_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.YELLOWARROWS]['values'], size=6)
 					distractor = blue_dis+yellow_dis
+					print(distractor)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
