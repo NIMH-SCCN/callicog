@@ -140,8 +140,8 @@ class TaskInterface(TaskStructure):
 		distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
 		if len(distractor_positions) == 13:
 				for position in distractor_positions:
-					blue_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWS]['values'], size=7)
-					yellow_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.YELLOWARROWS]['values'], size=6)
+					blue_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.YELLOWARROWS]['values'], size=7)
+					yellow_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWS]['values'], size=6)
 					distractor = blue_dis+yellow_dis
 					print(distractor)
 					distractor_stim = copy.copy(distractor[0])
