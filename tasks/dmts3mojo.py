@@ -17,7 +17,7 @@ class TaskInterface(TaskStructure):
 		
 		# Positions are listed as [sample_pos,distractor_pos]
 		left = (-382.5, -235)
-		right = (382.5, 235)
+		right = (382.5, -235)
 		centre = (0,-235)
 		position_list = [[left, centre],[left,right],[centre,left],[centre,right],[right,left],[right,centre]]
 		
