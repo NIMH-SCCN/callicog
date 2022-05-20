@@ -32,7 +32,7 @@ class TaskInterface(TaskStructure):
 		# Window 1
 		w1 = Window(transition=WindowTransition.TOUCH, label = 'encoding1')
 		w1_sample = copy.copy(trial_parameters[Parameter.TARGET])
-		w1_sample.position = (0,0)
+		w1_sample.position = (0,-235)
 		w1.add_stimulus(w1_sample)
 
 		# Window 2
@@ -41,7 +41,7 @@ class TaskInterface(TaskStructure):
 		# Window 3
 		w3 = Window(transition=WindowTransition.RELEASE, label = 'encoding2', timeout=2, is_outcome=False)
 		w3_sample = copy.copy(trial_parameters[Parameter.TARGET])
-		w3_sample.position = (0,0)
+		w3_sample.position = (0,-235)
 		w3.add_stimulus(w3_sample)
 
 		# Window 4
