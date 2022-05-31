@@ -148,6 +148,7 @@ class TaskInterface(TaskStructure):
 				distractor_stim.position = position
 				distractor_stim.outcome = Outcome.FAIL
 				w3.add_stimulus(distractor_stim)
+
 		elif len(distractor_positions) == 10: 
 			for position in distractor_positions:
 					blue_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.YELLOWARROWS]['values'], size=7)
