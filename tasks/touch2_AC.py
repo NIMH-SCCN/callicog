@@ -1,3 +1,4 @@
+from sqlalchemy import false
 from task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome, Parameter
 from task_structure import TaskStructure
 import random
@@ -17,9 +18,9 @@ class TaskInterface(TaskStructure):
 
     def build_trial(self, trial_parameters={}):
         # Window 1
-        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True)
+        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout=5)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
-                     size=(550,550),
+                     size=(700,700),
                      position=(0, 0))
         w1_square.color = trial_parameters[Parameter.COLOR]
         w1.add_stimulus(w1_square)

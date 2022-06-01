@@ -17,14 +17,16 @@ class TaskInterface(TaskStructure):
 
     def build_trial(self, trial_parameters={}):
         # Window 1
-        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True)
-        w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(250,250), position=(random.randint(-515,515), random.randint(-235,235)))
+        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout=5)
+        w1_square = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(550,550),
+                     position=(0, 0))
         w1_square.color = trial_parameters[Parameter.COLOR]
         w1.add_stimulus(w1_square)
         w1_square.outcome = Outcome.SUCCESS
-       
+        
         # Window 2
-        w2 = Window(blank=0.5)
+        w2 = Window(blank=1)
 
         # Penalty window (n/a)
         pw = Window(blank=0)

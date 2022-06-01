@@ -26,7 +26,7 @@ class TaskInterface(TaskStructure):
         w1_square.outcome = Outcome.SUCCESS
         
         # Window 2
-        w2 = Window(blank=0.5)
+        w2 = Window(blank=1)
 
         # Penalty window (n/a)
         pw = Window(blank=0)

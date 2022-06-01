@@ -10,17 +10,19 @@ class TaskInterface(TaskStructure):
 
     def init_parameters(self):
         color_list = [(-1,-1,1), (1,-1,-1), (1,1,-1)]
+        positions_list = [(-200, 0),(0,0) (200,0)]
         self.add_parameter(Parameter.COLOR, color_list)
+        self.add_parameter(Parameter.POSITION, positions_list)
 
     def generate_trials(self):
         self.trials = self.pseudorandomize_parameters()
 
     def build_trial(self, trial_parameters={}):
         # Window 1
-        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True)
+        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True, timeout=3)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
-                     size=(550,550),
-                     position=(0, 0))
+                     size=(250,250),
+                     position=trial_parameters[Parameter.POSITION])
         w1_square.color = trial_parameters[Parameter.COLOR]
         w1.add_stimulus(w1_square)
         w1_square.outcome = Outcome.SUCCESS
@@ -29,6 +31,6 @@ class TaskInterface(TaskStructure):
         w2 = Window(blank=1)
 
         # Penalty window (n/a)
-        pw = Window(blank=0)
+        pw = Window(blank=5)
 
         return [w1, w2, pw]
