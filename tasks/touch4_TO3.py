@@ -29,6 +29,6 @@ class TaskInterface(TaskStructure):
         w2 = Window(blank=1)
 
         # Penalty window (n/a)
-        pw = Window(blank=5)
+        pw = Window(blank=3)
 
         return [w1, w2, pw]
