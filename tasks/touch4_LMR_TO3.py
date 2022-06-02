@@ -10,7 +10,7 @@ class TaskInterface(TaskStructure):
 
     def init_parameters(self):
         color_list = [(-1,-1,1), (1,-1,-1), (1,1,-1)]
-        positions_list = [(-200, 0),(0,0) (200,0)]
+        positions_list = [(-200, 0),(0,0),(200,0)]
         self.add_parameter(Parameter.COLOR, color_list)
         self.add_parameter(Parameter.POSITION, positions_list)
 

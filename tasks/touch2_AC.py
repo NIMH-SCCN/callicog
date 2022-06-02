@@ -18,7 +18,7 @@ class TaskInterface(TaskStructure):
 
     def build_trial(self, trial_parameters={}):
         # Window 1
-        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout=5)
+        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout=5, is_outside_fail= True)
         w1_square = Stimulus(shape=StimulusShape.SQUARE,
                      size=(700,700),
                      position=(0, 0))
