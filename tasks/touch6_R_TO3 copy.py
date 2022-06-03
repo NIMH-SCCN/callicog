@@ -18,7 +18,7 @@ class TaskInterface(TaskStructure):
     def build_trial(self, trial_parameters={}):
         # Window 1
         w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True)
-        w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(250,250), position=(random.randint(-350,350), random.randint(-155,155)))
+        w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(150,150), position=(random.randint(-350,350), random.randint(-155,155)))
         w1_square.color = trial_parameters[Parameter.COLOR]
         w1.add_stimulus(w1_square)
         w1_square.outcome = Outcome.SUCCESS
@@ -27,6 +27,6 @@ class TaskInterface(TaskStructure):
         w2 = Window(blank=1)
 
         # Penalty window (n/a)
-        pw = Window(blank=5)        
+        pw = Window(blank=3)        
 
         return [w1, w2, pw]
