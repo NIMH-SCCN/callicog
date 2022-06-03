@@ -16,6 +16,15 @@ class TaskInterface(TaskStructure):
         self.trials = self.pseudorandomize_parameters()
 
     def build_trial(self, trial_parameters={}):
+       	
+        # blackcue
+        bc = Window(transition=WindowTransition.RELEASE)
+        bc_square = Stimulus(shape=StimulusShape.SQUARE,
+                    size=(200, 200),
+                    color=(-1, -1, -1),
+                    position=(0, 0))
+        bc.add_stimulus(bc_square)
+
         # Window 1
         w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True)
         w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(150,150), position=(random.randint(-350,350), random.randint(-155,155)), size_touch=(200,200))
@@ -27,6 +36,6 @@ class TaskInterface(TaskStructure):
         w2 = Window(blank=1)
 
         # Penalty window (n/a)
-        pw = Window(blank=3)        
+        pw = Window(blank=5)        
 
-        return [w1, w2, pw]
+        return [bc, w1, w2, pw]
