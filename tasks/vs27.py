@@ -12,7 +12,8 @@ class TaskInterface(TaskStructure):
 
 	def init_parameters(self):
 		ndistractors_list = [6]
-		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
+		positions_list = [(-466, 233), (-233, 233), (0, 233), (233, 233), (466, 233), (-466, 0), (-233, 0), (0, 0), (233, 0), (466, 0),(-466, -233), (-233, -233), (0, -233), (233, -233), (466, -233)]
+		
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
 					color=(120, 216, 255),
@@ -98,12 +99,12 @@ class TaskInterface(TaskStructure):
 		#all blue
 		level2_list = [yellow_triangle,  blue_arrow_w, yellow_star, yellow_diamond, blue_arrow_sw, blue_arrow_ne, yellow_circle, blue_arrow_nw]
 		#half blue half yellow
-		level3_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n, blue_arrow_n, blue_arrow_s]
+		level3_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n, blue_arrow_n, blue_arrow_s, blue_arrow_e]
 		#half  blue half yellow
 		level4_list = [yellow_arrow_s, yellow_arrow_s, yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_s, yellow_arrow_s,]
 		#all yellow
 
-		self.add_parameter(Parameter.DISTRACTOR, level1_list, pseudorandom=False)
+		self.add_parameter(Parameter.DISTRACTOR1, level1_list, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR2,level2_list, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR3,level3_list, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR4,level4_list, pseudorandom=False)
