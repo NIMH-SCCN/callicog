@@ -156,7 +156,7 @@ class TaskInterface(TaskStructure):
 					w3.add_stimulus(distractor_stim)
 		elif len(distractor_positions) == 6:
 				for position in distractor_positions:
-					distractorb = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR]['values'], size=3)
+					distractorb = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR2]['values'], size=3)
 					distractory = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR4]['values'], size=3)
 					distractor = distractorb+distractory
 					print(distractor)
