@@ -11,8 +11,8 @@ class TaskInterface(TaskStructure):
 		self.init_parameters()
 
 	def init_parameters(self):
-		ndistractors_list = [2,4,6]
-		positions_list = [(-465, 155), (-155, 155), (155, 155), (465, 155),(-465, -155), (-155, -155), (155, -155), (465, -155)]
+		ndistractors_list = [13, 10, 5]
+		positions_list = [(-466, 233), (-233, 233), (0, 233), (233, 233), (466, 233), (-466, 0), (-233, 0), (0, 0), (233, 0), (466, 0),(-466, -233), (-233, -233), (0, -233), (233, -233), (466, -233)]
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
 					color=(120, 216, 255),
@@ -81,6 +81,10 @@ class TaskInterface(TaskStructure):
 					size=(25,25), 
 					color = (120, 216, 255),
 					size_touch=(160,160))
+		blue_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
+					size=(25,25), 
+					color = (120, 216, 255),
+					size_touch=(160,160))
 		blue_arrow_s = Stimulus(shape=StimulusShape.ARROW_S,
 					size=(25,25), 
 					color = (120, 216, 255),
@@ -94,19 +98,15 @@ class TaskInterface(TaskStructure):
 					color = (120, 216, 255),
 					size_touch=(160,160))
 		
-		level1_list = [blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond]
-		#all blue
-		level2_list = [yellow_triangle,  blue_arrow_w, yellow_star, yellow_diamond, blue_arrow_sw, blue_arrow_ne, yellow_circle, blue_arrow_nw]
-		#half blue half yellow
-		level3_list = [yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, blue_arrow_s, blue_arrow_n, blue_arrow_n, blue_arrow_s]
-		#half  blue half yellow
-		level4_list = [yellow_arrow_s, yellow_arrow_s, yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_s, yellow_arrow_s,]
-		#all yellow
+		blueshapes = [blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond]
+		yellowshapes = [yellow_triangle, yellow_star, yellow_diamond, yellow_circle,yellow_triangle, yellow_star, yellow_diamond, yellow_circle,]
+		bluearrows = [blue_arrow_s, blue_arrow_n, blue_arrow_e, blue_arrow_n, blue_arrow_ne, blue_arrow_nw, blue_arrow_se, blue_arrow_sw,]
+		yellowarrows = [yellow_arrow_s, yellow_arrow_s, yellow_arrow_ne,yellow_arrow_ne,yellow_arrow_nw, yellow_arrow_nw, yellow_arrow_se, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_sw]
 
-		self.add_parameter(Parameter.DISTRACTOR, level1_list, pseudorandom=False)
-		self.add_parameter(Parameter.DISTRACTOR2,level2_list, pseudorandom=False)
-		self.add_parameter(Parameter.DISTRACTOR3,level3_list, pseudorandom=False)
-		self.add_parameter(Parameter.DISTRACTOR4,level4_list, pseudorandom=False)
+		self.add_parameter(Parameter.BLUESHAPES, blueshapes, pseudorandom=False)
+		self.add_parameter(Parameter.YELLOWSHAPES,yellowshapes, pseudorandom=False)
+		self.add_parameter(Parameter.BLUEARROWS,bluearrows, pseudorandom=False)
+		self.add_parameter(Parameter.YELLOWARROWS,yellowarrows, pseudorandom=False)
 		self.add_parameter(Parameter.DISTRACTOR_NUMBER, ndistractors_list)
 		self.add_parameter(Parameter.POSITION, positions_list)
 
@@ -138,24 +138,32 @@ class TaskInterface(TaskStructure):
 
 		# set distractors
 		distractor_positions = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
-		if len(distractor_positions) == 2:
-				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR4]['values'], size=2)
+		if len(distractor_positions) == 13:
+			for position in distractor_positions:
+				blue_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.YELLOWARROWS]['values'], size=7)
+				yellow_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWS]['values'], size=6)
+				distractor = blue_dis+yellow_dis
+				print(distractor)
+				distractor_stim = copy.copy(distractor[0])
+				distractor_stim.position = position
+				distractor_stim.outcome = Outcome.FAIL
+				w3.add_stimulus(distractor_stim)
+
+		elif len(distractor_positions) == 10: 
+			for position in distractor_positions:
+					blue_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.YELLOWARROWS]['values'], size=7)
+					yellow_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWS]['values'], size=6)
+					distractor = blue_dis+yellow_dis
+					print(distractor)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
-		elif len(distractor_positions) == 4:
-				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR3]['values'], size=4)
-					distractor_stim = copy.copy(distractor[0])
-					distractor_stim.position = position
-					distractor_stim.outcome = Outcome.FAIL
-					w3.add_stimulus(distractor_stim)
-		elif len(distractor_positions) == 6:
-				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.DISTRACTOR1]['values'], size=4)
-					distractor_stim = copy.copy(distractor[0])
+		else: 
+			for position in distractor_positions:
+					yellow_dis = self.randomize_from(self.pseudorandom_parameters[Parameter.YELLOWARROWS]['values'], size=len(distractor_positions))
+					print(distractor)
+					distractor_stim = copy.copy(yellow_dis[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
