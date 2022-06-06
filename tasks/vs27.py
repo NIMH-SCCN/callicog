@@ -94,6 +94,10 @@ class TaskInterface(TaskStructure):
 					size=(25,25), 
 					color = (120, 216, 255),
 					size_touch=(160,160))
+		blue_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
+					size=(25,25), 
+					color = (120, 216, 255),
+					size_touch=(160,160))
 		
 		blueshapes = [blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond]
 		yellowshapes = [yellow_triangle, yellow_star, yellow_diamond, yellow_circle,yellow_triangle, yellow_star, yellow_diamond, yellow_circle,]
