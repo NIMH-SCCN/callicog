@@ -161,6 +161,29 @@ class TaskInterface(TaskStructure):
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
+		
+		distractor_positions2 = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]], size=trial_parameters[Parameter.DISTRACTOR_NUMBER])
+		if len(distractor_positions2) == 3:
+				for position in distractor_positions2:
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUESHAPES]['values'], size=3)
+					distractor_stim = copy.copy(distractor[0])
+					distractor_stim.position = position
+					distractor_stim.outcome = Outcome.FAIL
+					w3.add_stimulus(distractor_stim)
+		elif len(distractor_positions2) == 4:
+				for position in distractor_positions2:
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWS]['values'], size=4)
+					distractor_stim = copy.copy(distractor[0])
+					distractor_stim.position = position
+					distractor_stim.outcome = Outcome.FAIL
+					w3.add_stimulus(distractor_stim)
+		elif len(distractor_positions2) == 5:
+				for position in distractor_positions2:
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.YELLOWARROWS]['values'], size=5)
+					distractor_stim = copy.copy(distractor[0])
+					distractor_stim.position = position
+					distractor_stim.outcome = Outcome.FAIL
+					w3.add_stimulus(distractor_stim)
 		# Window 8
 		w4 = Window(blank=2)
 

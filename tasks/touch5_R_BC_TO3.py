@@ -26,7 +26,7 @@ class TaskInterface(TaskStructure):
         bc.add_stimulus(bc_square)
 
         # Window 1
-        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True)
+        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True, timeout=3)
         w1_square = Stimulus(shape=StimulusShape.SQUARE, size=(250,250), position=(random.randint(-350,350), random.randint(-155,155)))
         w1_square.color = trial_parameters[Parameter.COLOR]
         w1.add_stimulus(w1_square)
