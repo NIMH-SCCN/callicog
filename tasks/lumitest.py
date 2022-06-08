@@ -29,7 +29,7 @@ class TaskInterface(TaskStructure):
         w1_a3 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(-466,-233),
-                     color=(180, 180, 0))          
+                     color=(220, 160, 0))          
         w1_b1 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(-233,233),
@@ -41,7 +41,7 @@ class TaskInterface(TaskStructure):
         w1_b3 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(-233,-233),
-                     color=(255, 180, 0))  
+                     color=(240, 180, 0))  
 
         w1_c1 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
@@ -54,20 +54,20 @@ class TaskInterface(TaskStructure):
         w1_c3 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(0,-233),
-                     color=(0, 150, 255)) 
+                     color=(50, 150, 255)) 
 
         w1_d1 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(233,233),
-                     color=(30, 255, 255))
+                     color=(70, 255, 255))
         w1_d2 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(233,0),
-                     color=(30, 200, 255))     
+                     color=(70, 200, 255))     
         w1_d3 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(233,-233),
-                     color=(30, 150, 255)) 
+                     color=(70, 150, 255)) 
 
         w1_e1 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
