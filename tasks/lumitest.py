@@ -28,13 +28,32 @@ class TaskInterface(TaskStructure):
                      color=(0, 200, 255))     
         w1_a3 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
-                     position=(-466,233),
-                     color=(100, 200, 255))          
-
+                     position=(-466,-233),
+                     color=(240, 240, 0))          
+        w1_b1 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(-233,233),
+                     color=(240, 240, 15))
+        w1_b2 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(-233,0),
+                     color=(0, 255, 255))     
+        w1_b3 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(-233,-233),
+                     color=(100, 255, 255))  
         w1.add_stimulus(w1_a1)
         w1_a1.outcome = Outcome.SUCCESS
         w1.add_stimulus(w1_a2)
         w1_a2.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_a3)
+        w1_a3.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_b1)
+        w1_b1.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_b2)
+        w1_b2.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_b3)
+        w1_b3.outcome = Outcome.SUCCESS
         # Window 2
         w2 = Window(blank=1)
 
