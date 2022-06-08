@@ -126,7 +126,7 @@ class TaskInterface(TaskStructure):
 		bluearrowsyellowarrows = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_sw, blue_arrow_w, yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_s, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_e, yellow_arrow_w]
 		self.add_parameter(Parameter.BLUESHAPES, blueshapes, pseudorandom= True)
 		self.add_parameter(Parameter.BLUEARROWSYELLOWSHAPES, bluearrowsyellowshapes, pseudorandom= True)
-		self.add_parameter(Parameter.BLUEARROWSYELLOWARROWS, bluearrowsyellowshapes, pseudorandom= True)
+		self.add_parameter(Parameter.BLUEARROWSYELLOWARROWS, bluearrowsyellowarrows, pseudorandom= True)
 		self.add_parameter(Parameter.DISTRACTOR_NUMBER, ndistractors_list)
 		self.add_parameter(Parameter.POSITION, positions_list)
 
