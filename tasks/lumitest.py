@@ -25,35 +25,97 @@ class TaskInterface(TaskStructure):
         w1_a2 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(-466,0),
-                     color=(0, 200, 255))     
+                     color=(240, 240, 0))     
         w1_a3 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(-466,-233),
-                     color=(240, 240, 0))          
+                     color=(220, 220, 0))          
         w1_b1 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(-233,233),
-                     color=(240, 240, 15))
+                     color=(200, 200, 0))
         w1_b2 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(-233,0),
-                     color=(0, 255, 255))     
+                     color=(255, 200, 30))     
         w1_b3 = Stimulus(shape=StimulusShape.SQUARE,
                      size=(160,160),
                      position=(-233,-233),
-                     color=(100, 255, 255))  
+                     color=(255, 220, 0))  
+
+        w1_c1 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(0,233),
+                     color=(0,255,255))
+        w1_c2 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(0,0),
+                     color=(0, 200, 255))     
+        w1_c3 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(0,-233),
+                     color=(0, 100, 255)) 
+
+        w1_d1 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(233,233),
+                     color=(30, 255, 255))
+        w1_d2 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(233,0),
+                     color=(30, 200, 255))     
+        w1_d3 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(233,-233),
+                     color=(30, 100, 255)) 
+
+        w1_e1 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(233,233),
+                     color=(40, 255, 255))
+        w1_e2 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(233,0),
+                     color=(40, 200, 255))     
+        w1_e3 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(233,-233),
+                     color=(40, 100, 255)) 
+        
         w1.add_stimulus(w1_a1)
         w1_a1.outcome = Outcome.SUCCESS
         w1.add_stimulus(w1_a2)
         w1_a2.outcome = Outcome.SUCCESS
         w1.add_stimulus(w1_a3)
         w1_a3.outcome = Outcome.SUCCESS
+
         w1.add_stimulus(w1_b1)
         w1_b1.outcome = Outcome.SUCCESS
         w1.add_stimulus(w1_b2)
         w1_b2.outcome = Outcome.SUCCESS
         w1.add_stimulus(w1_b3)
         w1_b3.outcome = Outcome.SUCCESS
+        
+        w1.add_stimulus(w1_c1)
+        w1_c1.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_c2)
+        w1_c2.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_c3)
+        w1_c3.outcome = Outcome.SUCCESS
+
+        w1.add_stimulus(w1_d1)
+        w1_c1.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_d2)
+        w1_c2.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_d3)
+        w1_c3.outcome = Outcome.SUCCESS   
+
+        w1.add_stimulus(w1_e1)
+        w1_c1.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_e2)
+        w1_c2.outcome = Outcome.SUCCESS
+        w1.add_stimulus(w1_e3)
+        w1_c3.outcome = Outcome.SUCCESS   
         # Window 2
         w2 = Window(blank=1)
 
