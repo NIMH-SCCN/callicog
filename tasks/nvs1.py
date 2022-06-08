@@ -138,7 +138,7 @@ class TaskInterface(TaskStructure):
 		w1 = Window(transition=WindowTransition.RELEASE)
 		w1_square = Stimulus(shape=StimulusShape.SQUARE,
 					 size=(200, 200),
-					 color=(-1, -1, -1),
+					 color=(0,0,0),
 					 position=(0, 0))
 		w1.add_stimulus(w1_square)
 		
@@ -150,7 +150,7 @@ class TaskInterface(TaskStructure):
 		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
 				size=(25,25), 
-				color = (255, 255, 100),
+				color = (220, 220, 0),
 				size_touch=(160,160))
 		target_stim.position = trial_parameters[Parameter.POSITION]
 		target_stim.outcome = Outcome.SUCCESS
