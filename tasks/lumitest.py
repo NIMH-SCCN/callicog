@@ -19,13 +19,17 @@ class TaskInterface(TaskStructure):
         w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, is_outside_fail=True)
        #yellow
         w1_a1 = Stimulus(shape=StimulusShape.SQUARE,
-                     size=(-466,233),
-                     position=(0, 0),
+                     size=(160,160),
+                     position=(-466,233),
                      color=(255, 255, 0))
         w1_a2 = Stimulus(shape=StimulusShape.SQUARE,
-                     size=(-466,0),
-                     position=(0, 0),
-                     color=(0, 200, 255))            
+                     size=(160,160),
+                     position=(-466,0),
+                     color=(0, 200, 255))     
+        w1_a3 = Stimulus(shape=StimulusShape.SQUARE,
+                     size=(160,160),
+                     position=(-466,233),
+                     color=(100, 200, 255))          
 
         w1.add_stimulus(w1_a1)
         w1_a1.outcome = Outcome.SUCCESS
