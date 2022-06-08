@@ -21,6 +21,8 @@ class Parameter:
 	DISTRACTOR4 = 'distractor4'
 	# new distractor pools 
 	BLUESHAPES = 'blueshapes'
+	BLUEARROWSYELLOWSHAPES = 'bluearrowsyellowshapes'
+	BLUEARROWSYELLOWARROWS = 'bluearrowsyellowarrows'
 	YELLOWSHAPES = 'yellowshapes'
 	BLUEARROWS = 'bluearrows'
 	YELLOWARROWS = 'yellowarrows'
