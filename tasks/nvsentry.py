@@ -171,7 +171,7 @@ class TaskInterface(TaskStructure):
 				
 		elif len(distractor_positions) == 7:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWSYELLOWSHAPES]['vßalues'], size=7)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWSYELLOWSHAPES]['values'], size=7)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
