@@ -121,13 +121,15 @@ class TaskInterface(TaskStructure):
 					size=(120,120),
 					color=(0, 255, 255),
 					size_touch= (160,160))
-					
+
 		blueshapes = [blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond]
 		bluearrowsyellowshapes = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_s, blue_arrow_sw, blue_arrow_w, yellow_circle, yellow_star, yellow_triangle, yellow_star, yellow_circle, yellow_star, yellow_triangle, yellow_star]
 		bluearrowsyellowarrows = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_sw, blue_arrow_w, yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_s, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_e, yellow_arrow_w]
+		yellowarrows=[yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_s, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_e, yellow_arrow_w]
 		self.add_parameter(Parameter.BLUESHAPES, blueshapes, pseudorandom= True)
 		self.add_parameter(Parameter.BLUEARROWSYELLOWSHAPES, bluearrowsyellowshapes, pseudorandom= True)
 		self.add_parameter(Parameter.BLUEARROWSYELLOWARROWS, bluearrowsyellowarrows, pseudorandom= True)
+		self.add_parameter(Parameter.YELLOWARROWS, yellowarrows, pseudorandom= True)
 		self.add_parameter(Parameter.DISTRACTOR_NUMBER, ndistractors_list)
 		self.add_parameter(Parameter.POSITION, positions_list)
 
@@ -148,10 +150,10 @@ class TaskInterface(TaskStructure):
 
 		# Window 3
 		# set targets
-		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
+		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
 		target_stim = Stimulus(shape=StimulusShape.ARROW_N,
 				size=(25,25), 
-				color = (255, 255, 100),
+				color = (220, 220, 0),
 				size_touch=(160,160))
 		target_stim.position = trial_parameters[Parameter.POSITION]
 		target_stim.outcome = Outcome.SUCCESS
