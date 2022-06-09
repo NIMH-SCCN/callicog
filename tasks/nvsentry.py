@@ -10,7 +10,7 @@ class TaskInterface(TaskStructure):
 		self.init_parameters()
 
 	def init_parameters(self):
-		ndistractors_list = [6, 7, 8, 9]
+		ndistractors_list = [6, 7, 8]
 		positions_list = [(-466, 233), (-233, 233), (0, 233), (233, 233), (466, 233), (-466, 0), (-233, 0), (0, 0), (233, 0), (466, 0),(-466, -233), (-233, -233), (0, -233), (233, -233), (466, -233)]
 		
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
@@ -182,13 +182,7 @@ class TaskInterface(TaskStructure):
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
-		else:
-				for position in distractor_positions:
-					distractor2 = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUESHAPES]['values'], size=len(distractor_positions))
-					distractor_stim = copy.copy(distractor2[0])
-					distractor_stim.position = position
-					distractor_stim.outcome = Outcome.FAIL
-					w3.add_stimulus(distractor_stim) 
+
 
 		# Window 8
 		w4 = Window(blank=2)
