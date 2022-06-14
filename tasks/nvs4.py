@@ -15,43 +15,43 @@ class TaskInterface(TaskStructure):
 		
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
-					color=(120, 216, 255),
+					color=(0, 255, 255),
 					size_touch= (160,160))
 		blue_star = Stimulus(shape=StimulusShape.STAR,
 					size=(0.7,0.7),
-					color=(120, 216, 255),
+					color=(0, 255, 255),
 					size_touch= (160,160))
 		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
 					size=(140,140),
-					color=(120, 216, 255),
+					color=(0, 255, 255),
 					size_touch= (160,160))
 		yellow_circle = Stimulus(shape=StimulusShape.CIRCLE,
 					size=(140,140),
-					color=(255, 255, 100),
+					color=(220,220,0),
 					size_touch= (160,160))
 		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
 					size=(120,120),
-					color=(120, 216, 255),
+					color=(0, 255, 255),
 					size_touch= (160,160))
 		yellow_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
-					color=(255, 255, 100),
+					color=(220,220,0),
 					size_touch= (160,160))
 		blue_arrow_e = Stimulus(shape=StimulusShape.ARROW_E,
 					size=(25,25), 
-					color = (120, 216, 255),
+					color = (0, 255, 255),
 					size_touch=(160,160))
 		blue_arrow_w = Stimulus(shape=StimulusShape.ARROW_W,
 					size=(25,25), 
-					color = (120, 216, 255),
+					color = (0, 255, 255),
 					size_touch=(160,160))
 		yellow_star = Stimulus(shape=StimulusShape.STAR,
 					size=(0.7,0.7),
-					color=(255, 255, 100),
+					color=(220,220,0),
 					size_touch= (160,160))
 		yellow_diamond = Stimulus(shape=StimulusShape.DIAMOND,
 					size=(120,120),
-					color=(255, 255, 100),
+					color=(220,220,0),
 					size_touch= (160,160))
 		yellow_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
 					size=(25,25), 
@@ -59,67 +59,67 @@ class TaskInterface(TaskStructure):
 					size_touch=(160,160))
 		blue_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
 					size=(25,25), 
-					color = (120, 216, 255),
+					color = (0, 255, 255),
 					size_touch=(160,160))
 		yellow_arrow_nw = Stimulus(shape=StimulusShape.ARROW_NW,
 					size=(25,25), 
-					color = (255, 255, 100),
+					color = (220,220,0),
 					size_touch=(160,160))
 		blue_arrow_nw = Stimulus(shape=StimulusShape.ARROW_NW,
 					size=(25,25), 
-					color = (120, 216, 255),
+					color = (0, 255, 255),
 					size_touch=(160,160))
 		yellow_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
 					size=(25,25), 
-					color = (255, 255, 100),
+					color = (220,220,0),
 					size_touch=(160,160))
 		yellow_arrow_w = Stimulus(shape=StimulusShape.ARROW_W,
 					size=(25,25), 
-					color = (255, 255, 100),
+					color = (220,220,0),
 					size_touch=(160,160))
 		yellow_arrow_e = Stimulus(shape=StimulusShape.ARROW_E,
 					size=(25,25), 
-					color = (255, 255, 100),
+					color = (220,220,0),
 					size_touch=(160,160))
 		yellow_arrow_sw = Stimulus(shape=StimulusShape.ARROW_SW,
 					size=(25,25), 
-					color = (255, 255, 100),
+					color = (220,220,0),
 					size_touch=(160,160))
 		blue_arrow_sw = Stimulus(shape=StimulusShape.ARROW_SW,
 					size=(25,25), 
-					color = (120, 216, 255),
+					color = (0, 255, 255),
 					size_touch=(160,160))
 		blue_arrow_s = Stimulus(shape=StimulusShape.ARROW_S,
 					size=(25,25), 
-					color = (120, 216, 255),
+					color = (0, 255, 255),
 					size_touch=(160,160))
 		yellow_arrow_s = Stimulus(shape=StimulusShape.ARROW_S,
 					size=(25,25), 
-					color = (255, 255, 100),
+					color = (220,220,0),
 					size_touch=(160,160))
 		blue_arrow_n = Stimulus(shape=StimulusShape.ARROW_N,
 					size=(25,25), 
-					color = (120, 216, 255),
+					color = (0, 255, 255),
 					size_touch=(160,160))
 		blue_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
 					size=(25,25), 
-					color = (120, 216, 255),
+					color = (0, 255, 255),
 					size_touch=(160,160))
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
-					color=(0, 0.7, 1),
+					color=(0, 255, 255),
 					size_touch= (160,160))
 		blue_star = Stimulus(shape=StimulusShape.STAR,
 					size=(0.7,0.7),
-					color=(0, 0.7, 1),
+					color=(0, 255, 255),
 					size_touch= (160,160))
 		blue_circle = Stimulus(shape=StimulusShape.CIRCLE,
 					size=(140,140),
-					color=(0, 0.7, 1),
+					color=(0, 255, 255),
 					size_touch= (160,160))
 		blue_diamond = Stimulus(shape=StimulusShape.DIAMOND,
 					size=(120,120),
-					color=(0, 0.7, 1),
+					color=(0, 255, 255),
 					size_touch= (160,160))
 		blueshapes = [blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond]
 		bluearrowsyellowshapes = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_s, blue_arrow_sw, blue_arrow_w, yellow_circle, yellow_star, yellow_triangle, yellow_star, yellow_circle, yellow_star, yellow_triangle, yellow_star]
