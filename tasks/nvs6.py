@@ -168,11 +168,12 @@ class TaskInterface(TaskStructure):
 				
 		if len(distractor_positions) == 4:
 				for position in distractor_positions:
-					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUESHAPES]['values'], size=2)
+					distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUESHAPES]['values'], size=4)
 					distractor_stim = copy.copy(distractor[0])
 					distractor_stim.position = position
 					distractor_stim.outcome = Outcome.FAIL
 					w3.add_stimulus(distractor_stim)
+					
 		else:
 				for position in distractor_positions:
 					distractor2 = self.randomize_from(self.pseudorandom_parameters[Parameter.BLUEARROWSYELLOWARROWS]['values'], size=len(distractor_positions))
