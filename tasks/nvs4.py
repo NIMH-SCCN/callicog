@@ -39,11 +39,11 @@ class TaskInterface(TaskStructure):
 					size_touch= (160,160))
 		blue_arrow_e = Stimulus(shape=StimulusShape.ARROW_E,
 					size=(25,25), 
-					color = (0, 255, 255),
+					color=(0, 255, 255),
 					size_touch=(160,160))
 		blue_arrow_w = Stimulus(shape=StimulusShape.ARROW_W,
 					size=(25,25), 
-					color = (0, 255, 255),
+					color=(0, 255, 255),
 					size_touch=(160,160))
 		yellow_star = Stimulus(shape=StimulusShape.STAR,
 					size=(0.7,0.7),
@@ -55,55 +55,55 @@ class TaskInterface(TaskStructure):
 					size_touch= (160,160))
 		yellow_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
 					size=(25,25), 
-					color = (255, 255, 100),
+					color=(220,220,0),
 					size_touch=(160,160))
 		blue_arrow_ne = Stimulus(shape=StimulusShape.ARROW_NE,
 					size=(25,25), 
-					color = (0, 255, 255),
+					color=(0, 255, 255),
 					size_touch=(160,160))
 		yellow_arrow_nw = Stimulus(shape=StimulusShape.ARROW_NW,
 					size=(25,25), 
-					color = (220,220,0),
+					color=(220,220,0),
 					size_touch=(160,160))
 		blue_arrow_nw = Stimulus(shape=StimulusShape.ARROW_NW,
 					size=(25,25), 
-					color = (0, 255, 255),
+					color=(0, 255, 255),
 					size_touch=(160,160))
 		yellow_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
 					size=(25,25), 
-					color = (220,220,0),
+					color=(220,220,0),
 					size_touch=(160,160))
 		yellow_arrow_w = Stimulus(shape=StimulusShape.ARROW_W,
 					size=(25,25), 
-					color = (220,220,0),
+					color=(220,220,0),
 					size_touch=(160,160))
 		yellow_arrow_e = Stimulus(shape=StimulusShape.ARROW_E,
 					size=(25,25), 
-					color = (220,220,0),
+					color=(220,220,0),
 					size_touch=(160,160))
 		yellow_arrow_sw = Stimulus(shape=StimulusShape.ARROW_SW,
 					size=(25,25), 
-					color = (220,220,0),
+					color=(220,220,0),
 					size_touch=(160,160))
 		blue_arrow_sw = Stimulus(shape=StimulusShape.ARROW_SW,
 					size=(25,25), 
-					color = (0, 255, 255),
+					color=(0, 255, 255),
 					size_touch=(160,160))
 		blue_arrow_s = Stimulus(shape=StimulusShape.ARROW_S,
 					size=(25,25), 
-					color = (0, 255, 255),
+					color=(0, 255, 255),
 					size_touch=(160,160))
 		yellow_arrow_s = Stimulus(shape=StimulusShape.ARROW_S,
 					size=(25,25), 
-					color = (220,220,0),
+					color=(220,220,0),
 					size_touch=(160,160))
 		blue_arrow_n = Stimulus(shape=StimulusShape.ARROW_N,
 					size=(25,25), 
-					color = (0, 255, 255),
+					color=(0, 255, 255),
 					size_touch=(160,160))
 		blue_arrow_se = Stimulus(shape=StimulusShape.ARROW_SE,
 					size=(25,25), 
-					color = (0, 255, 255),
+					color=(0, 255, 255),
 					size_touch=(160,160))
 		blue_triangle = Stimulus(shape=StimulusShape.TRIANGLE,
 					size=(15,15),
@@ -121,12 +121,15 @@ class TaskInterface(TaskStructure):
 					size=(120,120),
 					color=(0, 255, 255),
 					size_touch= (160,160))
+
 		blueshapes = [blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond]
-		bluearrowsyellowshapes = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_s, blue_arrow_sw, blue_arrow_w, yellow_circle, yellow_star, yellow_triangle, yellow_star, yellow_circle, yellow_star, yellow_triangle, yellow_star]
+		bluearrowsyellowshapes = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_s, blue_arrow_sw, blue_arrow_w, blue_arrow_ne, yellow_circle, yellow_diamond, yellow_star, yellow_triangle, yellow_star, yellow_circle, yellow_star, yellow_triangle, yellow_star]
 		bluearrowsyellowarrows = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_sw, blue_arrow_w, yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_s, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_e, yellow_arrow_w]
+		yellowarrows=[yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_s, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_e, yellow_arrow_w]
 		self.add_parameter(Parameter.BLUESHAPES, blueshapes, pseudorandom= True)
 		self.add_parameter(Parameter.BLUEARROWSYELLOWSHAPES, bluearrowsyellowshapes, pseudorandom= True)
 		self.add_parameter(Parameter.BLUEARROWSYELLOWARROWS, bluearrowsyellowarrows, pseudorandom= True)
+		self.add_parameter(Parameter.YELLOWARROWS, yellowarrows, pseudorandom= True)
 		self.add_parameter(Parameter.DISTRACTOR_NUMBER, ndistractors_list)
 		self.add_parameter(Parameter.POSITION, positions_list)
 

@@ -123,7 +123,7 @@ class TaskInterface(TaskStructure):
 					size_touch= (160,160))
 
 		blueshapes = [blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond, blue_triangle, blue_star, blue_circle, blue_diamond]
-		bluearrowsyellowshapes = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_s, blue_arrow_sw, blue_arrow_w, yellow_circle, yellow_star, yellow_triangle, yellow_star, yellow_circle, yellow_star, yellow_triangle, yellow_star]
+		bluearrowsyellowshapes = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_s, blue_arrow_sw, blue_arrow_w, blue_arrow_ne, yellow_circle, yellow_diamond, yellow_star, yellow_triangle, yellow_star, yellow_circle, yellow_star, yellow_triangle, yellow_star]
 		bluearrowsyellowarrows = [blue_arrow_e, blue_arrow_n, blue_arrow_nw, blue_arrow_se, blue_arrow_sw, blue_arrow_sw, blue_arrow_w, yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_s, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_e, yellow_arrow_w]
 		yellowarrows=[yellow_arrow_ne, yellow_arrow_nw, yellow_arrow_s, yellow_arrow_se, yellow_arrow_sw, yellow_arrow_e, yellow_arrow_w]
 		self.add_parameter(Parameter.BLUESHAPES, blueshapes, pseudorandom= True)
