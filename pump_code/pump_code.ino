@@ -19,7 +19,7 @@ int correct_volume = 90;
 int incorrect_volume = 100;
 
 int duration_ms = 1000;
-float dosage_amount = 100.0;
+float dosage_amount = 200.0;
 
 int incomingByte;
 
