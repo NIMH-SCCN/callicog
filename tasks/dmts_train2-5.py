@@ -58,8 +58,8 @@ class TaskInterface(TaskStructure):
 		w7_distractor.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0]
 		w7_distractor.outcome = Outcome.FAIL
 
-		w7.add_stimulus(w5_sample)
-		w7.add_stimulus(w5_distractor)
+		w7.add_stimulus(w7_sample)
+		w7.add_stimulus(w7_distractor)
 
 		# Window 8
 		w8 = Window(blank=0.5)
