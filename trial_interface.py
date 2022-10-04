@@ -8,9 +8,9 @@ from serial import SerialException
 class WindowRuntime:
 	def __get_ppy_stim_from_shape(self, shape, ppy_window):
 		if shape == StimulusShape.SQUARE:
-			return visual.Rect(win=ppy_window, colorSpace='rgb255')
+			return visual.Rect(win=ppy_window, colorSpace='rgb')
 		elif shape == StimulusShape.CIRCLE:
-			return visual.Circle(win=ppy_window, colorSpace='rgb255')
+			return visual.Circle(win=ppy_window, colorSpace='rgb')
 		elif shape == StimulusShape.STAR:
 			star_vertices = []
 			outer_radius = 131
@@ -21,9 +21,9 @@ class WindowRuntime:
 				star_vertices.append([x,y]); x = inner_radius*math.cos(math.radians(126+vertex*72))
 				y = inner_radius*math.sin(math.radians(126+vertex*72))
 				star_vertices.append([x,y])
-			return visual.ShapeStim(win=ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb255')
+			return visual.ShapeStim(win=ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb')
 		elif shape == StimulusShape.DIAMOND:
-			return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb255')
+			return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb')
 		elif shape == StimulusShape.ARROW_N:
 			arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
 			return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
