@@ -1,1 +1,1 @@
-/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
+/usr/local/opt/postgresql@14/bin/postgres -D /usr/local/var/postgresql@14
