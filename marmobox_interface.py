@@ -11,11 +11,8 @@ class MarmoboxInterface:
         self.is_fullscreen = is_fullscreen
 
     def initialize(self):
-            self.box = MarmoboxIO(self.arduino_port, dummy=self.is_dummy)
-            self.box.connect()
-        except:
-            print('Failed to connect to Arduino')
-            return False
+        self.box = MarmoboxIO(self.arduino_port, dummy=self.is_dummy)
+        self.box.connect()
         self.ppy_window = visual.Window(self.window_size, monitor='test', units='pix', pos=(0,0), fullscr=self.is_fullscreen)
         self.ppy_mouse = event.Mouse(win=self.ppy_window, visible=self.is_dummy)
         logging.console.setLevel(logging.ERROR)

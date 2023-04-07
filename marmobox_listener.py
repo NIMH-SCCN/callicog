@@ -43,7 +43,8 @@ class ClientJob(Thread):
 
     def run(self):
         print('Client thread #%s started from %s' % (self.ident, self.client_address))
-        if self.mbox_interface.initialize():
+        try:
+            self.mbox_interface.initialize()
             print('Marmobox interface initialized') # status report
             self.client_socket.send(bytes(json.dumps(self.pack_response({'status': 'init success'})), 'utf8'))
             while not self.shutdown_flag.is_set():
@@ -61,8 +62,8 @@ class ClientJob(Thread):
                     break
                 self.parse_msg(msg)
             self.mbox_interface.close()
-        else: # status report
-            self.client_socket.send(bytes(json.dumps(self.pack_response({'status': 'arduino failed'})), 'utf8'))
+        except Exception as exc: # status report
+            self.client_socket.send(bytes(json.dumps(self.pack_response({'status': str(exc)})), 'utf8'))
         print('Client thread #%s stopped' % self.ident)
 
 def main():
