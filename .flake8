@@ -1,0 +1,6 @@
+[flake8]
+per-file-ignores =
+    ./*:E501
+    marmobox.py:E501
+    setup.py:E121
+    other_project/*:W9
