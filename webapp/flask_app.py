@@ -1,15 +1,36 @@
 import sys
-sys.path.append('..')
-
-from io import StringIO
 import csv
-from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash, make_response
+from datetime import datetime
+from io import StringIO
+from flask import (
+    Flask,
+    _app_ctx_stack,
+    render_template,
+    request,
+    redirect,
+    # url_for,
+    # flash,
+    make_response,
+)
 from flask_cors import CORS
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.sql import true
+
+sys.path.append('..')
 from database import DatabaseSession
-from marmobox_schema import Protocol, Task, Animal, Template, TemplateProtocol, Experiment, Trial, TrialParameter, ProtocolParameter, StimulusObject, WindowObject
-from datetime import datetime
+from marmobox_schema import (
+    Protocol,
+    # Task,
+    Animal,
+    Template,
+    TemplateProtocol,
+    Experiment,
+    # Trial,
+    # TrialParameter,
+    # ProtocolParameter,
+    # StimulusObject,
+    # WindowObject,
+)
 
 DATE_FORMAT = '%d/%m/%Y'
 TIME_FORMAT = '%H:%M:%S'
@@ -21,12 +42,14 @@ app.config['SECRET_KEY'] = "secret"
 CORS(app)
 app.session = scoped_session(DatabaseSession, scopefunc=_app_ctx_stack.__ident_func__)
 
+
 def isDateValid(datetime_string, format_string):
     try:
         datetime.strptime(datetime_string, format_string)
-    except:
+    except Exception:
         return False
     return True
+
 
 @app.route('/animals', methods=['GET', 'POST'])
 def getAnimalList():
@@ -39,8 +62,9 @@ def getAnimalList():
             animal = Animal(animal_code=alias)
             db.add(animal)
             db.commit()
-            #flash('New animal added successfully!')
+            # flash('New animal added successfully!')
         return redirect('/animals')
+
 
 @app.route('/tasks', methods=['GET', 'POST'])
 def getTaskList():
@@ -53,8 +77,9 @@ def getTaskList():
             task = Protocol(protocol_name=task_name)
             db.add(task)
             db.commit()
-            #flash('New task added successfully!')
+            # flash('New task added successfully!')
         return redirect('/tasks')
+
 
 @app.route('/templates', methods=['GET', 'POST'])
 def getTemplateList():
@@ -68,6 +93,7 @@ def getTemplateList():
             db.add(template)
             db.commit()
         return redirect('/templates')
+
 
 @app.route('/trials', methods=['GET', 'POST'])
 def getTrialQueryResults():
@@ -94,8 +120,7 @@ def getTrialQueryResults():
         target_color = request.form['target_color']
         trial_delay = request.form['trial_delay']
 
-        query_result = db.execute('select * from query_trials(:param_trial_id, :param_session_id, :param_experiment_id, :param_template_name, :param_task_name, :param_animal_code, :param_trial_start, :param_trial_end, :param_timeout, :param_ntargets, :param_ndistractors, :param_outcome, :param_target_shape, :param_target_color, :param_trial_delay);',
-            {
+        query_result = db.execute('select * from query_trials(:param_trial_id, :param_session_id, :param_experiment_id, :param_template_name, :param_task_name, :param_animal_code, :param_trial_start, :param_trial_end, :param_timeout, :param_ntargets, :param_ndistractors, :param_outcome, :param_target_shape, :param_target_color, :param_trial_delay);', {
                 'param_trial_id': (None if trial_id == '' else trial_id),
                 'param_session_id': (None if session_id == '' else session_id),
                 'param_experiment_id': (None if experiment_id == '' else experiment_id),
@@ -115,6 +140,7 @@ def getTrialQueryResults():
         return render_template('trials.html', trials=query_result)
     return render_template('trials.html', trials=[])
 
+
 @app.route('/experiments/detail/<int:id>', methods=['GET'])
 def getExperimentDetails(id):
     query_exp = db.query(Experiment).filter(Experiment.experiment_id == id).all()
@@ -122,6 +148,7 @@ def getExperimentDetails(id):
         experiment = query_exp[0]
         if request.method == 'GET':
             return render_template('experiment_details.html', experiment=experiment)
+
 
 @app.route('/experiments', methods=['GET', 'POST'])
 def getExperimentList():
@@ -151,8 +178,7 @@ def getExperimentList():
             end_datetime = (end_date + '-' + end_time)
             end_format = DATE_FORMAT + '-' + TIME_FORMAT
 
-        if (start_datetime == '' or isDateValid(start_datetime, start_format)) and (end_datetime == '' or 
-            isDateValid(end_datetime, end_format)):
+        if (start_datetime == '' or isDateValid(start_datetime, start_format)) and (end_datetime == '' or isDateValid(end_datetime, end_format)):
             experiments = db.query(Experiment).filter(
                 (true() if animal_id == '0' else Experiment.animal_id == animal_id),
                 (true() if template_id == '0' else Experiment.template_id == template_id),
@@ -163,6 +189,7 @@ def getExperimentList():
         else:
             return redirect(request.url)
     return render_template('experiments.html', experiments=experiments, all_animals=all_animals, all_templates=all_templates)
+
 
 @app.route('/experiments/save/<int:id>', methods=['GET'])
 def saveExperiment(id):
@@ -176,6 +203,7 @@ def saveExperiment(id):
     response.headers["Content-type"] = "text/csv"
     return response
 
+
 @app.route('/experiments/delete/<int:id>')
 def deleteExperiment(id):
     query_task = db.query(Experiment).filter(Experiment.experiment_id == id).all()
@@ -184,6 +212,7 @@ def deleteExperiment(id):
         db.delete(experiment)
         db.commit()
         return redirect('/experiments')
+
 
 @app.route('/tasks/update/<int:id>', methods=['GET', 'POST'])
 def updateTask(id):
@@ -197,6 +226,7 @@ def updateTask(id):
         if request.method == 'GET':
             return render_template('update_tasks.html', task=task)
 
+
 @app.route('/animals/update/<int:id>', methods=['GET', 'POST'])
 def updateAnimal(id):
     query_animal = db.query(Animal).filter(Animal.animal_id == id).all()
@@ -208,6 +238,7 @@ def updateAnimal(id):
             return redirect('/animals')
         if request.method == 'GET':
             return render_template('update_animals.html', animal=animal)
+
 
 @app.route('/templates/update/<int:id>', methods=['GET', 'POST'])
 def updateTemplate(id):
@@ -221,8 +252,13 @@ def updateTemplate(id):
         if request.method == 'GET':
             template_protocols = template.protocols
             all_protocols = db.query(Protocol).all()
-            return render_template('update_templates.html', 
-                template=template, template_protocols=template_protocols, all_protocols=all_protocols)
+            return render_template(
+                'update_templates.html',
+                template=template,
+                template_protocols=template_protocols,
+                all_protocols=all_protocols,
+            )
+
 
 @app.route('/templates/update/tasks/update/<int:id>', methods=['GET', 'POST'])
 def updateTemplateTask(id):
@@ -257,6 +293,7 @@ def updateTemplateTask(id):
                 db.commit()
                 return redirect('/templates/update/%s' % template_protocol.template.template_id)
 
+
 @app.route('/tasks/delete/<int:id>')
 def deleteTask(id):
     query_task = db.query(Protocol).filter(Protocol.protocol_id == id).all()
@@ -265,6 +302,7 @@ def deleteTask(id):
         db.delete(task)
         db.commit()
         return redirect('/tasks')
+
 
 @app.route('/templates/delete/<int:id>')
 def deleteTemplate(id):
@@ -275,6 +313,7 @@ def deleteTemplate(id):
         db.commit()
         return redirect('/templates')
 
+
 @app.route('/templates/update/tasks/delete/<int:id>')
 def deleteTemplateTask(id):
     query_task = db.query(TemplateProtocol).filter(TemplateProtocol.template_protocol_id == id).all()
@@ -284,6 +323,7 @@ def deleteTemplateTask(id):
         db.delete(template_protocol)
         db.commit()
         return redirect('/templates/update/%s' % template_id)
+
 
 @app.route('/templates/add-task/<int:id>', methods=['POST'])
 def addTaskToTemplate(id):
@@ -307,13 +347,14 @@ def addTaskToTemplate(id):
                 if progression_type == 'rolling_average':
                     template_protocol.success_rate = float(request.form['success_rate'])
                     template_protocol.rolling_window_size = int(request.form['rolling_window_size'])
-                
+
                 template_protocol.protocol = protocol
                 template_protocol.template = template
                 template.protocols.append(template_protocol)
                 db.add(template_protocol)
                 db.commit()
                 return redirect('/templates/update/%s' % id)
+
 
 @app.route('/animals/delete/<int:id>')
 def deleteAnimal(id):
@@ -323,5 +364,6 @@ def deleteAnimal(id):
         db.delete(animal)
         db.commit()
         return redirect('/animals')
+
 
 app.run(host='localhost', port=5000)
