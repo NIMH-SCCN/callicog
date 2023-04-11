@@ -1,5 +1,9 @@
-from database import Base
+from database import (
+    Base,
+    get_db_session,
+)
 from sqlalchemy import (
+    event,
     Column,
     Integer,
     Float,
@@ -7,10 +11,21 @@ from sqlalchemy import (
     DateTime,
     String,
     ForeignKey,
-    Table,
 )
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import (
+    relationship,
+    mapper,
+)
 from task_builder import Outcome
+
+
+@event.listens_for(mapper, 'init')
+def auto_add(target, args, kwargs):
+    """ Listen for the creation of new ORM instances (e.g. Trial, Animal etc).
+    Immediately add the new object to the database session.
+    """
+    session = get_db_session()
+    session.add(target)
 
 
 class WindowObject(Base):

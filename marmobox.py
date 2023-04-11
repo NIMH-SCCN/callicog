@@ -3,7 +3,7 @@ from marmobox_schema import (
     # Protocol,
     Experiment,
     Task,
-    Session,
+    Session as ExperimentalSession,
     Trial,
     Template,
     WindowObject,
@@ -114,7 +114,7 @@ class Marmobox:
 
     def run_session_based_trials(self, current_task, task_interface):
         while not current_task.complete:
-            session = Session(task=current_task, session_start=datetime.now())
+            session = ExperimentalSession(task=current_task, session_start=datetime.now())
             trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.template_protocol.target_trials)
 
             valid_trials = []
@@ -224,10 +224,13 @@ class Marmobox:
                 if stimulus['touch_pos']:
                     window_stimulus.stimulus_touch_x = stimulus['touch_pos'][0]
                     window_stimulus.stimulus_touch_y = stimulus['touch_pos'][1]
-        # self.db_session.commit()
+        # TODO: find out why this is commented out, and whether we need this
+        # functionality to be re-enabled. Right now this is not "saving" the
+        # trial events as the function name suggests.
+        self.db_session.commit()
 
     def run_target_based_trials(self, current_task, task_interface):
-        session = Session(task=current_task, session_start=datetime.now())
+        session = ExperimentalSession(task=current_task, session_start=datetime.now())
         trial_indices, iter_trials = self.shuffle_trials(task_interface.trials, current_task.template_protocol.target_trials)
         next_trial = None
 
@@ -269,7 +272,7 @@ class Marmobox:
             self.db_session.commit()
 
     def run_rolling_average_trials(self, current_task, task_interface):
-        session = Session(task=current_task, session_start=datetime.now())
+        session = ExperimentalSession(task=current_task, session_start=datetime.now())
         trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
         next_trial = None
 
@@ -310,7 +313,6 @@ class Marmobox:
                 if (success_trials / len(window)) >= current_task.template_protocol.success_rate:
                     session.session_end = datetime.now()
                     current_task.complete = True
-            self.db_session.add(new_trial)
             self.db_session.commit()
 
     def shuffle_trials(self, trials, target=0):
@@ -327,6 +329,7 @@ class Marmobox:
         for protocol in template.protocols:
             task = Task(experiment=experiment, template_protocol=protocol)
             self.db_session.add(task)
+        assert experiment in self.db_session
         self.db_session.commit()
         return experiment
 
@@ -342,6 +345,9 @@ class Marmobox:
             progression = current_task.template_protocol.progression
             print(f'new task: {current_task.template_protocol.protocol.protocol_name}, progression: {progression}')
 
+            # NOTE: this is not best practice, but probably was necessary
+            # given the non-standard package structure of this Python repo.
+            # Import the submodule with the given `protocol_name`:
             mod = __import__(f'tasks.{current_task.template_protocol.protocol.protocol_name}', fromlist=['TaskInterface'])
             task_interface = getattr(mod, 'TaskInterface')()
             task_interface.generate_trials()
