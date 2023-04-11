@@ -1,4 +1,4 @@
-from database import DatabaseSession
+from database import get_db_session
 from marmobox import Marmobox
 import argparse
 
@@ -53,7 +53,8 @@ args = parser.parse_args()
 # ) # google cloud VM
 # DatabaseSession = sessionmaker()
 # DatabaseSession.configure(bind=db_engine)
-db_session = DatabaseSession()
+
+db_session = get_db_session()
 
 mb = Marmobox(args.server, MARMOBOX_PORT, db_session)
 mb.connect()
