@@ -15,6 +15,7 @@ from flask import (
 from flask_cors import CORS
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.sql import true
+from sqlalchemy.sql.expression import text
 
 sys.path.append('..')
 from database import DatabaseSession
@@ -37,7 +38,8 @@ TIME_FORMAT = '%H:%M:%S'
 
 db = DatabaseSession()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "secret"
+app.config["SECRET_KEY"] = 'secret'
+app.config["WERKZEUG_DEBUG_PIN"] = 'off'
 
 CORS(app)
 app.session = scoped_session(DatabaseSession, scopefunc=_app_ctx_stack.__ident_func__)
@@ -195,7 +197,8 @@ def getExperimentList():
 def saveExperiment(id):
     si = StringIO()
     cw = csv.writer(si)
-    query_result = db.execute('select * from get_experiment_data(:param_id);', {'param_id': id})
+    q = text('select * from get_experiment_data(:param_id);')
+    query_result = db.execute(q, {'param_id': id})
     cw.writerow(query_result.keys())
     cw.writerows(query_result)
     response = make_response(si.getvalue())
