@@ -1,7 +1,3 @@
-from database import (
-    Base,
-    get_db_session,
-)
 from sqlalchemy import (
     event,
     Column,
@@ -16,7 +12,17 @@ from sqlalchemy.orm import (
     relationship,
     mapper,
 )
+from sqlalchemy.schema import (
+    MetaData,
+    Table,
+)
+
 from task_builder import Outcome
+from database import (
+    Base,
+    get_db_session,
+    engine,
+)
 
 
 @event.listens_for(mapper, 'init')
@@ -26,6 +32,13 @@ def auto_add(target, args, kwargs):
     """
     session = get_db_session()
     session.add(target)
+
+
+metadata = MetaData()
+# This uses 'reflection' to create a SQLAlchemy Table representing the view
+# called 'search', which first must be defined in the database.
+# TODO: consider defining the view here using the SQLAlchemy ORM.
+SearchView = Table('search', metadata, autoload_with=engine)
 
 
 class WindowObject(Base):
