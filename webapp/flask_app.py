@@ -18,7 +18,7 @@ from sqlalchemy.sql import true
 from sqlalchemy.sql.expression import text
 
 sys.path.append('..')
-from database import DatabaseSession
+from database import get_db_session
 from marmobox_schema import (
     Protocol,
     # Task,
@@ -26,7 +26,7 @@ from marmobox_schema import (
     Template,
     TemplateProtocol,
     Experiment,
-    SearchView,
+    search,
     # Trial,
     # TrialParameter,
     # ProtocolParameter,
@@ -37,13 +37,13 @@ from marmobox_schema import (
 DATE_FORMAT = '%d/%m/%Y'
 TIME_FORMAT = '%H:%M:%S'
 
-db = DatabaseSession()
+db = get_db_session()
 app = Flask(__name__)
 app.config["SECRET_KEY"] = 'secret'
 app.config["WERKZEUG_DEBUG_PIN"] = 'off'
 
 CORS(app)
-app.session = scoped_session(DatabaseSession, scopefunc=_app_ctx_stack.__ident_func__)
+app.session = db
 
 
 def isDateValid(datetime_string, format_string):
@@ -122,44 +122,24 @@ def getTrialQueryResults():
         target_shape = request.form['target_shape']
         target_color = request.form['target_color']
         trial_delay = request.form['trial_delay']
-        q = db.query(SearchView)
-        # q = text("""
-        #      select * from query_trials (
-        #         :param_trial_id,
-        #         :param_session_id,
-        #         :param_experiment_id,
-        #         :param_template_name,
-        #         :param_task_name,
-        #         :param_animal_code,
-        #         :param_trial_start,
-        #         :param_trial_end,
-        #         :param_timeout,
-        #         :param_ntargets,
-        #         :param_ndistractors,
-        #         :param_outcome,
-        #         :param_target_shape,
-        #         :param_target_color,
-        #         :param_trial_delay
-        #     );""")
-        # params = {
-        #     'param_trial_id': (None if trial_id == '' else trial_id),
-        #     'param_session_id': (None if session_id == '' else session_id),
-        #     'param_experiment_id': (None if experiment_id == '' else experiment_id),
-        #     'param_template_name': (None if template_name == '' else template_name),
-        #     'param_task_name': (None if task_name == '' else task_name),
-        #     'param_animal_code': (None if animal_code == '' else animal_code),
-        #     'param_trial_start': (None if trial_start == '' else trial_start),
-        #     'param_trial_end': (None if trial_end == '' else trial_end),
-        #     'param_timeout': (None if timeout == '' else timeout),
-        #     'param_ntargets': (None if ntargets == '' else ntargets),
-        #     'param_ndistractors': (None if ndistractors == '' else ndistractors),
-        #     'param_outcome': (None if outcome == '' else outcome),
-        #     'param_target_shape': (None if target_shape == '' else target_shape),
-        #     'param_target_color': (None if target_color == '' else target_color),
-        #     'param_trial_delay': (None if trial_delay == '' else trial_delay)
-        # }
-        # query_result = db.execute(q, params)
-        query_result = q.all()
+        query_result = search(
+            db,
+            trial_id=trial_id,
+            session_id=session_id,
+            experiment_id=experiment_id,
+            template_name=template_name,
+            task_name=task_name,
+            animal_code=animal_code,
+            trial_start=trial_start,
+            trial_end=trial_end,
+            timeout=timeout,
+            ntargets=ntargets,
+            ndistractors=ndistractors,
+            outcome=outcome,
+            target_shape=target_shape,
+            target_color=target_color,
+            trial_delay=trial_delay,
+        )
         return render_template('trials.html', trials=query_result)
     return render_template('trials.html', trials=[])
 
