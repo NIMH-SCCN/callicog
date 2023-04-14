@@ -1,5 +1,9 @@
+from greenlet import getcurrent
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import (
+    sessionmaker,
+    scoped_session,
+)
 from sqlalchemy.ext.declarative import declarative_base
 
 engine = create_engine('postgresql:///marmodb', echo=False)
@@ -15,10 +19,13 @@ def get_db_session():
     `main.py` and `marmobox_schema.py` cleanly.
 
     Avoid potential of unintentionally working with more than one independent
-    session (and therefore having unsynchronized or un-committed changes).
+    session and therefore having unsynchronized or un-committed changes.
     """
     global db_session
     if not db_session:
-        db_session = DatabaseSession()
+        db_session = scoped_session(
+            DatabaseSession,
+            scopefunc=getcurrent,
+        )
     assert db_session is not None
     return db_session
