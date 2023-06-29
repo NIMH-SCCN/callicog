@@ -162,7 +162,7 @@
 	Change the `username` value in the payload.
 
 13. Make Callicog launch on startup.
-		
+
 		mkdir ~/.config/autostart
 		cp ~/callicog/installation/callicog.desktop ~/.config/autostart
 
@@ -407,3 +407,29 @@ Distractors are randomized from the list of targets (`self.pseudorandom_paramete
 The positions are randomized from the list of positions (`self.pseudorandom_parameters[Parameter.POSITION]['values']`), excluding the current target position (`trial_parameters[Parameter.POSITION]`), again placed in brackets because is just one value and `exclude` must be a list.
 In this case, we want to match the number of random positions with the number of distractors, hence `size=len(distractors)`.
 Finally, we iterate through the list of distractors to add them to the current window object.
+
+
+### Miscellaneous Observations
+
+#### Errors and exceptions
+
+##### No such file or directory: '/dev/ttyACM0'
+
+Example:
+```
+sccn@MH02001980MDI ~ % ./callicog.sh 192.168.0.101 run seymour training
+{
+  "success": 1,
+  "body": {
+    "data": {
+      "status": "[Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such
+file or directory: '/dev/ttyACM0'"
+    }
+  }
+}
+```
+
+Check whether the pump/sound controller USB cable is plugged in. If it is
+plugged into a USB splitter, remove it from the splitter and plug it in
+directly.
+
