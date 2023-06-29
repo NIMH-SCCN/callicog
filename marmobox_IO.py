@@ -9,7 +9,10 @@ class MarmoboxIO:
 
     def connect(self):
         if not self.dummy:
-            self.board = serial.Serial(port='/dev/' + self.port, baudrate=9600)
+            self.board = serial.Serial(
+                port='/dev/' + self.port,
+                baudrate=9600,
+            )
 
     def disconnect(self):
         if self.board:

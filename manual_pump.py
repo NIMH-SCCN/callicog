@@ -1,14 +1,13 @@
 import serial
 import time
-import sys
 
 box = serial.Serial(port='/dev/ttyACM0', baudrate=9600)
 time.sleep(2)
 try:
-	while True:
-		box.write(b'C')
-		time.sleep(1)
+    while True:
+        box.write(b'C')
+        time.sleep(1)
 except KeyboardInterrupt:
-	print('Stopped gracefully!')
+    print('Stopped gracefully!')
 
 box.close()
