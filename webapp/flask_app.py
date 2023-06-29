@@ -4,7 +4,6 @@ from datetime import datetime
 from io import StringIO
 from flask import (
     Flask,
-    _app_ctx_stack,
     render_template,
     request,
     redirect,
@@ -13,7 +12,6 @@ from flask import (
     make_response,
 )
 from flask_cors import CORS
-from sqlalchemy.orm import scoped_session
 from sqlalchemy.sql import true
 from sqlalchemy.sql.expression import text
 
@@ -140,8 +138,37 @@ def getTrialQueryResults():
             target_color=target_color,
             trial_delay=trial_delay,
         )
-        return render_template('trials.html', trials=query_result)
-    return render_template('trials.html', trials=[])
+        action = request.form.get('action')
+        if action == 'export':
+            import csv
+            from io import BytesIO
+            from flask import send_file, make_response
+            from io import StringIO
+            si = StringIO()
+            cw = csv.writer(si)
+            cw.writerows(query_result)
+            response = make_response(si.getvalue())
+            response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
+            response.headers['Content-type'] = "text/csv"
+            return response
+            try:
+                with BytesIO() as f:
+                    writer = csv.writer(f, quotechar='"')
+                    for row in query_result:
+                        writer.writerow(row)
+                    return send_file(
+                        f,
+                        mimetype='text/csv',
+                        download_name='Adjacency.csv',
+                        as_attachment=True
+                    )
+            except Exception as exc:
+                myex = exc
+                import pdb; pdb.set_trace()
+        elif action == 'search':
+            return render_template('trials.html', trials=query_result)
+
+    raise ValueError("Unexpected request state.")
 
 
 @app.route('/experiments/detail/<int:id>', methods=['GET'])
