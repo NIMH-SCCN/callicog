@@ -1,4 +1,13 @@
 # Hardware test for reward subsystem.
+#
+# To run this test:
+#
+#    1. plug in the reward subsystem directly into the computer you're running the test from, then
+#    2. activate the virtual environment, and finally
+#    3. run:
+#
+#         `pytest --capture=no callicog/hardware_test_reward_module.py`
+#
 
 from marmobox_IO import MarmoboxIO
 import time
