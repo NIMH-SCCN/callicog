@@ -409,6 +409,27 @@ In this case, we want to match the number of random positions with the number of
 Finally, we iterate through the list of distractors to add them to the current window object.
 
 
+### Raspberry Pi Camera Setup
+
+We use Raspberry Pi Zero W with Raspberry Pi Camera Module v2.1 and the [RPi Cam Web Interface](https://github.com/silvanmelchior/RPi_Cam_Web_Interface) for video stream monitoring of behavior in the CalliCogs. Here are instructions for setting this up:
+
+1. Download [Raspberry Pi Imager]()
+2. Insert your microSD card into a card reader, plug into your computer
+3. Launch Raspberry Pi Imager
+   a. Select operating system (e.g. Raspberry Pi OS (32-bit))
+   b. Select Storage (your microSD card) e.g. "Generic SD/MMC Media"
+   c. Click the gear icon to edit settings (click "No" if asked to use Keychain)
+   d. Set hostname following our naming convention, e.g. "pi02a", "pi02b", "pi03a"...
+   e. Check to "Enable SSH", and "Use password authentication"
+   f. Set username and password to "sccn" and "marmoset"
+   g. Check "Configure wireless LAN"
+   e. Set SSID to "squirtle" and password to "marmomarm"
+   f. Set "Wireless LAN country" to "US"
+   g. Check "Set locale settings", set to "America/New York" and "US" keyboard layout
+   i. Other settings can be ignored; click "Save"
+4. Click "Write" and confirm OK to overwrite the microSD contents; this step will take ~20 minutes
+
+
 ### Miscellaneous Observations
 
 #### Errors and exceptions
