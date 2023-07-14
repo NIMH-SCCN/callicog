@@ -413,7 +413,7 @@ Finally, we iterate through the list of distractors to add them to the current w
 
 We use Raspberry Pi Zero W with Raspberry Pi Camera Module v2.1 and the [RPi Cam Web Interface](https://github.com/silvanmelchior/RPi_Cam_Web_Interface) for video stream monitoring of behavior in the CalliCogs. Here are instructions for setting this up:
 
-1. Download [Raspberry Pi Imager]()
+1. Download [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 2. Insert your microSD card into a card reader, plug into your computer
 3. Launch Raspberry Pi Imager
    a. Select operating system (e.g. Raspberry Pi OS (32-bit))
@@ -427,7 +427,7 @@ We use Raspberry Pi Zero W with Raspberry Pi Camera Module v2.1 and the [RPi Cam
    f. Set "Wireless LAN country" to "US"
    g. Check "Set locale settings", set to "America/New York" and "US" keyboard layout
    i. Other settings can be ignored; click "Save"
-4. Click "Write" and confirm OK to overwrite the microSD contents; this step will take ~20 minutes
+4. Click "Write" and confirm OK to overwrite the microSD contents; this step will take ~5-10 minutes
 
 
 ### Miscellaneous Observations
