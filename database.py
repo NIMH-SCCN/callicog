@@ -6,7 +6,7 @@ from sqlalchemy.orm import (
 )
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine('postgresql:///marmodb', echo=False)
+engine = create_engine('postgresql:///marmodb', echo=False, pool_size=20)
 DatabaseSession = sessionmaker()
 DatabaseSession.configure(bind=engine)
 Base = declarative_base()
