@@ -118,7 +118,7 @@ CREATE TABLE trial_parameter(
 	FOREIGN KEY (trial_id) REFERENCES trial(trial_id)
 );
 
-# used if window_object_id has the not null constraint for stimulus_object table
+-- used if window_object_id has the not null constraint for stimulus_object table
 alter table stimulus_object alter window_object_id drop not null;
 alter table window_object add column outside_fail_position_x INTEGER;
 alter table window_object add column outside_fail_position_y INTEGER;
