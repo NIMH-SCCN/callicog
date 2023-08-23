@@ -1,10 +1,8 @@
-from database import DatabaseSession
-from marmobox_schema import Experiment, TrialParameter
+from marmobox_schema import Experiment, TrialParameter, db
 from task_builder import Outcome, Parameter
 
-db = DatabaseSession()
 
-experiments = db.query(Experiment).filter(Experiment.animal_id == 2).all()
+experiments = db.session.query(Experiment).filter(Experiment.animal_id == 2).all()
 if len(experiments) > 0:
 	for experiment in experiments:
 		for task in experiment.tasks:
@@ -32,8 +30,8 @@ if len(experiments) > 0:
 										trial_param = TrialParameter(trial=trial, protocol_parameter=param, parameter_value=str(len([distractor for distractor in window.stimuli if distractor.stimulus_outcome == Outcome.FAIL])))
 									else:
 										continue
-									db.add(trial_param)
+									db.session.add(trial_param)
 
-db.commit()
+db.session.commit()
 print('done')
 
