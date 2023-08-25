@@ -22,7 +22,22 @@ import socket
 import select
 import pickle
 import json
+import logging
 
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+#file_handler = logging.FileHandler('marmobox.log')
+#file_handler.setLevel(logging.INFO)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s %(name)s:%(lineno)d %(levelname)s - %(message)s')
+#file_handler.setFormatter(formatter)
+console_handler.setFormatter(formatter)
+#logger.addHandler(file_handler)
+logger.addHandler(console_handler)
+
+raise Exception()
 
 class Marmobox:
     RX_TIMEOUT = 10
@@ -34,6 +49,7 @@ class Marmobox:
         self.port = port
         self.client_socket = None
         self.db_session = db_session
+        logger.debug("init")
 
     def connect(self):
         self.client_socket = socket.socket()
@@ -125,6 +141,7 @@ class Marmobox:
                         next_trial = next(iter_trials)
                         trial_parameters = task_interface.trials[next_trial]
                         trial_windows = task_interface.build_trial(trial_parameters)
+                        logger.debug(trial_parameters)
                     except StopIteration:
                         trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
                         continue
@@ -240,6 +257,7 @@ class Marmobox:
                     next_trial = next(iter_trials)
                     trial_parameters = task_interface.trials[next_trial]
                     trial_windows = task_interface.build_trial(trial_parameters)
+                    logger.debug(trial_parameters)
                 except StopIteration:
                     trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
                     continue
@@ -282,6 +300,7 @@ class Marmobox:
                     next_trial = next(iter_trials)
                     trial_parameters = task_interface.trials[next_trial]
                     trial_windows = task_interface.build_trial(trial_parameters)
+                    logger.debug(trial_parameters)
                 except StopIteration:
                     trial_indices, iter_trials = self.shuffle_trials(task_interface.trials)
                     continue
