@@ -1,25 +1,59 @@
+""" Listener, runs on miniPC, waits for and accepts communication from
+control computer.
+"""
+# pylint: disable=W,C
+
+from threading import Thread, Event
+
 import argparse
+import logging
 import socket
 import signal
 import pickle
 import json
-import sys
+# import sys
+import numpy as np
+
 from marmobox_interface import MarmoboxInterface
-from threading import Thread, Event
+
+
+logger = logging.getLogger(__name__)
 
 MAX_LENGTH = 4096
 PORT = 10000
 HOST = '0.0.0.0'
 
+
 class ServiceExit(Exception):
     pass
 
+
 def service_shutdown(signum, frame):
-    print(': Caught signal %d' % signum)
-    raise ServiceExit
+    msg = f': Caught signal {signum}'
+    print(msg)
+    raise ServiceExit(msg)
+
+
+class NumpyFloat32Encoder(json.JSONEncoder):
+
+    # pylint: disable=no-value-for-parameter
+    def default(self, obj):
+        if isinstance(obj, np.float32):
+            return float(obj)
+        return json.JSONEncoder.default(obj)
+
 
 class ClientJob(Thread):
-    def __init__(self, client_socket, client_address, arduino_port, window_size, is_dummy, is_fullscreen):
+
+    def __init__(
+        self,
+        client_socket,
+        client_address,
+        arduino_port,
+        window_size,
+        is_dummy,
+        is_fullscreen
+    ):
         Thread.__init__(self)
         self.shutdown_flag = Event()
         self.mbox_interface = MarmoboxInterface(arduino_port, window_size, is_dummy, is_fullscreen)
@@ -39,7 +73,12 @@ class ClientJob(Thread):
         if msg['action'] == 'run_trial':
             trial_data = self.mbox_interface.run_trial(msg['trial_params'])
             response = self.pack_response(trial_data)
-        self.client_socket.send(bytes(json.dumps(response), 'utf8'))
+        self.client_socket.send(
+            bytes(
+                json.dumps(response, cls=NumpyFloat32Encoder),
+                'utf8',
+            )
+        )
 
     def run(self):
         print('Client thread #%s started from %s' % (self.ident, self.client_address))
@@ -59,11 +98,21 @@ class ClientJob(Thread):
                 try:
                     msg = pickle.loads(buf)
                 except:
+                    logger.debug('Cannot decode with Pickle')
                     break
                 self.parse_msg(msg)
             self.mbox_interface.close()
         except Exception as exc: # status report
-            self.client_socket.send(bytes(json.dumps(self.pack_response({'status': str(exc)})), 'utf8'))
+            import traceback
+            tb = traceback.format_tb(exc.__traceback__)
+            error_lines = [f'Exception on listener-side (miniPC): {str(exc)}']
+            error_lines.extend(tb)
+            self.client_socket.send(
+                bytes(
+                    json.dumps(self.pack_response({'status': error_lines})),
+                    'utf8',
+                )
+            )
         print('Client thread #%s stopped' % self.ident)
 
 def main():
@@ -99,6 +148,7 @@ def main():
                 ct.join()
             break
     print('Exiting main thread')
+
 
 if __name__ == '__main__':
     main()
