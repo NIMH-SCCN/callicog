@@ -1,8 +1,14 @@
-from database import get_db_session
-from marmobox import Marmobox
 import argparse
 
+from marmobox import Marmobox
+from webapp.flask_app import (
+    db,
+    app,
+)
+
+
 MARMOBOX_PORT = 10000
+app.app_context().push()
 
 
 def callicog_run(box, args):
@@ -54,9 +60,7 @@ args = parser.parse_args()
 # DatabaseSession = sessionmaker()
 # DatabaseSession.configure(bind=db_engine)
 
-db_session = get_db_session()
-
-mb = Marmobox(args.server, MARMOBOX_PORT, db_session)
+mb = Marmobox(args.server, MARMOBOX_PORT, db.session)
 mb.connect()
 print('Connected')
 
@@ -79,7 +83,7 @@ if experiment:
     # mb.continue_task_experiment(experiment)
 
 mb.disconnect()
-db_session.close()
+db.session.close()
 print('mbox disconnected')
 print('db session closed')
 print('Done')

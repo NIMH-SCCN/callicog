@@ -1,33 +1,29 @@
-from sqlalchemy import (
-    event,
-    Column,
-    Integer,
-    Float,
-    Boolean,
-    DateTime,
-    String,
-    ForeignKey,
-)
-from sqlalchemy.sql.expression import text
-from sqlalchemy.orm import (
-    relationship,
-    mapper,
-)
+from flask_sqlalchemy import SQLAlchemy
 
 from task_builder import Outcome
-from database import (
-    Base,
-    get_db_session,
-)
 
 
-@event.listens_for(mapper, 'init')
+db = SQLAlchemy()
+
+Base = db.Model
+Column = db.Column
+Integer = db.Integer
+event = db.event
+Float = db.Float
+Boolean = db.Boolean
+DateTime = db.DateTime
+String = db.String
+ForeignKey = db.ForeignKey
+
+relationship = db.relationship
+
+
+@db.event.listens_for(db.mapper, 'init')
 def auto_add(target, args, kwargs):
     """ Listen for the creation of new ORM instances (e.g. Trial, Animal etc).
     Immediately add the new object to the database session.
     """
-    session = get_db_session()
-    session.add(target)
+    db.session.add(target)
 
 
 class WindowObject(Base):
@@ -274,7 +270,6 @@ class Template(Base):
 
 
 def search(
-    db_session,
     trial_id=None,
     session_id=None,
     experiment_id=None,
@@ -291,7 +286,6 @@ def search(
     target_color=None,
     trial_delay=None,
 ):
-    sql = text(SEARCH_SQL)
     params = {
         'param_trial_id': (None if trial_id == '' else trial_id),
         'param_session_id': (None if session_id == '' else session_id),
@@ -309,7 +303,7 @@ def search(
         'param_target_color': (None if target_color == '' else target_color),
         'param_trial_delay': (None if trial_delay == '' else trial_delay)
     }
-    results = db_session.execute(sql, params)
+    results = db.session.execute(db.text(SEARCH_SQL), params)
     return results
 
 
