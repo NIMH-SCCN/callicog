@@ -125,9 +125,9 @@
 		pip install psychopy --no-deps
 		pip install pyyaml requests freetype-py pandas python-bidi pyglet json-tricks scipy packaging future imageio
 
-	Download the `wxPython` package from [here](https://drive.google.com/file/d/1sSObbJR2PSWKPJ76bHksWlHL9MY3J2xJ/view?usp=sharing). Put it in the HOME directory.
+    Install the `wxPython` package:
 		
-		pip install ~/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
+		pip install ~/callicog/installation/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
 
 12. Make the mini PC broadcast its eduroam IP address to the Slack [channel](https://marmobox.slack.com).
 
