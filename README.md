@@ -125,54 +125,43 @@
 		pip install psychopy --no-deps
 		pip install pyyaml requests freetype-py pandas python-bidi pyglet json-tricks scipy packaging future imageio
 
-    Install the `wxPython` package:
-		
-		pip install ~/callicog/installation/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
+    Install the `wxPython` package. First, copy the wxPython "wheel" from NIMH SCCN Qumulo to your laptop or workstation:
 
-12. Make the mini PC broadcast its eduroam IP address to the Slack [channel](https://marmobox.slack.com).
+        `smb://nih.gov/nimhfileshare/Lab/SCCN/callicog/software/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl`
 
-		sudo systemctl edit --force --full broadcast_ip.service
+    Then secure-copy (`scp`) it from there to your miniPC home directory:
 
-	Add the following lines:
+        `scp my/file/path/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl <user>@<minipc>:~`
 
-		[Unit]
-		Description=Broadcast IP to Slack service
-		Wants=network-online.target
-		After=network-online.target
-		[Service]
-		Type=simple
-		User=jack
-		WorkingDirectory=/home/jack
-		ExecStart=/home/jack/broadcastIP_slack.sh
-		RestartSec=30
-		Restart=on-failure
-		[Install]
-		WantedBy=multi-user.target
+    Next, return to the miniPC and install it:
 
-	Save and exit the file.
+		`pip install ~/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl`
 
-		sudo systemctl enable broadcast_ip.service
-		sudo systemctl start broadcast_ip.service
-		sudo systemctl reboot
+13. Make Callicog launch on startup; create the autostart directory, and then
+    symlink the Callicog autostart script into it.
 
-	The Slack message contains the username `Callicog (192.168.0.20)` by default. Change it accordingly by modifying the `broadcastIP_slack.sh` file.
-
-		nano ~/broadcastIP_slack.sh
-
-	Change the `username` value in the payload.
-
-13. Make Callicog launch on startup.
-
+        ```
 		mkdir ~/.config/autostart
-		cp ~/callicog/installation/callicog.desktop ~/.config/autostart
+		ln -s ~/callicog/installation/callicog.desktop ~/.config/autostart
+        ```
 
 14. You can also add a CalliCog shortcut to the desktop bottom panel.
 
 15. Make the mini PC stream with VNC. Install the server.
 
-		sudo apt install x11vnc
+		`sudo apt install x11vnc`
 
-	Change the IP address in the file `~/start_vncserver.sh`. The first IP is the static Ethernet IP of the mini PC. The second is the CalliCog client (e.g. iMac).
+    Create a symlink to the vnc autostart script:
+
+        `ln -s ~/callicog/installation/vnc_autostart.desktop ~/.config/autostart`
+
+    This will launch a bash shell on startup and run: `x11vnc -display :0`,
+    which will enable you to connect to VNC into this miniPC from a control
+    computer.
+
+16. Disable sleep, hibernate and hybrid-sleep modes:
+
+        `sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target`
 
 ### Client installation (macOS)
 
