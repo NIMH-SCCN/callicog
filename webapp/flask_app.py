@@ -1,8 +1,11 @@
-from flask import Flask
-import sys
 import csv
+import logging
+import os
+import sys
+
 from datetime import datetime
 from io import StringIO
+
 from flask import (
     Flask,
     render_template,
@@ -37,17 +40,38 @@ from marmobox_schema import (
     # WindowObject,
 )
 
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s %(name)s:%(lineno)d %(levelname)s - %(message)s')
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
+
+DATE_FORMAT = '%d/%m/%Y'
+TIME_FORMAT = '%H:%M:%S'
+
+DEFAULT_DB_URL = 'postgresql:///marmodb'
+
+# Attempt to read database location from environment variable:
+db_url = os.environ.get('CALLICOG_DB_URL', None)
+if not db_url:
+    logger.info(
+        'Use'
+        ' `export CALLICOG_DB_URL=postgresql://<user>@<host>:5432/marmodb`'
+        ' before running this command if you want your webapp to point to'
+        ' a non-local database instance.'
+    )
+db_url = db_url or DEFAULT_DB_URL
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///marmodb'
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SECRET_KEY'] = 'secret'
 app.config['WERKZEUG_DEBUG_PIN'] = 'off'
 db.init_app(app)
 
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
-
-DATE_FORMAT = '%d/%m/%Y'
-TIME_FORMAT = '%H:%M:%S'
 
 
 def isDateValid(datetime_string, format_string):
