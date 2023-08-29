@@ -37,7 +37,6 @@ console_handler.setFormatter(formatter)
 #logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
-raise Exception()
 
 class Marmobox:
     RX_TIMEOUT = 10
