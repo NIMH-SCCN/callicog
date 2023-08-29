@@ -2,4 +2,5 @@
 
 export FLASK_APP=flask_app
 export FLASK_ENV=development
-flask run
+export FLASK_DEBUG=1
+flask run --host=0.0.0.0 --port=5000

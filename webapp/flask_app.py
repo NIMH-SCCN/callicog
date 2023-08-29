@@ -10,7 +10,10 @@ from flask import (
     redirect,
     make_response,
 )
-from flask_cors import CORS
+from flask_cors import (
+    CORS,
+    cross_origin,
+)
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import true
 from sqlalchemy.sql.expression import text
@@ -41,6 +44,7 @@ app.config['WERKZEUG_DEBUG_PIN'] = 'off'
 db.init_app(app)
 
 CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 DATE_FORMAT = '%d/%m/%Y'
 TIME_FORMAT = '%H:%M:%S'
@@ -55,6 +59,7 @@ def isDateValid(datetime_string, format_string):
 
 
 @app.route('/animals', methods=['GET', 'POST'])
+@cross_origin()
 def getAnimalList():
     if request.method == 'GET':
         animals = db.session.query(Animal).order_by(Animal.animal_id).all()
@@ -70,6 +75,7 @@ def getAnimalList():
 
 
 @app.route('/tasks', methods=['GET', 'POST'])
+@cross_origin()
 def getTaskList():
     if request.method == 'GET':
         tasks = db.session.query(Protocol).order_by(Protocol.protocol_id).all()
@@ -85,6 +91,7 @@ def getTaskList():
 
 
 @app.route('/templates', methods=['GET', 'POST'])
+@cross_origin()
 def getTemplateList():
     if request.method == 'GET':
         templates = db.session.query(Template).order_by(Template.template_id).all()
@@ -99,6 +106,7 @@ def getTemplateList():
 
 
 @app.route('/trials', methods=['GET', 'POST'])
+@cross_origin()
 def getTrialQueryResults():
     if request.method == 'GET':
         return render_template('trials.html', trials=[])
@@ -173,6 +181,7 @@ def getTrialQueryResults():
 
 
 @app.route('/experiments/detail/<int:id>', methods=['GET'])
+@cross_origin()
 def getExperimentDetails(id):
     query_exp = db.session.query(Experiment).filter(Experiment.experiment_id == id).all()
     if len(query_exp) > 0:
@@ -182,6 +191,7 @@ def getExperimentDetails(id):
 
 
 @app.route('/experiments', methods=['GET', 'POST'])
+@cross_origin()
 def getExperimentList():
     all_animals = db.session.query(Animal).all()
     all_templates = db.session.query(Template).all()
@@ -223,6 +233,7 @@ def getExperimentList():
 
 
 @app.route('/experiments/save/<int:id>', methods=['GET'])
+@cross_origin()
 def saveExperiment(id):
     si = StringIO()
     cw = csv.writer(si)
@@ -237,6 +248,7 @@ def saveExperiment(id):
 
 
 @app.route('/experiments/delete/<int:id>')
+@cross_origin()
 def deleteExperiment(id):
     query_task = db.session.query(Experiment).filter(Experiment.experiment_id == id).all()
     if len(query_task) > 0:
@@ -247,6 +259,7 @@ def deleteExperiment(id):
 
 
 @app.route('/tasks/update/<int:id>', methods=['GET', 'POST'])
+@cross_origin()
 def updateTask(id):
     query_task = db.session.query(Protocol).filter(Protocol.protocol_id == id).all()
     if len(query_task) > 0:
@@ -260,6 +273,7 @@ def updateTask(id):
 
 
 @app.route('/animals/update/<int:id>', methods=['GET', 'POST'])
+@cross_origin()
 def updateAnimal(id):
     query_animal = db.session.query(Animal).filter(Animal.animal_id == id).all()
     if len(query_animal) > 0:
@@ -273,6 +287,7 @@ def updateAnimal(id):
 
 
 @app.route('/templates/update/<int:id>', methods=['GET', 'POST'])
+@cross_origin()
 def updateTemplate(id):
     query_exp = db.session.query(Template).filter(Template.template_id == id).all()
     if len(query_exp) > 0:
@@ -293,6 +308,7 @@ def updateTemplate(id):
 
 
 @app.route('/templates/update/tasks/update/<int:id>', methods=['GET', 'POST'])
+@cross_origin()
 def updateTemplateTask(id):
     query_task = db.session.query(TemplateProtocol).filter(TemplateProtocol.template_protocol_id == id).all()
     if len(query_task) > 0:
@@ -327,6 +343,7 @@ def updateTemplateTask(id):
 
 
 @app.route('/tasks/delete/<int:id>')
+@cross_origin()
 def deleteTask(id):
     query_task = db.session.query(Protocol).filter(Protocol.protocol_id == id).all()
     if len(query_task) > 0:
@@ -337,6 +354,7 @@ def deleteTask(id):
 
 
 @app.route('/templates/delete/<int:id>')
+@cross_origin()
 def deleteTemplate(id):
     query_exp = db.session.query(Template).filter(Template.template_id == id).all()
     if len(query_exp) > 0:
@@ -347,6 +365,7 @@ def deleteTemplate(id):
 
 
 @app.route('/templates/update/tasks/delete/<int:id>')
+@cross_origin()
 def deleteTemplateTask(id):
     query_task = db.session.query(TemplateProtocol).filter(TemplateProtocol.template_protocol_id == id).all()
     if len(query_task) > 0:
@@ -358,6 +377,7 @@ def deleteTemplateTask(id):
 
 
 @app.route('/templates/add-task/<int:id>', methods=['POST'])
+@cross_origin()
 def addTaskToTemplate(id):
     query_exp = db.session.query(Template).filter(Template.template_id == id).all()
     if len(query_exp) > 0:
@@ -389,6 +409,7 @@ def addTaskToTemplate(id):
 
 
 @app.route('/animals/delete/<int:id>')
+@cross_origin()
 def deleteAnimal(id):
     query_task = db.session.query(Animal).filter(Animal.animal_id == id).all()
     if len(query_task) > 0:
@@ -399,4 +420,4 @@ def deleteAnimal(id):
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=5000)
+    app.run(host='0.0.0.0', port=5000)
