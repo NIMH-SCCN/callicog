@@ -84,7 +84,9 @@ class Marmobox:
         return animal
 
     def get_template(self, template_name):
-        template = self.db_session.query(Template).filter(Template.template_name == template_name).all()[0]
+        q = self.db_session.query(Template)
+        q = q.filter(Template.template_name == template_name)
+        records = q.one()
         return template
 
     def get_experiment(self, experiment_id):
