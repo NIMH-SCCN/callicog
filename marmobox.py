@@ -76,7 +76,13 @@ class Marmobox:
             ready = select.select([self.client_socket], [], [], timeout)
             if ready[0]:
                 response = self.client_socket.recv(self.TX_MAX_LENGTH)
-                return json.loads(response.decode())
+                try:
+                    resp_str = response.decode()
+                    return json.loads(response_str)
+                except json.JSONDecodeError as exc:
+                    msg = f'Couldn''t deserialize to JSON:\n\n{resp_str}'
+                    logger.error(msg)
+                    raise exc
         return None
 
     def get_animal(self, animal_code):
