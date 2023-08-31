@@ -77,10 +77,12 @@ class Marmobox:
             if ready[0]:
                 response = self.client_socket.recv(self.TX_MAX_LENGTH)
                 try:
-                    resp_str = response.decode()
-                    return json.loads(response_str)
+                    return json.loads(response.decode())
                 except json.JSONDecodeError as exc:
-                    msg = f'Couldn''t deserialize to JSON:\n\n{resp_str}'
+                    msg = (
+                        'Couldn''t deserialize to JSON:\n\n'
+                        f'{response.decode()}'
+                    )
                     logger.error(msg)
                     raise exc
         return None
@@ -92,7 +94,7 @@ class Marmobox:
     def get_template(self, template_name):
         q = self.db_session.query(Template)
         q = q.filter(Template.template_name == template_name)
-        records = q.one()
+        template = q.one()
         return template
 
     def get_experiment(self, experiment_id):
