@@ -114,6 +114,10 @@ fi
 
 set -o vi
 
-export PATH="/home/jack/.local/bin:$PATH"
+export PATH="/home/$USER/.local/bin:$PATH"
 
+# Use this alias to re-launch the Callicog listener:
 alias callicog_listen='source ~/callicogenv/bin/activate && cd ~/callicog && ./server.sh'
+
+# Disable the sleep and display power management system in Xorg:
+source ~/callicog/installation/disable_sleep.sh 
