@@ -7,6 +7,8 @@ if [ -n "$DISPLAY" ]; then
 
     # Disable DPMS
     xset -dpms
+
+    echo "Display Power Management and sleep disabled (Xorg)"
 fi
 
 # NOTE: if display is still sleeping/suspending, try running this command:
