@@ -18,7 +18,7 @@ SQL
 CURRENT_DATE=$(date +"%Y_%m_%d")
 
 # Define the output directory with the current date
-OUTPUT_DIR="~/db_backup/marmodb/$CURRENT_DATE"
+OUTPUT_DIR="Users/sccn/db_backup/marmodb/$CURRENT_DATE"
 
 # Check if the output directory already exists
 if [ -d "$OUTPUT_DIR" ]; then
@@ -36,5 +36,8 @@ do
     pg_dump -t "$table" -U "$PG_USER" -h "$PG_HOST" "$PG_DB" > "$OUTPUT_DIR/$table.sql"
 done;
 
-# Dump schema
-pg_dump -U "$PG_USER" -h "$PG_HOST" "$PG_DB" --schema-only > "$OUTPUT_DIR/marmodb_schema.sql"
+# Dump schema only
+pg_dump -U "$PG_USER" -h "$PG_HOST" "$PG_DB" --schema-only > "$OUTPUT_DIR/schema.sql"
+
+# Dump full database, including table contents
+pg_dump -U "$PG_USER" -h "$PG_HOST" "$PG_DB" > "$OUTPUT_DIR/marmodb.pg_dump.sql"
