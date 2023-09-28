@@ -73,12 +73,13 @@ class ClientJob(Thread):
         if msg['action'] == 'run_trial':
             trial_data = self.mbox_interface.run_trial(msg['trial_params'])
             response = self.pack_response(trial_data)
-        self.client_socket.send(
-            bytes(
-                json.dumps(response, cls=NumpyFloat32Encoder),
-                'utf8',
-            )
-        )
+        message_str = json.dumps(response, cls=NumpyFloat32Encoder)
+        message_in_bytes = bytes(message_str, 'uft8')
+        logger.info(f'byte length: {len(message_in_bytes)}')
+        logger.info(f'string length: {len(message_str)}')
+        if len(message_in_bytes) > MAX_LENGTH:
+            raise Exception('message too long')
+        self.client_socket.send(message_in_bytes)
 
     def run(self):
         print('Client thread #%s started from %s' % (self.ident, self.client_address))
