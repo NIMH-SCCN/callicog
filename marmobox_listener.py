@@ -74,7 +74,7 @@ class ClientJob(Thread):
             trial_data = self.mbox_interface.run_trial(msg['trial_params'])
             response = self.pack_response(trial_data)
         message_str = json.dumps(response, cls=NumpyFloat32Encoder)
-        message_in_bytes = bytes(message_str, 'uft8')
+        message_in_bytes = bytes(message_str, 'utf8')
         logger.info(f'byte length: {len(message_in_bytes)}')
         logger.info(f'string length: {len(message_str)}')
         if len(message_in_bytes) > MAX_LENGTH:
