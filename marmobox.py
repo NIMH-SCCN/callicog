@@ -23,6 +23,7 @@ import select
 import pickle
 import json
 import logging
+import traceback
 
 
 logger = logging.getLogger(__name__)
@@ -65,7 +66,9 @@ class Marmobox:
 
     def send(self, message):
         if self.client_socket:
-            self.client_socket.send(bytes(json.dumps(message), 'utf8'))
+            message_in_bytes = bytes(json.dumps(message), 'utf8')
+            logger.info(f'message length in bytes: {len(message_in_bytes)}')
+            self.client_socket.send(message_in_bytes)
 
     def send_binary(self, message):
         if self.client_socket:
@@ -387,9 +390,11 @@ class Marmobox:
             elif progression == Progression.TARGET_BASED:
                 try:
                     self.run_target_based_trials(current_task, task_interface)
-                except Exception:
+                except Exception as exc:
                     self.db_session.commit()
-                    print('\n\n\ncaught kill signal, experiment interrupted')
+                    #print('\n\n\ncaught kill signal, experiment interrupted')
+                    print(traceback.format_exc())
+                    print(str(exc))
                     return
 
             if current_task.complete:
