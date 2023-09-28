@@ -70,13 +70,14 @@ class ClientJob(Thread):
         return response
 
     def parse_msg(self, msg):
+        print('marmobox_listener: inside parse_msg()')
         if msg['action'] == 'run_trial':
             trial_data = self.mbox_interface.run_trial(msg['trial_params'])
             response = self.pack_response(trial_data)
         message_str = json.dumps(response, cls=NumpyFloat32Encoder)
         message_in_bytes = bytes(message_str, 'utf8')
-        logger.info(f'byte length: {len(message_in_bytes)}')
-        logger.info(f'string length: {len(message_str)}')
+        print(f'byte length: {len(message_in_bytes)}')
+        print(f'string length: {len(message_str)}')
         if len(message_in_bytes) > MAX_LENGTH:
             raise Exception('message too long')
         self.client_socket.send(message_in_bytes)
@@ -101,6 +102,7 @@ class ClientJob(Thread):
                 except:
                     logger.debug('Cannot decode with Pickle')
                     break
+                print('marmobox_listener: about to parse_msg()')
                 self.parse_msg(msg)
             self.mbox_interface.close()
         except Exception as exc: # status report
