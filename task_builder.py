@@ -162,6 +162,6 @@ class Stimulus:
     def __hide_other(self):
         stimuli = self.window.stimuli
         for stimulus in stimuli:
-            print(f'{stimulus.outcome} {stimulus.window.ppy_window is None}')
+            print(f'{stimulus.outcome} {stimulus.window.ppy_window}')
             #if self is not stimulus:
             #    stimulus.__hide()
