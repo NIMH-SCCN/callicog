@@ -283,6 +283,7 @@ class Marmobox:
                 print('Invalid trial, aborting...')
                 raise Exception
 
+            print(trial_data)
             new_trial.trial_status = trial_data['trial_outcome']
             new_trial.trial_end = trial_data['trial_end']
             trial_events = trial_data['events']
