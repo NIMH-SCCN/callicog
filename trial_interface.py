@@ -142,6 +142,14 @@ class WindowRuntime:
                             touch_event['release_time'] = release_time
                             print('released')
                             return stimulus, touch_event, stimulus.outcome
+                        elif window.transition == WindowTransition.MAINTAIN:
+                            print(f'in object, maintain touched stim, waiting for release')
+                            while ppy_mouse.getPressed()[0]:
+                                time.sleep(0.001)
+                            release_time = datetime.now()
+                            touch_event['release_time'] = release_time
+                            print('released')
+                            return stimulus, touch_event, stimulus.outcome
                 print('outside, waiting for release')
                 position = ppy_mouse.getPos()
                 touch_event = {
