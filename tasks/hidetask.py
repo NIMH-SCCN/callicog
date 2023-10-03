@@ -1,10 +1,11 @@
 from task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
+from task_structure import TaskStructure
 import random
 import numpy as np
 from itertools import combinations
 import copy
 
-class TaskInterface:
+class TaskInterface(TaskStructure):
     def __init__(self):
         self.pseudorandom_parameters = {}
         self.initialize_pseudorandom_parameters()
