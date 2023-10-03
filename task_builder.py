@@ -174,6 +174,9 @@ class Stimulus:
     def __hide_other(self):
         stimuli = self.window.stimuli
         for stimulus in stimuli:
-            print(f'{stimulus.outcome} {stimulus.window.ppy_window}')
+            self.ppy_show_stim.autoDraw = False
+            self.ppy_touch_stim.autoDraw = False
+        self.window.ppy_window.flip()
+            #print(f'{stimulus.outcome} {stimulus.window.ppy_window}')
             #if self is not stimulus:
             #    stimulus.__hide()
