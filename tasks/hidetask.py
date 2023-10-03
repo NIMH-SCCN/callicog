@@ -40,7 +40,10 @@ class TaskInterface(TaskStructure):
 
     def __randomize(self):
         pass
-
+    
+    def generate_trials(self):
+        self.trials = self.pseudorandomize_parameters()
+    
     def initialize_pseudorandom_parameters(self):
         # define list of pseudorandom parameters
         red_square = Stimulus(shape=StimulusShape.SQUARE,
