@@ -2,6 +2,7 @@ from numpy import random
 from datetime import datetime
 import time
 import math
+import traceback
 
 from pkg_resources import Distribution
 
@@ -73,9 +74,19 @@ class Window:
         self.timeout = timeout
         self.label = label
         self.active_timeout = timeout
-        self.ppy_window = None
+        #self.ppy_window = None
+        self._ppy_window = None
         self.flip_tstamp = None
         self.stimuli = []
+       
+    @property    
+    def ppy_window(self):
+        return self._ppy_window
+
+    @ppy_window.setter
+    def ppy_window(self, value):
+        self._ppy_window = value
+        traceback.print_stack()
 
     def add_stimulus(self, stimulus):
         self.stimuli.append(stimulus)
