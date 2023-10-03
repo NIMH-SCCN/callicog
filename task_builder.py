@@ -86,7 +86,8 @@ class Window:
     @ppy_window.setter
     def ppy_window(self, value):
         self._ppy_window = value
-        traceback.print_stack()
+        if value is None:
+            traceback.print_stack()
 
     def add_stimulus(self, stimulus):
         self.stimuli.append(stimulus)
