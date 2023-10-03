@@ -36,13 +36,6 @@ class TaskInterface(TaskStructure):
         w2.add_stimulus(penalty_stim)
 
         # Window 3
-#        w3 = Window(blank = 1)
-#        if Outcome.SUCCESS: 
-#            w3.add_stimulus(reward_stim)
-#        else:
-#            w3.add_stimulus(penalty_stim) 
-
-        # Window 4
         w3 = Window(blank=0.5)
         
         # Penalty window - conditional
