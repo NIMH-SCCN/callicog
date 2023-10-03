@@ -36,16 +36,16 @@ class TaskInterface(TaskStructure):
         w2.add_stimulus(penalty_stim)
 
         # Window 3
-        w3 = Window(blank = 1)
-        if Outcome.SUCCESS: 
-            w3.add_stimulus(reward_stim)
-        else:
-            w3.add_stimulus(penalty_stim) 
+#        w3 = Window(blank = 1)
+#        if Outcome.SUCCESS: 
+#            w3.add_stimulus(reward_stim)
+#        else:
+#            w3.add_stimulus(penalty_stim) 
 
         # Window 4
-        w4 = Window(blank=0.5)
+        w3 = Window(blank=0.5)
         
         # Penalty window - conditional
         pw = Window(blank=1.5)
 
-        return [w1, w2, w3, w4, pw]
+        return [w1, w2, w3, pw]
