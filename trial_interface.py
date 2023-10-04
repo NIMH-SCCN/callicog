@@ -4,6 +4,11 @@ from psychopy import visual
 import math
 import time
 from serial import SerialException
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class WindowRuntime:
     def __get_ppy_stim_from_shape(self, shape, ppy_window):
@@ -93,6 +98,7 @@ class WindowRuntime:
         if stimulus:
             if len(stimulus.after_touch) > 0:
                 stimulus.on_touch()
+                # import pdb; pdb.set_trace()
             stimulus.record_touch_data(
                 touch_event['xcoor'],
                 touch_event['ycoor'],
@@ -206,6 +212,14 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
                     box_status = 'SerialException. ARDUINO CONNECTION LOST. NO REWARD/FEEDBACK GIVEN.'
             elif outcome == Outcome.NULL:
                 pass
+
+            # Continue displaying stimuli for a period of time after reward is dispensed
+            if window.is_reward_delayed:
+                if window.post_touch_delay is not None:
+                    time.sleep(window.post_touch_delay)
+                else:
+                    logger.error("To cause stimuli to linger after touch, set `window.post_touch_delay` in task definition")
+                window.is_reward_delayed = False
 
         elif window.timeout > 0 and not window.is_outcome:
             outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)    

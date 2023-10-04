@@ -1,3 +1,3 @@
 #!/bin/bash
 
-kill $(pgrep xfce4-terminal) 2> /dev/null
+kill -9 $(pgrep -f marmobox_listener.py) 2> /dev/null
