@@ -74,24 +74,13 @@ class Window:
         self.timeout = timeout
         self.label = label
         self.active_timeout = timeout
-        #self.ppy_window = None
-        self._ppy_window = None
+        self.ppy_window = None
         self.flip_tstamp = None
         self.stimuli = []
         # Time in seconds to continue displaying stimuli after touch
         # (i.e. for tasks that "hide" stimuli after a touch)
         self.post_touch_delay = None
-        self.is_reward_delayed = False
-       
-    @property    
-    def ppy_window(self):
-        return self._ppy_window
-
-    @ppy_window.setter
-    def ppy_window(self, value):
-        self._ppy_window = value
-        if value is None:
-            traceback.print_stack()
+        self.is_delayed_after_touch = False
 
     def add_stimulus(self, stimulus):
         self.stimuli.append(stimulus)
@@ -181,6 +170,5 @@ class Stimulus:
             if stimulus is not self:
                 stimulus.ppy_show_stim.autoDraw = False
                 stimulus.ppy_touch_stim.autoDraw = False
-        self.window.is_reward_delayed = True
+        self.window.is_delayed_after_touch = True
         self.window.ppy_window.flip()
-        print(" ~~~~ HIDE OTHER ~~~~ ")

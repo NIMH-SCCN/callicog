@@ -214,12 +214,12 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
                 pass
 
             # Continue displaying stimuli for a period of time after reward is dispensed
-            if window.is_reward_delayed:
+            if window.is_delayed_after_touch:
                 if window.post_touch_delay is not None:
                     time.sleep(window.post_touch_delay)
                 else:
                     logger.error("To cause stimuli to linger after touch, set `window.post_touch_delay` in task definition")
-                window.is_reward_delayed = False
+                window.is_delayed_after_touch = False
 
         elif window.timeout > 0 and not window.is_outcome:
             outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)    

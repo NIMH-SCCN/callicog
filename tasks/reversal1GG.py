@@ -24,8 +24,7 @@ class TaskInterface(TaskStructure):
         # Window 2
         # set targets
         w2 = Window(transition=WindowTransition.MAINTAIN, is_outcome=True, timeout=2)
-        # Duration for stimuli to remain displayed after screen is touched
-        w2.post_touch_delay = 1
+
         reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite4-2.jpg', color = (1,1,1), size_touch=(250,250))
         reward_stim.after_touch = [{'name': 'hide_other'}]
         penalty_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite4-1.jpg', color = (1,1,1), size_touch=(250,250))
@@ -36,7 +35,10 @@ class TaskInterface(TaskStructure):
         penalty_stim.outcome = Outcome.FAIL
         w2.add_stimulus(reward_stim)
         w2.add_stimulus(penalty_stim)
-        #this is necessary for 'hide'ing to work?
+
+        # Set up for "hide_other" behavior:        
+        # Duration for stimuli to remain displayed after screen is touched
+        w2.post_touch_delay = 1
         for stimulus in w2.stimuli:
             stimulus.auto_draw = True
 
