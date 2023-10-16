@@ -49,3 +49,5 @@ class TaskInterface(TaskStructure):
         pw = Window(blank=1.5)
 
         return [w1, w2, w3, pw]
+
+#test
