@@ -19,7 +19,7 @@ class TaskInterface(TaskStructure):
 
 	# Window 1
 	# set targets
-		w1 = Window(transition=WindowTransition.MAINTAIN, is_outcome=True, timeout=2)
+		w1 = Window(transition=WindowTransition.MAINTAIN, is_outcome=True)
 		# Duration for stimuli to remain displayed after screen is touched
 		w1.post_touch_delay = 1
 		reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite1-1.jpg', color = (1,1,1), size_touch=(250,250))
