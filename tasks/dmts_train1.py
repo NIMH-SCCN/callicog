@@ -47,7 +47,7 @@ class TaskInterface(TaskStructure):
 		w3.add_stimulus(w3_distractor)
 
 		#this is necessary for 'hide'ing to work?
-		for stimulus in w2.stimuli:
+		for stimulus in w3.stimuli:
 			stimulus.auto_draw = True
 
 		# Window 4
