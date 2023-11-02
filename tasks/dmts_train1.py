@@ -31,7 +31,7 @@ class TaskInterface(TaskStructure):
 		w2 = Window(blank=0.5)
 
 		# Window 3
-		w3 = Window(transition=WindowTransition.MAINTAIN, is_outcome=True, timeout=3)
+		w3 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
 		w3.post_touch_delay = 1
 		w3_sample = copy.copy(trial_parameters[Parameter.TARGET])
 		w3_sample.after_touch = [{'name': 'hide_other'}]
