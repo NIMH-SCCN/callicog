@@ -129,6 +129,21 @@ def main():
     parser.set_defaults(dummy=False, fullscreen=False)
     args = parser.parse_args()
 
+	port = args.port
+	width = args.width
+	height = args.height
+	dummy = args.dummy
+	fullscreen = args.fullscreen
+	_main(port, width, height, dummy, fullscreen)
+
+
+def _main(port, width, height, dummy, fullscreen):
+	assert port
+	assert width
+	assert height
+	assert dummy
+	assert fullscreen
+
     signal.signal(signal.SIGTERM, service_shutdown)
     signal.signal(signal.SIGINT, service_shutdown)
 
@@ -143,7 +158,14 @@ def main():
     while True:
         try:
             (client_socket, address) = server_socket.accept()
-            ct = ClientJob(client_socket, address, args.port, [args.width, args.height], args.dummy, args.fullscreen)
+            ct = ClientJob(
+				client_socket,
+				address,
+				port,
+				[width, height],
+				dummy,
+				fullscreen,
+            )
             ct.start()
         except ServiceExit:
             if ct:
