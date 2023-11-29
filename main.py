@@ -1,4 +1,5 @@
 import argparse
+import logging
 
 from marmobox import Marmobox
 from webapp.flask_app import (
@@ -6,6 +7,8 @@ from webapp.flask_app import (
     app,
 )
 
+logging.config.fileConfig('logging.ini')
+logger = logging.getLogger(__name__)
 
 MARMOBOX_PORT = 10000
 app.app_context().push()
@@ -64,9 +67,26 @@ mb = Marmobox(args.server, MARMOBOX_PORT, db.session)
 mb.connect()
 print('Connected')
 
+# Get existing or create new experiment:
 experiment = args.func(mb, args)
 if experiment:
-    mb.continue_task_experiment(experiment)
+    while True:
+        try:
+            # Run (or resume) the experiment:
+            mb.continue_task_experiment(experiment)
+            # Experiment over, exit loop:
+            break
+        except json.JSONDecodeError as exc:
+            # Due to networking errors, we have been seeing truncations of
+            # JSON messages, leading to JSONDecodeErrors. If this happens,
+            # log the error and automatically resume experiment:
+            logger.error(
+                "Malformed JSON, presumably truncated due to packet loss. "
+                "Attempting to auto-resume..."
+            )
+            logger.error(str(exc))
+            # Auto-resume the experiment, iterate the loop:
+            continue
 
 # animal = mb.get_animal(config['ANIMAL_CODE'])
 # if animal:
