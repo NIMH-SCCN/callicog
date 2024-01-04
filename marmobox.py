@@ -88,6 +88,14 @@ class Marmobox:
                     )
                     logger.error(msg)
                     raise exc
+                except json.decoder.JSONDecodeError as exc:
+                    msg = (
+                        'Couldn''t deserialize to JSON:\n\n'
+                        f'{response.decode()}'
+                    )
+                    logger.info("NOTE  >>>>>  Handling json.decoder.JSONDecodeError.......")
+                    logger.error(msg)
+                    raise exc
         return None
 
     def get_animal(self, animal_code):
