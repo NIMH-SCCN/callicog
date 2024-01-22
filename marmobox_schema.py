@@ -1,3 +1,4 @@
+import sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
 
 from task_builder import Outcome
@@ -18,7 +19,7 @@ ForeignKey = db.ForeignKey
 relationship = db.relationship
 
 
-@db.event.listens_for(db.mapper, 'init')
+@db.event.listens_for(sqlalchemy.orm.Mapper, 'init')
 def auto_add(target, args, kwargs):
     """ Listen for the creation of new ORM instances (e.g. Trial, Animal etc).
     Immediately add the new object to the database session.
