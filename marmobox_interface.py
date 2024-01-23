@@ -1,7 +1,12 @@
+import logging
 import time
 import marmobox_stimuli as st
 from marmobox_IO import MarmoboxIO
-from psychopy import visual, event, logging
+from psychopy import visual, event
+from psychopy import logging as ppy_logging
+
+logger = logging.getLogger(__name__)
+
 
 class MarmoboxInterface:
     def __init__(self, arduino_port, window_size, is_dummy, is_fullscreen):
@@ -15,7 +20,8 @@ class MarmoboxInterface:
         self.box.connect()
         self.ppy_window = visual.Window(self.window_size, monitor='test', units='pix', pos=(0,0), fullscr=self.is_fullscreen)
         self.ppy_mouse = event.Mouse(win=self.ppy_window, visible=self.is_dummy)
-        logging.console.setLevel(logging.ERROR)
+        ppy_logging.console.setLevel(ppy_logging.ERROR)
+        logger.debug("Marmobox interface initialized")
         return True
 
     def close(self):
