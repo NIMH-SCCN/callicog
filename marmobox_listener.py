@@ -175,8 +175,7 @@ class ListenerThread(Thread):
             return msg
 
     def run(self):
-        """ Implement Thread.run(), which is called after client code calls
-        Thread.start().
+        """ Implement Thread.run(), called downstream of Thread.start().
         """
         # Terminate context when control flow exits `with` block:
         with ZMQContextManager(thread_log=thread_log) as zmq_context:
