@@ -180,7 +180,13 @@ class Marmobox:
             # TODO: print (or log) just useful trial data
             print(json.dumps(trial_data, indent=2))
             return trial_data
-        return None
+        elif not response:
+            raise Exception("No response received from listener")
+        elif response and response["success"] != 1:
+            logger.error(str(response))
+            raise Exception(f"Bad response from listener\n\n{str(response)}")
+        else:
+            raise ValueError(f"Code excecution not expected to reach this point. Listener message: {str(response)}")
 
     def run_session_based_trials(self, current_task, task_interface):
         while not current_task.complete:
@@ -321,6 +327,7 @@ class Marmobox:
             new_trial = Trial(session=session, trial_start=datetime.now())
             trial_data = self.run_trial(trial_windows)
             if not trial_data:
+                import pdb; pdb.set_trace()
                 self.db_session.commit()
                 print('Invalid trial, aborting...')
                 raise Exception

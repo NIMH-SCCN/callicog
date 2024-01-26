@@ -165,7 +165,8 @@ class ListenerThread(Thread):
         else:
             try:
                 msg = json.loads(buf.decode())
-            except json.JSONDecodeError as exc:
+            except Exception as exc:
+                thread_log("debug", f"{str(type(exc))} {str(exc)}")
                 thread_log("debug", "Can't load JSON, trying pickle...")
                 try:
                     msg = pickle.loads(buf)
@@ -204,7 +205,7 @@ class ListenerThread(Thread):
                 except Exception as exc:
                     import traceback
                     tb = traceback.format_tb(exc.__traceback__)
-                    error_lines = [f"Exception on listener-side (miniPC): {str(exc)}"]
+                    error_lines = [f"Exception on listener-side (miniPC): {type(exc)} {str(exc)}"]
                     if hasattr(exc, "unhandled_message"):
                         error_lines.extend(exc.unhandled_message)
                     error_lines.extend(tb)
