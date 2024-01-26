@@ -65,47 +65,44 @@ args = parser.parse_args()
 # DatabaseSession = sessionmaker()
 # DatabaseSession.configure(bind=db_engine)
 
-mb = Marmobox(args.server, MARMOBOX_PORT, db.session)
-mb.connect()
-print('Connected')
+with Marmobox(args.server, MARMOBOX_PORT, db.session) as mb:
+    mb.connect()
 
-# Get existing or create new experiment:
-experiment = args.func(mb, args)
-if experiment:
-    while True:
-        try:
-            # Run (or resume) the experiment:
-            mb.continue_task_experiment(experiment)
-            # Experiment over, exit loop:
-            break
-        except json.JSONDecodeError as exc:
-            # Due to networking errors, we have been seeing truncations of
-            # JSON messages, leading to JSONDecodeErrors. If this happens,
-            # log the error and automatically resume experiment:
-            logger.error(
-                "Malformed JSON, presumably truncated due to packet loss. "
-                "Attempting to auto-resume..."
-            )
-            logger.error(str(exc))
-            # Auto-resume the experiment, iterate the loop:
-            continue
+    # Get existing or create new experiment:
+    experiment = args.func(mb, args)
+    if experiment:
+        while True:
+            try:
+                # Run (or resume) the experiment:
+                mb.continue_task_experiment(experiment)
+                # Experiment over, exit loop:
+                break
+            except json.JSONDecodeError as exc:
+                # Due to networking errors, we have been seeing truncations of
+                # JSON messages, leading to JSONDecodeErrors. If this happens,
+                # log the error and automatically resume experiment:
+                logger.error(
+                    "Malformed JSON, presumably truncated due to packet loss. "
+                    "Attempting to auto-resume..."
+                )
+                logger.error(str(exc))
+                # Auto-resume the experiment, iterate the loop:
+                continue
 
-# animal = mb.get_animal(config['ANIMAL_CODE'])
-# if animal:
-    # tasks = config['TASKS']
+    # animal = mb.get_animal(config['ANIMAL_CODE'])
+    # if animal:
+        # tasks = config['TASKS']
 
-    # new experiment or open experiment and continue
-    # if len(animal.experiments) > 0:
-    #     experiment = animal.experiments[0]
-    # else:
-    #     experiment = mb.new_experiment(animal, tasks)
+        # new experiment or open experiment and continue
+        # if len(animal.experiments) > 0:
+        #     experiment = animal.experiments[0]
+        # else:
+        #     experiment = mb.new_experiment(animal, tasks)
 
-    # resume experiment? find from ID
-    # experiment = mb.new_experiment(animal, tasks)
-    # mb.continue_task_experiment(experiment)
+        # resume experiment? find from ID
+        # experiment = mb.new_experiment(animal, tasks)
+        # mb.continue_task_experiment(experiment)
 
-mb.disconnect()
-db.session.close()
-print('mbox disconnected')
-print('db session closed')
-print('Done')
+    db.session.close()
+    logger.info('db session closed')
+    print('Done')
