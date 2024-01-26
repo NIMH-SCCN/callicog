@@ -25,18 +25,24 @@ import json
 import logging
 import traceback
 
+import zmq
+
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-#file_handler = logging.FileHandler('marmobox.log')
-#file_handler.setLevel(logging.INFO)
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s %(name)s:%(lineno)d %(levelname)s - %(message)s')
-#file_handler.setFormatter(formatter)
-console_handler.setFormatter(formatter)
-#logger.addHandler(file_handler)
-logger.addHandler(console_handler)
+# logger.setLevel(logging.INFO)
+# console_handler = logging.StreamHandler()
+# console_handler.setLevel(logging.INFO)
+# console_handler.setFormatter(formatter)
+# logger.addHandler(console_handler)
+
+
+def setup_file_logging(logger, file='marmobox.log', log_level=logging.INFO):
+    # logger.setLevel(logging.INFO)
+    file_handler = logging.FileHandler(file)
+    file_handler.setLevel(log_level)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
 
 
 class Marmobox:
@@ -47,56 +53,82 @@ class Marmobox:
     def __init__(self, host, port, db_session):
         self.host = host
         self.port = port
-        self.client_socket = None
         self.db_session = db_session
-        logger.debug("init")
+        self.zmq_context = None
+        self.socket = None
+
+    def __enter__(self):
+        """ Context manager method. Executes when Marmobox invoked in a `with`
+        context block.
+        """
+        self.connect()
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        """ Context manager method. Executes when flow exits `with` block.
+        """
+        self.disconnect()
 
     def connect(self):
-        self.client_socket = socket.socket()
-        self.client_socket.settimeout(None)
-        self.client_socket.connect((self.host, self.port))
-
-        status = self.receive(self.RX_TIMEOUT)
-        if status:
-            # status report, return fail status if arduino fails
-            print(json.dumps(status, indent=2))
+        self.zmq_context = zmq.Context()
+        self.socket = self.zmq_context.socket(zmq.REQ)
+        self.socket.setsockopt(zmq.LINGER, 0)
+        self.socket.connect(f"tcp://{self.host}:{self.port}")
+        logger.debug("ZMQ Socket bound")
+        # TODO: re-implement status check for ZMQ REQ/REP
+        # status = self.receive(self.RX_TIMEOUT)
+        # if status:
+        #     # status report, return fail status if arduino fails
+        #     print(json.dumps(status, indent=2))
 
     def disconnect(self):
-        self.client_socket.close()
+        try:
+            self.socket.close()
+            logger.debug("ZMQ socket closed")
+        except Exception as exc:
+            logger.error(f"ZMQ socket could not be closed {str(exc)}")
+            raise exc
+        try:
+            self.zmq_context.term()
+            logger.debug("ZMQ context terminated")
+        except Exception as exc:
+            logger.error(f"ZMQ context could not be terminated {str(exc)}")
+            raise exc
 
-    def send(self, message):
-        if self.client_socket:
-            message_in_bytes = bytes(json.dumps(message), 'utf8')
-            logger.info(f'message length in bytes: {len(message_in_bytes)}')
-            self.client_socket.send(message_in_bytes)
+    def send(self, msg):
+        """ Prepare message and send it out on the socket.
+        """
+        msg = json.dumps(msg)
+        msg_in_bytes = bytes(msg, "utf8")
+        # thread_log("debug", f"Listener sending {len(msg_in_bytes)} bytes")
+        self.socket.send(msg_in_bytes)
 
-    def send_binary(self, message):
-        if self.client_socket:
-            self.client_socket.send(message)
+    def send_pickle(self, message):
+        self.socket.send(pickle.dumps(message))
 
     def receive(self, timeout=None):
-        if self.client_socket:
-            ready = select.select([self.client_socket], [], [], timeout)
-            if ready[0]:
-                response = self.client_socket.recv(self.TX_MAX_LENGTH)
+        start = datetime.now()
+        continue_listening = True
+        while continue_listening:
+            poller = zmq.Poller()
+            poller.register(self.socket, zmq.POLLIN)
+            poll_timeout = 300   # milliseconds
+            events = poller.poll(poll_timeout)
+            if events:
                 try:
-                    return json.loads(response.decode())
+                    msg = self.socket.recv()
+                    msg = json.loads(msg.decode())
                 except json.JSONDecodeError as exc:
-                    msg = (
+                    log = (
                         'Couldn''t deserialize to JSON:\n\n'
-                        f'{response.decode()}'
+                        f'{msg.decode()}'
                     )
-                    logger.error(msg)
+                    logger.error(log)
                     raise exc
-                except json.decoder.JSONDecodeError as exc:
-                    msg = (
-                        'Couldn''t deserialize to JSON:\n\n'
-                        f'{response.decode()}'
-                    )
-                    logger.info("NOTE  >>>>>  Handling json.decoder.JSONDecodeError.......")
-                    logger.error(msg)
-                    raise exc
-        return None
+                return msg
+            if timeout:
+                elapsed = (datetime.now() - start).total_seconds()
+                continue_listening = elapsed > timeout
 
     def get_animal(self, animal_code):
         animal = self.db_session.query(Animal).filter(Animal.animal_code == animal_code).all()[0]
@@ -112,20 +144,21 @@ class Marmobox:
         experiment = self.db_session.query(Experiment).filter(Experiment.experiment_id == experiment_id).all()[0]
         return experiment
 
-    def wait_for_animal(self):
-        message = {
-            'action': 'wait_for_animal'
-        }
-        self.send(message)
-        response = self.receive()
-        if response and response['success'] == 1:
-            body = response['body']
-            animal_code = body['data']
-            animal = self.db_session.query(Animal).filter(
-                    Animal.animal_code == animal_code
-                ).all()[0]
-            return animal
-        return None
+    # TODO: delete this if confirmed it is not still needed/used
+    # def wait_for_animal(self):
+    #     message = {
+    #         'action': 'wait_for_animal'
+    #     }
+    #     self.send(message)
+    #     response = self.receive()
+    #     if response and response['success'] == 1:
+    #         body = response['body']
+    #         animal_code = body['data']
+    #         animal = self.db_session.query(Animal).filter(
+    #                 Animal.animal_code == animal_code
+    #             ).all()[0]
+    #         return animal
+    #     return None
 
     def run_trial(self, trial_windows):
         message = {
@@ -135,15 +168,16 @@ class Marmobox:
                 'trial_windows': trial_windows
             }
         }
-        self.send_binary(pickle.dumps(message))
+        self.send_pickle(message)
         try:
             response = self.receive()
         except KeyboardInterrupt:
-            print('/ninterrupted, exiting gracefully')
+            print("KeyboardInterrupt, exiting...")
             return None
         if response and response['success'] == 1:
             body = response['body']
             trial_data = body['data']
+            # TODO: print (or log) just useful trial data
             print(json.dumps(trial_data, indent=2))
             return trial_data
         return None
