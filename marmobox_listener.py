@@ -301,7 +301,7 @@ def _main(arduino_port, width, height, dummy, fullscreen):
 
     print(f'Listening for incoming connections')
     thread = None
-    while True:
+    while not stop_event.is_set():
         try:
             marmobox_interface = MarmoboxInterface(
                 arduino_port,
@@ -316,13 +316,12 @@ def _main(arduino_port, width, height, dummy, fullscreen):
             )
             thread.start()
             print_thread_log()
-        except ListenerExit:
+        except ListenerExit as exc:
             if thread:
-                thread.shutdown_flag.set()
-                thread.join()
-            break
+                thread.stop()
         finally:
             print_thread_log()
+            thread.join()
         print('Exiting main thread')
 
 
