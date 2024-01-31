@@ -14,6 +14,9 @@ class MarmoboxInterface:
         self.window_size = window_size
         self.is_dummy = is_dummy
         self.is_fullscreen = is_fullscreen
+        self.box = None
+        self.ppy_window = None
+        self.ppy_mouse = None
 
     def initialize(self):
         self.box = MarmoboxIO(self.arduino_port, dummy=self.is_dummy)
@@ -25,8 +28,10 @@ class MarmoboxInterface:
         return True
 
     def close(self):
-        self.box.disconnect()
-        self.ppy_window.close()
+        if self.box:
+            self.box.disconnect()
+        if self.ppy_window:
+            self.ppy_window.close()
         self.ppy_mouse = None
 
     def run_trial(self, trial_params):
