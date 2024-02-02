@@ -206,7 +206,8 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
                 if (outcome == Outcome.FAIL) or (outcome == Outcome.NULL):
                     # In cases where a task has multiple outcome windows, abort any remaining outcome windows (whole trial failed)
                     print(f"failed trial at trial window {i}")
-                    for subsequent_window in windows[i+1:-1]:
+                    # TODO: run this logic by Jack to confirm it's sufficiently backward compatible
+                    for subsequent_window in windows[i+1:-2]:
                         # Trial failed, abort all remaining trial windows (not penalty windows)
                         subsequent_window.aborted = True
                     break
