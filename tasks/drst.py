@@ -14,30 +14,22 @@ class TaskInterface(TaskStructure):
 
 # Defining possible stimuli
     def init_parameters(self):
+        #TODO 
         stimulus_list = [
-            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite1-1.jpg', color = (1,1,1), size_touch = (200,200)),
-            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite1-2.jpg', color = (1,1,1), size_touch = (200,200)),
-            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite2-1.jpg', color = (1,1,1), size_touch = (200,200)),
-            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite2-2.jpg', color = (1,1,1), size_touch = (200,200)),
-            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img5.jpg', color = (1,1,1), size_touch = (200,200)),
-            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img6.jpg', color = (1,1,1), size_touch = (200,200)),
-            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img7.jpg', color = (1,1,1), size_touch = (200,200)),
-            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img8.jpg', color = (1,1,1), size_touch = (200,200)),
-            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img9.jpg', color = (1,1,1), size_touch = (200,200)),
+            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = f'tasks/drstimages/drst{i}.jpg', color = (1,1,1), size_touch = (200,200))
+            for i in range(1,7)
+        #    Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/drstimages/drst1.jpg', color = (1,1,1), size_touch = (200,200)),
+        #    Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/drstimages/drst2.jpg', color = (1,1,1), size_touch = (200,200)),
+        #    Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/drstimages/drst3.jpg', color = (1,1,1), size_touch = (200,200)),
+            #Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite1-1.jpg', color = (1,1,1), size_touch = (200,200)),
+            #Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite1-2.jpg', color = (1,1,1), size_touch = (200,200)),
+            #Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite2-1.jpg', color = (1,1,1), size_touch = (200,200)),
         ]
         self.stimulus_count = len(stimulus_list)
-
         self.add_parameter(Parameter.TARGET, stimulus_list)
     # Defining possible positions
-        position_list = [(0,0), (-200, 0), (200, 0), (-200, -200)]
-        #, (-200, 200), (200, 200), (200, -200), (0, 200), (0, -200)]
+        position_list = [(0,150), (0,-150), (300, 150), (300, -150), (-300, -150), (-300, 150)]
         self.add_parameter(Parameter.POSITION, position_list)
-        
-        # self.add_parameter(Parameter.TARGET_NUMBER, 1)
-        # self.add_parameter(Parameter.DISTRACTOR_NUMBER, 3)
-    # Defining delay between stimuli?
-        # delay_list = [1]
-        # self.add_parameter(Parameter.DELAY, delay_list, pseudorandom = False) #Don't use DELAY, probably have to create a new parameter
 
 # Generating trials based on parameters
     def generate_trials(self):
@@ -74,24 +66,23 @@ class TaskInterface(TaskStructure):
             stimulus.position = position
             target = stimulus
             target.outcome = Outcome.SUCCESS
-            window = Window(transition=WindowTransition.TOUCH, is_outcome=False)
+            window = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
+            # Spacer
+            spacer = Window(blank=2)
             for distractor in distractors:
                 window.add_stimulus(distractor)
+
             window.add_stimulus(target)
             trial_sequence.append(window)
-        
+            trial_sequence.append(spacer)
+            
             # Set up distractor for subsequent window:
             distractor = copy.copy(target)
             distractor.outcome = Outcome.FAIL
-            distractors.append(distractor)    
-
-        trial_sequence[-1].is_outcome = True
-
-        # Spacer
-        spacer = Window(blank=0.5)
-
+            distractors.append(distractor)   
+                
         # Penalty window
-        pw = Window(blank=1)
+        pw = Window(blank=5)
 
         return [w1] + trial_sequence + [spacer, pw]
 
