@@ -191,10 +191,15 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
 
     trial_data = []
     for i, window in enumerate(windows[:-1]):
+        
+        if window.aborted:
+            # This window was aborted, skip remaining logic and go to next window
+            continue
+        
         flip_time = ppy_runtime.run_window(window, ppy_window)
         window.flip_tstamp = flip_time
 
-        if window.is_outcome and not window.aborted:
+        if window.is_outcome:
             targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
             while not all([target.touched for target in targets]):
                 outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
