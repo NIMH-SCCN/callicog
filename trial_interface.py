@@ -190,15 +190,21 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
     box_status = "CalliCog OK"
 
     trial_data = []
-    for window in windows[:-1]:
+    for i, window in enumerate(windows[:-1]):
         flip_time = ppy_runtime.run_window(window, ppy_window)
         window.flip_tstamp = flip_time
 
-        if window.is_outcome:
+        if window.is_outcome and not window.aborted:
             targets = [stimulus for stimulus in window.stimuli if stimulus.outcome == Outcome.SUCCESS]
             while not all([target.touched for target in targets]):
                 outcome = ppy_runtime.get_touch_outcome(window, flip_time, ppy_mouse)
                 if (outcome == Outcome.FAIL) or (outcome == Outcome.NULL):
+                    # In cases where a task has multiple outcome windows, abort any remaining outcome windows (whole trial failed)
+                    print(f"failed trial at trial window {i}")
+                    for subsequent_window in windows[i+1:]:
+                        # Trial failed, abort all remaining trial windows (not penalty windows)
+                        if subsequent_window.is_outcome:
+                            subsequent_window.aborted = True
                     break
 
             if outcome == Outcome.SUCCESS:
