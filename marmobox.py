@@ -327,7 +327,6 @@ class Marmobox:
             new_trial = Trial(session=session, trial_start=datetime.now())
             trial_data = self.run_trial(trial_windows)
             if not trial_data:
-                import pdb; pdb.set_trace()
                 self.db_session.commit()
                 print('Invalid trial, aborting...')
                 raise Exception
