@@ -22,7 +22,7 @@ from communication import ZMQContextManager
 from marmobox_interface import MarmoboxInterface
 
 
-MAX_LENGTH = 4096
+# MAX_LENGTH = 4096
 PORT = 10000
 HOST = '0.0.0.0'
 
@@ -151,8 +151,8 @@ class ListenerThread(Thread):
         msg = json.dumps(msg, cls=NumpyFloat32Encoder)
         msg_in_bytes = bytes(msg, "utf8")
         thread_log("debug", f"Listener sending {len(msg_in_bytes)} bytes")
-        if len(msg_in_bytes) > MAX_LENGTH:
-            raise Exception(f"Message too long: {len(msg_in_bytes)} bytes.")
+        # if len(msg_in_bytes) > MAX_LENGTH:
+        #    raise Exception(f"Message too long: {len(msg_in_bytes)} bytes.")
         self.socket.send(msg_in_bytes)
 
     def recv(self):
