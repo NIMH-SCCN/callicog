@@ -68,6 +68,7 @@ class Window:
     def __init__(self, blank=0, transition=None, is_outcome=False, timeout=0, is_outside_fail=False, label=''):
         self.blank = blank
         self.transition = transition
+        self.aborted = False
         self.is_outcome = is_outcome
         self.is_outside_fail = is_outside_fail
         self.fail_position = None
