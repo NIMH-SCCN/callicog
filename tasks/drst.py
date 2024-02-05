@@ -15,16 +15,11 @@ class TaskInterface(TaskStructure):
 # Defining possible stimuli
     def init_parameters(self):
         #TODO 
-        stimulus_list = [
+        possible_stimulus_list = [
             Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = f'tasks/drstimages/drst{i}.jpg', color = (1,1,1), size_touch = (200,200))
-            for i in range(1,7)
-        #    Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/drstimages/drst1.jpg', color = (1,1,1), size_touch = (200,200)),
-        #    Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/drstimages/drst2.jpg', color = (1,1,1), size_touch = (200,200)),
-        #    Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/drstimages/drst3.jpg', color = (1,1,1), size_touch = (200,200)),
-            #Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite1-1.jpg', color = (1,1,1), size_touch = (200,200)),
-            #Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite1-2.jpg', color = (1,1,1), size_touch = (200,200)),
-            #Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite2-1.jpg', color = (1,1,1), size_touch = (200,200)),
+            for i in range(1,100)
         ]
+        stimulus_list = random.sample(possible_stimulus_list, 6)
         self.stimulus_count = len(stimulus_list)
         self.add_parameter(Parameter.TARGET, stimulus_list)
     # Defining possible positions
@@ -34,8 +29,7 @@ class TaskInterface(TaskStructure):
 # Generating trials based on parameters
     def generate_trials(self):
         self.trials = self.pseudorandomize_parameters()
-
-# help
+        
     def build_trial(self, trial_parameters={}):        
         #Window 1: cue window
         w1 = Window(transition=WindowTransition.RELEASE)
