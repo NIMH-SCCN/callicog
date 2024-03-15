@@ -97,16 +97,16 @@
 
 9. Copy useful scripts to the HOME directory.
 		
-		cp ~/callicog/scripts/broadcastIP_slack.sh ~
-		cp ~/callicog/scripts/start_callicog_server.sh ~
-		cp ~/callicog/scripts/changeres.sh ~
-		cp ~/callicog/scripts/flush.sh ~
-		cp ~/callicog/scripts/kill_callicog.sh ~
-		cp ~/callicog/scripts/start_vncserver.sh ~
+		sudo ln -s ~/callicog/scripts/broadcastIP_slack ~
+		sudo ln -s ~/callicog/scripts/start_callicog_server ~
+		sudo ln -s ~/callicog/scripts/changeres.sh ~
+		sudo ln -s ~/callicog/scripts/flush.sh ~
+		sudo ln -s ~/callicog/scripts/kill_callicog.sh ~
+		sudo ln -s ~/callicog/scripts/start_vncserver.sh ~
 
-10. Disable screenlocker in 'Session & Startup' setting.
+11. Disable screenlocker in 'Session & Startup' setting.
 
-11. Install CalliCog.
+12. Install CalliCog.
 
 		cd ~
 		sudo apt install python3-venv python3-pip
