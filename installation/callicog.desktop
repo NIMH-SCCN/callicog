@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
 Name=Callicog server
-Exec=bash -c "source ~/callicogenv/bin/activate && cd ~/callicog && bash server.sh; bash" -T "Callicog ready" 
+Exec=bash -c "pyenv activate callicog && cd ~/callicog && bash server.sh; bash" -T "Callicog ready" 
 Terminal=true

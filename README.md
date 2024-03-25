@@ -125,7 +125,12 @@
 		pip install psychopy --no-deps
 		pip install pyyaml requests freetype-py pandas python-bidi pyglet json-tricks scipy packaging future imageio
 
-    Install the `wxPython` package. First, copy the wxPython "wheel" from NIMH SCCN Qumulo to your laptop or workstation:
+    Install the `wxPython` package. See instructions here:
+https://www.psychopy.org/download.html#linux-install
+Download wxPython from here:
+https://extras.wxpython.org/wxPython4/extras/linux/gtk3/
+
+First, copy the wxPython "wheel" from NIMH SCCN Qumulo to your laptop or workstation:
 
         `smb://nih.gov/nimhfileshare/Lab/SCCN/callicog/software/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl`
 
@@ -138,11 +143,13 @@
 		`pip install ~/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl`
 
 13. Make Callicog launch on startup; create the autostart directory, and then
-    symlink the Callicog autostart script into it.
+    symlink the Callicog environment setup and autostart scripts into it.
 
         ```
 		mkdir ~/.config/autostart
+		ln -s ~/callicog/installation/setup_callicog_env.sh ~/.config/autostart/
 		ln -s ~/callicog/installation/callicog.desktop ~/.config/autostart
+
         ```
 
 14. You can also add a CalliCog shortcut to the desktop bottom panel.
@@ -214,6 +221,10 @@
 		sudo -u postgres createuser --interactive
 
 5. If the `createuser` command does not work, nor `psql`, you may need to lanch PostgreSQL manually:
+
+		/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
+
+	A shortcut can be found in the HOME directory:
 
 		/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
 
@@ -498,8 +509,4 @@ file or directory: '/dev/ttyACM0'"
   }
 }
 ```
-
-Check whether the pump/sound controller USB cable is plugged in. If it is
-plugged into a USB splitter, remove it from the splitter and plug it in
-directly.
 
