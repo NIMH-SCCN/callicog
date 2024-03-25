@@ -70,6 +70,6 @@ class TaskInterface(TaskStructure):
 		w6 = Window(blank=0.5)
 		
 		# Penalty window - conditional
-		pw = Window(blank=1.5)
+		pw = Window(blank=3.5)
 
 		return [w1, w2, w3, w4, w5, w6, pw]

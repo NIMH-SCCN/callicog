@@ -57,7 +57,7 @@ class TaskInterface(TaskStructure):
 		w5_distractor.after_touch = [{'name': 'hide_other'}]
 
 		w5.add_stimulus(w5_sample)
-		if odds <= percentage:
+		if odds <= 100-percentage:
 			w5.add_stimulus(w5_distractor)
 		else:
 			pass

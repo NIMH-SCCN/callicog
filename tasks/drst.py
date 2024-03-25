@@ -7,6 +7,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+#def randomlist(possible_stimulus_list, k)
+
 class TaskInterface(TaskStructure):
     def __init__(self):
         super().__init__()
@@ -14,17 +16,23 @@ class TaskInterface(TaskStructure):
 
 # Defining possible stimuli
     def init_parameters(self):
-        #TODO 
-        possible_stimulus_list = [
-            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = f'tasks/drstimages/drst{i}.jpg', color = (1,1,1), size_touch = (200,200))
+        self.possible_stimulus_list = [
+            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = f'tasks/drstimages2/drst{i}.jpg', color = (1,1,1), size_touch = (200,200))
             for i in range(1,100)
-        ]
-        stimulus_list = random.sample(possible_stimulus_list, 6)
-        self.stimulus_count = len(stimulus_list)
-        self.add_parameter(Parameter.TARGET, stimulus_list)
+        ]    
+        #stimulus_list = random.sample(self.possible_stimulus_list, 8)
+        #self.stimulus_count = len(stimulus_list)
+        #self.add_parameter(Parameter.TARGET, stimulus_list)  
+        self.update_random_stimulus()
+        
     # Defining possible positions
-        position_list = [(0,150), (0,-150), (300, 150), (300, -150), (-300, -150), (-300, 150)]
+        position_list = [(150, 150), (150, -150), (-150, 150), (-150, -150), (450, 150), (450, -150), (-450, 150), (-450, -150)]        
         self.add_parameter(Parameter.POSITION, position_list)
+
+    def update_random_stimulus(self):
+        stimulus_list = random.sample(self.possible_stimulus_list, 8)
+        self.stimulus_count = len(stimulus_list)
+        self.add_parameter(Parameter.TARGET, stimulus_list)        
 
 # Generating trials based on parameters
     def generate_trials(self):
@@ -57,10 +65,11 @@ class TaskInterface(TaskStructure):
         trial_sequence = []
         distractors = []
         for (stimulus, position) in zip(stimuli, stimuli_positions):
+            self.update_random_stimulus()
             stimulus.position = position
             target = stimulus
             target.outcome = Outcome.SUCCESS
-            window = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=5)
+            window = Window(transition=WindowTransition.TOUCH, is_outcome=True)
             # Spacer
             spacer = Window(blank=2)
             for distractor in distractors:

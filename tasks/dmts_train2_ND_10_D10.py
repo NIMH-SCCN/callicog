@@ -23,7 +23,7 @@ class TaskInterface(TaskStructure):
 	def build_trial(self, trial_parameters={}):
 		
 		odds = random.randint(1,100)
-		percentage = 60
+		percentage = 10
 		
 		# Window 1
 		w1 = Window(transition=WindowTransition.TOUCH)
@@ -70,6 +70,6 @@ class TaskInterface(TaskStructure):
 		w6 = Window(blank=0.5)
 		
 		# Penalty window - conditional
-		pw = Window(blank=1.5)
+		pw = Window(blank=9.5)
 
 		return [w1, w2, w3, w4, w5, w6, pw]

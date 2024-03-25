@@ -21,10 +21,6 @@ class TaskInterface(TaskStructure):
 		self.trials = self.pseudorandomize_parameters()
 
 	def build_trial(self, trial_parameters={}):
-		
-		odds = random.randint(1,100)
-		percentage = 60
-		
 		# Window 1
 		w1 = Window(transition=WindowTransition.TOUCH)
 		w1_sample = copy.copy(trial_parameters[Parameter.TARGET])
@@ -57,10 +53,7 @@ class TaskInterface(TaskStructure):
 		w5_distractor.after_touch = [{'name': 'hide_other'}]
 
 		w5.add_stimulus(w5_sample)
-		if odds <= 100-percentage:
-			w5.add_stimulus(w5_distractor)
-		else:
-			pass
+		w5.add_stimulus(w5_distractor)
 
 		#this is necessary for 'hide'ing to work?
 		for stimulus in w5.stimuli:
@@ -70,6 +63,6 @@ class TaskInterface(TaskStructure):
 		w6 = Window(blank=0.5)
 		
 		# Penalty window - conditional
-		pw = Window(blank=1.5)
+		pw = Window(blank=9.5)
 
 		return [w1, w2, w3, w4, w5, w6, pw]

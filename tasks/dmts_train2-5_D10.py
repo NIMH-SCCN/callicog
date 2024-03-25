@@ -21,10 +21,6 @@ class TaskInterface(TaskStructure):
 		self.trials = self.pseudorandomize_parameters()
 
 	def build_trial(self, trial_parameters={}):
-		
-		odds = random.randint(1,100)
-		percentage = 60
-		
 		# Window 1
 		w1 = Window(transition=WindowTransition.TOUCH)
 		w1_sample = copy.copy(trial_parameters[Parameter.TARGET])
@@ -44,32 +40,31 @@ class TaskInterface(TaskStructure):
 		w4 = Window(blank=0.5)
 
 		# Window 5
-		w5 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
-		w5.post_touch_delay = 1
+		w5 = Window(transition=WindowTransition.RELEASE)
 		w5_sample = copy.copy(trial_parameters[Parameter.TARGET])
-		w5_sample.after_touch = [{'name': 'hide_other'}]
-		w5_sample.position = trial_parameters[Parameter.POSITION]
-		w5_sample.outcome = Outcome.SUCCESS
-		
-		w5_distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.TARGET]['values'], exclude=[trial_parameters[Parameter.TARGET]])[0]
-		w5_distractor.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0]
-		w5_distractor.outcome = Outcome.FAIL
-		w5_distractor.after_touch = [{'name': 'hide_other'}]
-
+		w5_sample.position = (0,0)
 		w5.add_stimulus(w5_sample)
-		if odds <= 100-percentage:
-			w5.add_stimulus(w5_distractor)
-		else:
-			pass
-
-		#this is necessary for 'hide'ing to work?
-		for stimulus in w5.stimuli:
-			stimulus.auto_draw = True
 
 		# Window 6
 		w6 = Window(blank=0.5)
+
+		# Window 7
+		w7 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
+		w7_sample = copy.copy(trial_parameters[Parameter.TARGET])
+		w7_sample.position = trial_parameters[Parameter.POSITION]
+		w7_sample.outcome = Outcome.SUCCESS
+		
+		w7_distractor = self.randomize_from(self.pseudorandom_parameters[Parameter.TARGET]['values'], exclude=[trial_parameters[Parameter.TARGET]])[0]
+		w7_distractor.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0]
+		w7_distractor.outcome = Outcome.FAIL
+
+		w7.add_stimulus(w7_sample)
+		w7.add_stimulus(w7_distractor)
+
+		# Window 8
+		w8 = Window(blank=0.5)
 		
 		# Penalty window - conditional
-		pw = Window(blank=1.5)
+		pw = Window(blank=9.5)
 
-		return [w1, w2, w3, w4, w5, w6, pw]
+		return [w1, w2, w3, w4, w5, w6, w7, w8, pw]
