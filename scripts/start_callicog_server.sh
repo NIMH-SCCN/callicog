@@ -1,3 +1,3 @@
 #!/bin/bash
 
-source ~/callicogenv/bin/activate && cd ~/callicog && ./server.sh
+pyenv activate callicog && cd ~/callicog && ./server.sh

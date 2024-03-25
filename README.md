@@ -125,31 +125,20 @@
 		pip install psychopy --no-deps
 		pip install pyyaml requests freetype-py pandas python-bidi pyglet json-tricks scipy packaging future imageio
 
-    Install the `wxPython` package. See instructions here:
-https://www.psychopy.org/download.html#linux-install
-Download wxPython from here:
-https://extras.wxpython.org/wxPython4/extras/linux/gtk3/
 
-First, copy the wxPython "wheel" from NIMH SCCN Qumulo to your laptop or workstation:
+    Install the `wxPython` package. We have to build from source due to Debian and Pyenv:
+ https://wxpython.org/blog/2017-08-17-builds-for-linux-with-pip/
+	
+ https://github.com/pyenv/pyenv/wiki#how-to-build-cpython-with---enable-shared
+env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.11.8
 
-        `smb://nih.gov/nimhfileshare/Lab/SCCN/callicog/software/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl`
-
-    Then secure-copy (`scp`) it from there to your miniPC home directory:
-
-        `scp my/file/path/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl <user>@<minipc>:~`
-
-    Next, return to the miniPC and install it:
-
-		`pip install ~/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl`
 
 13. Make Callicog launch on startup; create the autostart directory, and then
-    symlink the Callicog environment setup and autostart scripts into it.
+    symlink the Callicog autostart script into it.
 
         ```
 		mkdir ~/.config/autostart
-		ln -s ~/callicog/installation/setup_callicog_env.sh ~/.config/autostart/
 		ln -s ~/callicog/installation/callicog.desktop ~/.config/autostart
-
         ```
 
 14. You can also add a CalliCog shortcut to the desktop bottom panel.
@@ -219,6 +208,13 @@ First, copy the wxPython "wheel" from NIMH SCCN Qumulo to your laptop or worksta
 
 		sudo apt-get install postgresql postgresql-client
 		sudo -u postgres createuser --interactive
+
+5. If the `createuser` command does not work, nor `psql`, you may need to lanch PostgreSQL manually:
+
+		/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
+
+	A shortcut can be found in the HOME directory:
+
 
 5. If the `createuser` command does not work, nor `psql`, you may need to lanch PostgreSQL manually:
 
@@ -503,10 +499,3 @@ sccn@MH02001980MDI ~ % ./callicog.sh 192.168.0.101 run seymour training
   "success": 1,
   "body": {
     "data": {
-      "status": "[Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such
-file or directory: '/dev/ttyACM0'"
-    }
-  }
-}
-```
-
