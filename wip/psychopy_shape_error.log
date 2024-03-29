@@ -1,0 +1,51 @@
+Listening for incoming connections
+--- new window!
+Exiting main thread
+ListenerThread: Exception on listener-side (miniPC): <class 'ValueError'> operands could not be broadcast together with shapes (4,2) (0,) 
+ListenerThread:   File "/home/sccn/callicog/marmobox_listener.py", line 201, in run
+    self.handle_message(msg)
+
+ListenerThread:   File "/home/sccn/callicog/marmobox_listener.py", line 235, in handle_message
+    trial_data = self.run_trial(trial_params)
+
+ListenerThread:   File "/home/sccn/callicog/marmobox_listener.py", line 260, in run_trial
+    trial_data = self.mbox_interface.run_trial(trial_params)
+
+ListenerThread:   File "/home/sccn/callicog/marmobox_interface.py", line 53, in run_trial
+    return st.process_stimulus(trial_params, self.box, self.ppy_window, self.ppy_mouse)
+
+ListenerThread:   File "/home/sccn/callicog/marmobox_stimuli.py", line 6, in process_stimulus
+    (run_end, trial_outcome, events, box_status) = run_trial(trial_windows, box, ppy_window, ppy_mouse)
+
+ListenerThread:   File "/home/sccn/callicog/trial_interface.py", line 199, in run_trial
+    flip_time = ppy_runtime.run_window(window, ppy_window)
+
+ListenerThread:   File "/home/sccn/callicog/trial_interface.py", line 89, in run_window
+    self.__load_stimulus(stimulus, ppy_window)
+
+ListenerThread:   File "/home/sccn/callicog/trial_interface.py", line 63, in __load_stimulus
+    stimulus.ppy_touch_stim = visual.Rect(win=ppy_window, opacity=0)
+
+ListenerThread:   File "/home/sccn/callicogenv/lib/python3.9/site-packages/psychopy/contrib/lazy_import.py", line 118, in __call__
+    return obj(*args, **kwargs)
+
+ListenerThread:   File "/home/sccn/callicogenv/lib/python3.9/site-packages/psychopy/visual/rect.py", line 148, in __init__
+    super(Rect, self).__init__(
+
+ListenerThread:   File "/home/sccn/callicogenv/lib/python3.9/site-packages/psychopy/visual/shape.py", line 179, in __init__
+    if vertices != ():  # flag for when super-init'ing a ShapeStim
+
+q^CTraceback (most recent call last):
+  File "/home/sccn/callicog/marmobox_listener.py", line 329, in <module>
+    main()
+  File "/home/sccn/callicog/marmobox_listener.py", line 288, in main
+    _main(arduino_port, width, height, dummy, fullscreen)
+  File "/home/sccn/callicog/marmobox_listener.py", line 324, in _main
+    thread.join()
+  File "/usr/lib/python3.9/threading.py", line 1033, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.9/threading.py", line 1049, in _wait_for_tstate_lock
+    elif lock.acquire(block, timeout):
+  File "/home/sccn/callicog/marmobox_listener.py", line 85, in stop_listener
+    raise ListenerExit(msg)
+__main__.ListenerExit: Stopping listener, caught signal 2
