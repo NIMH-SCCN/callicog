@@ -30,6 +30,13 @@ class MarmoboxInterface:
                 self.box.connect()
                 connected = True
             except SerialException as exc:
+                if "permission denied" in str(exc).lower():
+                    logger.error(
+                        f"Permission denied on USB serial port ({self.arduino_port})."
+                        " Make sure user is in `dialout` group:"
+                        "    `sudo usermod -a -G dialout sccn`"
+                    )
+                    raise exc
                 print("Reward module not detected, check USB connection.")
                 print(f"Retrying in {wait} seconds...") 
                 time.sleep(wait)
