@@ -83,4 +83,132 @@ So far, the first signs are good.
 	pip install "pyglet==1.5.27"	&&
 	pip install psychopy --no-deps
 	```
-- 
+- NOTE: some steps are missing between this step and where I ultimately got, which was up to the point where I could run CalliCog tasks BUT PsychoPy registered no mouse input. I was able to narrow this down to a problem with the CalliCog repository, since I downloaded the PsychoPy git repo and was able to run mouse-specific demo scripts perfectly well. I was not able to determine the origin of this problem in the tangle of PsychoPy code throughout CalliCog, so I am instead attempting to recreate the identical virtualenv to ccpc01, which was setup most recently and which is working. It uses Python 3.7.3. There is a snapshot of the requirements in wip/ccpc01.requirements.txt. The following notes will detail my attempt to recreate this environment exactly:
+- First, install the Pyenv dependencies:
+
+	```shell
+	# Install Pyenv's build dependencies (required when Pyenv tries to build a python version).
+	# Documentation is here, in case troubleshooting is needed:
+	#     https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+	sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
+	libbz2-dev libreadline-dev libsqlite3-dev curl \
+	libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+	```
+- Next, install Pyenv
+
+	```shell
+	# NOTE: be sure to edit both .bashrc and .profile according to the instructions provided by the installer after it runs:
+	curl https://pyenv.run | bash
+	```
+
+- Next, install Python 3.7.3:
+
+	```shell
+	# NOTE: I used CC=clang because I ran into issues using the default compiler, which I believe is gcc. See:
+	#     https://github.com/pyenv/pyenv/issues/1889#issuecomment-833587851
+	# Also, I used `--enable-shared` because wxPython specifies that it should be used if using Pyenv
+	#     https://wxpython.org/blog/2017-08-17-builds-for-linux-with-pip/index.html
+	sudo apt install clang
+	env CC="clang" PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.7.3
+
+- Next, set the local python version, create the virtualenv, activate virtualenv:
+
+	```shell
+	# TODO
+	```
+
+- Now, install wxPython
+
+	```sh
+	# TODO
+	# - install wxPython dependencies
+	# - attempt to build a wheel for wxPython for Python 3.7.3 using instructions on wxPython blog
+	# - failed!
+	```
+- I remembered that I had previously downloaded and archived a wheel for 3.7.3, so I tried installing using that. Install went fine, but on running tests there was an issue emanating from wxPython:
+
+```sh
+sccn@ccpc05:~/callicog$ pytest tests/test_psychopy_click.py
+======================================================================================= test session starts =======================================================================================
+platform linux -- Python 3.7.3, pytest-7.4.4, pluggy-1.2.0
+rootdir: /home/sccn/callicog
+collected 1 item
+
+tests/test_psychopy_click.py F                                                                                                                                                              [100%]
+
+============================================================================================ FAILURES =============================================================================================
+___________________________________________________________________________________________ test_touch2 ___________________________________________________________________________________________
+
+    def test_touch2():
+        from tasks.touch2 import TaskInterface
+>       from marmobox_interface import MarmoboxInterface
+
+tests/test_psychopy_click.py:39:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+marmobox_interface.py:5: in <module>
+    from psychopy import visual, event
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/visual/__init__.py:29: in <module>
+    from psychopy import event  # import before visual or
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/event.py:70: in <module>
+    from psychopy.tools.monitorunittools import cm2pix, deg2pix, pix2cm, pix2deg
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/tools/monitorunittools.py:15: in <module>
+    from psychopy import monitors
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/monitors/__init__.py:10: in <module>
+    from .calibTools import *
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/monitors/calibTools.py:21: in <module>
+    from psychopy import __version__, logging, hardware, constants
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/hardware/__init__.py:13: in <module>
+    from . import eyetracker
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/hardware/eyetracker.py:2: in <module>
+    from psychopy.alerts import alert
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/alerts/__init__.py:5: in <module>
+    from ._alerts import alert, catalog
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/alerts/_alerts.py:11: in <module>
+    from psychopy.localization import _translate
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/psychopy/localization/__init__.py:23: in <module>
+    import wx
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/wx/__init__.py:17: in <module>
+    from wx.core import *
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    """
+
+>   from ._core import *
+E   ImportError: libjpeg.so.62: cannot open shared object file: No such file or directory
+
+../.pyenv/versions/3.7.3/lib/python3.7/site-packages/wx/core.py:12: ImportError
+===================================================================================== short test summary info =====================================================================================
+FAILED tests/test_psychopy_click.py::test_touch2 - ImportError: libjpeg.so.62: cannot open shared object file: No such file or directory
+======================================================================================== 1 failed in 0.26s ========================================================================================
+```
+
+- Attempts using 3.7.3 failed, so I am going to attempt instead to use Python 3.8, which has a pre-built wheel hosted on wxPython site. Hopefully this doesn't impair my abilitiy to install the identical ccpc01.requirements.txt
+
+- Install python 3.8.19
+
+```sh
+sccn@ccpc05:~$ env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.19
+# NOTE: succeeded without needing clang
+```
+
+- Set local python, create, activate venv:
+
+```sh
+#TODO recap
+```
+
+- Install, starting with pinned PsychoPy so subsequent dependencies are constrained re: versions
+
+```sh
+pip install PsychoPy==2021.2.3 --no-deps
+pip install Pillow pyserial numpy matplotlib pyqt5==5.14.0 pyyaml requests freetype-py pandas python-bidi pyglet==1.4.11 json-tricks scipy packaging future imageio
+pip install pyzmq
+pip install pytest
+pip install wxPython-4.2.0-cp38-cp38-linux_x86_64.whl 
+cd callicog/
+pytest tests/test_psychopy_click.py 
+pip uninstall numpy
+pip install numpy==1.21.6
+pytest tests/test_psychopy_click.py 
+```
+
