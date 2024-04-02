@@ -1,10 +1,12 @@
 import logging
 import time
-import marmobox_stimuli as st
-from marmobox_IO import MarmoboxIO
+# import marmobox_stimuli as st
 from serial.serialutil import SerialException
 from psychopy import visual, event
 from psychopy import logging as ppy_logging
+
+from marmobox_IO import MarmoboxIO
+from trial_interface import run_trial as run_trial_interface
 
 logger = logging.getLogger(__name__)
 
@@ -42,8 +44,9 @@ class MarmoboxInterface:
                 time.sleep(wait)
                 wait = wait + 1 if (wait < max_wait) else max_wait
 
-        self.ppy_window = visual.Window(self.window_size, monitor='test', units='pix', pos=(0,0), fullscr=self.is_fullscreen, checkTiming=False)
+        self.ppy_window = visual.Window(size=self.window_size, allowGUI=True, monitor='test', units='pix', pos=(0,0), fullscr=self.is_fullscreen, checkTiming=False)
         self.ppy_mouse = event.Mouse(win=self.ppy_window, visible=self.is_dummy)
+        assert self.ppy_window.mouseVisible == True
         ppy_logging.console.setLevel(ppy_logging.ERROR)
         logger.debug("Marmobox interface initialized")
         return True
@@ -55,5 +58,10 @@ class MarmoboxInterface:
             self.ppy_window.close()
         self.ppy_mouse = None
 
+    def process_stimulus(self, trial_params, box, ppy_window, ppy_mouse):
+        trial_windows = trial_params['trial_windows']
+        (run_end, trial_outcome, events, box_status) = run_trial_interface(trial_windows, box, ppy_window, ppy_mouse)
+        return {'trial_end': str(run_end), 'trial_outcome': trial_outcome, 'events': events, 'box_status': box_status}
+
     def run_trial(self, trial_params):
-        return st.process_stimulus(trial_params, self.box, self.ppy_window, self.ppy_mouse)
+        return self.process_stimulus(trial_params, self.box, self.ppy_window, self.ppy_mouse)
