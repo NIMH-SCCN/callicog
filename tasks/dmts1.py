@@ -30,7 +30,7 @@ class TaskInterface(TaskStructure):
 
 	def build_trial(self, trial_parameters={}):
 		# Window 1
-		w1 = Window(transition=WindowTransition.TOUCH)
+		w1 = Window(transition=WindowTransition.TOUCH, label = 'encoding1')
 		w1_sample = copy.copy(trial_parameters[Parameter.TARGET])
 		w1_sample.position = (0,0)
 		w1.add_stimulus(w1_sample)
@@ -39,17 +39,17 @@ class TaskInterface(TaskStructure):
 		w2 = Window(blank=0.5)
 
 		# Window 3
-		w3 = Window(transition=WindowTransition.RELEASE, timeout=2)
+		w3 = Window(transition=WindowTransition.RELEASE, label = 'encoding2', timeout=2, is_outcome=False)
 		w3_sample = copy.copy(trial_parameters[Parameter.TARGET])
 		w3_sample.position = (0,0)
 		w3.add_stimulus(w3_sample)
 
 		# Window 4
 		w4_blank = trial_parameters[Parameter.DELAY]
-		w4 = Window(blank=w4_blank)
+		w4 = Window(blank=w4_blank, label = 'maintenance')
 
 		# Window 5
-		w5 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3)
+		w5 = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout=3, label = 'retrieval')
 		w5_sample = copy.copy(trial_parameters[Parameter.TARGET])
 		w5_sample.position = trial_parameters[Parameter.POSITION][0]
 		w5_sample.outcome = Outcome.SUCCESS
@@ -62,9 +62,11 @@ class TaskInterface(TaskStructure):
 		w5.add_stimulus(w5_distractor)
 
 		# Window 6
-		w6 = Window(blank=0.5)
-		
+		w6 = Window(blank=1.0, label = 'outcome1')
+	
+ 		# Window 7 - placeholder for eeg timing
+		w7 = Window(blank=0.00000001, label = 'outcome2')	
 		# Penalty window - conditional
-		pw = Window(blank=1.5)
+		pw = Window(blank=1.0)
 
-		return [w1, w2, w3, w4, w5, w6, pw]
+		return [w1, w2, w3, w4, w5, w6, w7, pw]
