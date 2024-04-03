@@ -125,17 +125,13 @@
 		pip install psychopy --no-deps
 		pip install pyyaml requests freetype-py pandas python-bidi pyglet json-tricks scipy packaging future imageio
 
-    Install the `wxPython` package. First, copy the wxPython "wheel" from NIMH SCCN Qumulo to your laptop or workstation:
 
-        `smb://nih.gov/nimhfileshare/Lab/SCCN/callicog/software/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl`
+    Install the `wxPython` package. We have to build from source due to Debian and Pyenv:
+ https://wxpython.org/blog/2017-08-17-builds-for-linux-with-pip/
+	
+ https://github.com/pyenv/pyenv/wiki#how-to-build-cpython-with---enable-shared
+env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.11.8
 
-    Then secure-copy (`scp`) it from there to your miniPC home directory:
-
-        `scp my/file/path/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl <user>@<minipc>:~`
-
-    Next, return to the miniPC and install it:
-
-		`pip install ~/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl`
 
 13. Make Callicog launch on startup; create the autostart directory, and then
     symlink the Callicog autostart script into it.
@@ -214,6 +210,17 @@
 		sudo -u postgres createuser --interactive
 
 5. If the `createuser` command does not work, nor `psql`, you may need to lanch PostgreSQL manually:
+
+		/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
+
+	A shortcut can be found in the HOME directory:
+
+
+5. If the `createuser` command does not work, nor `psql`, you may need to lanch PostgreSQL manually:
+
+		/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
+
+	A shortcut can be found in the HOME directory:
 
 		/usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
 
@@ -492,14 +499,3 @@ sccn@MH02001980MDI ~ % ./callicog.sh 192.168.0.101 run seymour training
   "success": 1,
   "body": {
     "data": {
-      "status": "[Errno 2] could not open port /dev/ttyACM0: [Errno 2] No such
-file or directory: '/dev/ttyACM0'"
-    }
-  }
-}
-```
-
-Check whether the pump/sound controller USB cable is plugged in. If it is
-plugged into a USB splitter, remove it from the splitter and plug it in
-directly.
-
