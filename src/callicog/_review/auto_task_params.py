@@ -1,6 +1,6 @@
 from os import listdir
 from os.path import isfile, join
-from marmobox_schema import ProtocolParameter, Protocol, db
+from callicog.marmobox_schema import ProtocolParameter, Protocol, db
 
 mypath = './tasks'
 task_files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
