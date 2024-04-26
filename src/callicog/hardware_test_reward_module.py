@@ -9,7 +9,7 @@
 #         `pytest --capture=no callicog/hardware_test_reward_module.py`
 #
 
-from marmobox_IO import MarmoboxIO
+from callicog.marmobox_IO import MarmoboxIO
 import time
 
 

@@ -1,12 +1,12 @@
 import sys
 sys.path.append('./test')
 
-from marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Event
+from callicog.marmobox_schema import Animal, Protocol, Experiment, Task, Session, Trial, Event
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
-from new_stim import StimShape, Progression, Outcome, run_trial
-from marmobox_IO import MarmoboxIO
+from callicog.new_stim import StimShape, Progression, Outcome, run_trial
+from callicog.marmobox_IO import MarmoboxIO
 from numpy import random
 
 def new_experiment(db_session, animal, tasks):

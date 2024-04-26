@@ -1,7 +1,7 @@
 import sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
 
-from task_builder import Outcome
+from callicog.task_builder import Outcome
 
 
 db = SQLAlchemy()

@@ -5,8 +5,8 @@ from serial.serialutil import SerialException
 from psychopy import visual, event
 from psychopy import logging as ppy_logging
 
-from marmobox_IO import MarmoboxIO
-from trial_interface import run_trial as run_trial_interface
+from callicog.marmobox_IO import MarmoboxIO
+from callicog.trial_interface import run_trial as run_trial_interface
 
 logger = logging.getLogger(__name__)
 

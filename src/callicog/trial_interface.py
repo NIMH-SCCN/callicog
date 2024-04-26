@@ -1,4 +1,4 @@
-from task_builder import StimulusShape, Outcome, WindowTransition
+from callicog.task_builder import StimulusShape, Outcome, WindowTransition
 from datetime import datetime
 from psychopy import visual
 import math

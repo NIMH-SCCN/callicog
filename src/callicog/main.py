@@ -3,8 +3,8 @@ import json
 import logging
 import logging.config
 
-from marmobox import Marmobox
-from webapp.flask_app import (
+from callicog.marmobox import Marmobox
+from callicog.webapp.flask_app import (
     db,
     app,
 )
@@ -29,22 +29,22 @@ def callicog_resume(box, args):
     return experiment
 
 
-parser = argparse.ArgumentParser(description='Marmobox client. \
-    Connects to Marmobox server and stores data in local database.')
-parser.add_argument('server', help='Callicog IP address.', type=str)
-subparsers = parser.add_subparsers()
-
-parser_run = subparsers.add_parser('run', help='Executes a new experiment.')
-parser_run.add_argument('animal', type=str)
-parser_run.add_argument('template', type=str)
-parser_run.set_defaults(func=callicog_run)
-
-parser_resume = subparsers.add_parser(
-    'resume', help='Resumes an existing experiment.')
-parser_resume.add_argument('experiment', type=int)
-parser_resume.set_defaults(func=callicog_resume)
-
-args = parser.parse_args()
+# parser = argparse.ArgumentParser(description='Marmobox client. \
+#     Connects to Marmobox server and stores data in local database.')
+# parser.add_argument('server', help='Callicog IP address.', type=str)
+# subparsers = parser.add_subparsers()
+# 
+# parser_run = subparsers.add_parser('run', help='Executes a new experiment.')
+# parser_run.add_argument('animal', type=str)
+# parser_run.add_argument('template', type=str)
+# parser_run.set_defaults(func=callicog_run)
+# 
+# parser_resume = subparsers.add_parser(
+#     'resume', help='Resumes an existing experiment.')
+# parser_resume.add_argument('experiment', type=int)
+# parser_resume.set_defaults(func=callicog_resume)
+# 
+# args = parser.parse_args()
 
 # parser.add_argument(
 #     'config_filename',

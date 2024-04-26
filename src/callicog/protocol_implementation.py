@@ -1,4 +1,4 @@
-from protocol_base import Window, Stimulus, StageOne
+from callicog.protocol_base import Window, Stimulus, StageOne
 
 # define list of stimulus
 stimuli = []

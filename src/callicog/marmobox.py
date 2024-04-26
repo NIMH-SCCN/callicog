@@ -1,4 +1,4 @@
-from marmobox_schema import (
+from callicog.marmobox_schema import (
     Animal,
     # Protocol,
     Experiment,
@@ -10,7 +10,7 @@ from marmobox_schema import (
     StimulusObject,
     TrialParameter,
 )
-from task_builder import (
+from callicog.task_builder import (
     Progression,
     Outcome,
     # Parameter,

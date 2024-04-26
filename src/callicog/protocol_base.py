@@ -1,6 +1,6 @@
 from psychopy import visual, event
 from datetime import datetime
-from marmobox_IO import MarmoboxIO
+from callicog.marmobox_IO import MarmoboxIO
 import time
 
 class Stimulus:

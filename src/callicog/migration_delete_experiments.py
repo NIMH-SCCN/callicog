@@ -1,4 +1,4 @@
-from marmobox_schema import Experiment, Animal, db
+from callicog.marmobox_schema import Experiment, Animal, db
 
 
 del_experiments = db.session.query(Experiment).filter(Experiment.animal_id == 1).all()

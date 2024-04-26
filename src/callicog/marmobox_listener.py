@@ -18,8 +18,8 @@ import queue
 import numpy as np
 import zmq
 
-from communication import ZMQContextManager
-from marmobox_interface import MarmoboxInterface
+from callicog.communication import ZMQContextManager
+from callicog.marmobox_interface import MarmoboxInterface
 
 
 # MAX_LENGTH = 4096

@@ -3,7 +3,7 @@ import json
 import pytest
 import numpy as np
 
-from marmobox_listener import NumpyFloat32Encoder
+from callicog.marmobox_listener import NumpyFloat32Encoder
 
 
 class FloatEncoderTest(json.JSONEncoder):

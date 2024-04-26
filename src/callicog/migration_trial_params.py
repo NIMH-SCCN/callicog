@@ -1,5 +1,5 @@
-from marmobox_schema import Experiment, TrialParameter, db
-from task_builder import Outcome, Parameter
+from callicog.marmobox_schema import Experiment, TrialParameter, db
+from callicog.task_builder import Outcome, Parameter
 
 
 experiments = db.session.query(Experiment).filter(Experiment.animal_id == 2).all()

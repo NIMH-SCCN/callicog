@@ -1,4 +1,4 @@
-from task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
+from callicog.task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
 import random
 import numpy as np
 from itertools import combinations

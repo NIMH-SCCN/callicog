@@ -21,10 +21,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import true
 from sqlalchemy.sql.expression import text
 
-# NOTE: amending `sys.path` is only needed for importing modules from other
-# directories due to lack of a conventional Python package directory structure
-sys.path.append('..')
-from marmobox_schema import (
+from callicog.marmobox_schema import (
     db,
     Protocol,
     # Task,

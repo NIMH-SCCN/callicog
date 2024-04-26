@@ -10,8 +10,8 @@ from unittest.mock import MagicMock
 
 import zmq
 
-from communication import ZMQContextManager
-from marmobox import Marmobox
+from callicog.communication import ZMQContextManager
+from callicog.marmobox import Marmobox
 # from marmobox_listener import ListenerThread
 # from marmobox_listener import ListenerExit
 # from marmobox_listener import stop_event

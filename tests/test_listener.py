@@ -10,11 +10,11 @@ from unittest.mock import MagicMock
 import zmq
 
 # from communication import ZMQContextManager
-from marmobox_listener import ListenerThread
-from marmobox_listener import ListenerExit
-from marmobox_listener import stop_event
-from marmobox_listener import print_thread_log
-from marmobox_interface import MarmoboxInterface
+from callicog.marmobox_listener import ListenerThread
+from callicog.marmobox_listener import ListenerExit
+from callicog.marmobox_listener import stop_event
+from callicog.marmobox_listener import print_thread_log
+from callicog.marmobox_interface import MarmoboxInterface
 
 
 logger = logging.getLogger(__name__)

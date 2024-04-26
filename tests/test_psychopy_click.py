@@ -5,6 +5,9 @@ from datetime import datetime
 # from psychopy import core as ppy_core, visual, event
 # from psychopy.hardware import keyboard
 
+from callicog.tasks.touch2 import TaskInterface
+from callicog.marmobox_interface import MarmoboxInterface
+
 
 # This library is noisy so let's ignore it unless it throws WARNING or above
 logging.getLogger('PIL').setLevel(logging.WARNING)
@@ -35,8 +38,6 @@ logging.getLogger('PIL').setLevel(logging.WARNING)
 
 
 def test_touch2():
-    from tasks.touch2 import TaskInterface
-    from marmobox_interface import MarmoboxInterface
     arduino_port = 'dummy'
     window_size = (800, 600)
     is_dummy = True
