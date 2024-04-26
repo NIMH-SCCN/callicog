@@ -12,6 +12,8 @@ from flask import (
     request,
     redirect,
     make_response,
+    send_from_directory,
+    url_for,
 )
 from flask_cors import (
     CORS,
@@ -77,6 +79,16 @@ def isDateValid(datetime_string, format_string):
     except Exception:
         return False
     return True
+
+
+@app.route("/")
+def root():
+  return redirect(url_for("getAnimalList"))
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/animals', methods=['GET', 'POST'])
