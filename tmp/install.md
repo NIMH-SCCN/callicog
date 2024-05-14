@@ -145,24 +145,43 @@ is *required*, [per wxPython][wxpy_blog].
     cd ~/callicog
     python3 -m venv .venv
     source .venv/bin activate
+
     # Verify that when we invoke `python` now, it's the one in the venv:
     which python
+
     # Verify that it's still the correct version:
     python --version
     ```
 * Install CalliCog's dependencies into the virtual environment:
     ```sh
     pip install PsychoPy==2021.2.3 --no-deps
-    pip install Pillow pyserial numpy matplotlib pyqt5==5.14.0 pyyaml       \
+    pip install Pillow pyserial numpy==1.21.6 matplotlib pyqt5==5.14.0 pyyaml       \
         requests freetype-py pandas python-bidi pyglet==1.4.11 json-tricks  \
-        scipy packaging future imageio
-    pip install pyzmq
-    pip install pytest
-    pip install wxPython-4.2.0-cp38-cp38-linux_x86_64.whl 
-    cd callicog/
+        scipy packaging future imageio pyzmq pytest
+    ```
+
+* Continuing with installing dependencies, this one has historically been finnicky. See note below if this snippet fails to install:
+    ```sh
+    # Download the pre-built wheel for your Ubuntu version (22.04) and cPython (3.8):
+    pip download https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
+
+    # Install the wheel file you downloaded:
+    pip install wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
+
+    # Install libsdl, a dependency of wxPython:
+    sudo apt install libsdl2-2.0-0
+    ```
+
+* Run the `callicog` install script:
+
+   ```sh
+   pip install -e .
+   ```
+
+* Now let's run a test of CalliCog:
+    ```sh
     pytest tests/test_psychopy_click.py 
     pip uninstall numpy
-    pip install numpy==1.21.6
     pytest tests/test_psychopy_click.py 
     ```
 
