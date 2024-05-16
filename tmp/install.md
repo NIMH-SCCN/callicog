@@ -8,11 +8,10 @@ referring to official install instructions for Ubuntu is sufficient).
 
 ## Setting up the mini-PC
 
-### Installing on Ubuntu
+### Install Ubuntu
 
 * Create an [installation USB][ubuntu_usb]
 * Install Ubuntu via the USB drive
-
 
 #### Navigate Ubuntu graphical install process
 * Choose keyboard layout
@@ -50,7 +49,6 @@ mini-PC into the NIH network
         * Off
 * If updates are installed, reboot if prompted
 
-
 #### Disable Wayland (re-enable X)
 
 Most graphical Linux distros have for decades relied on a graphical system
@@ -83,13 +81,14 @@ x11
 ```
 
 
-#### Install required software
+### Install required software
 
 * Once running, open terminal and install tools:
+    ```shell
+    sudo apt install git screen vim stow
+    ```
 
-	`sudo apt install git screen vim stow`
-
-#### Clone the CalliCog repository
+### Clone the CalliCog repository
 
 Contributing users (e.g. SCCN users) need to create an SSH key in order to use
 the GitHub repository. While it is still private, this includes even cloning it
@@ -103,7 +102,6 @@ but only permissioned users will be able to push commits.
 	cd ~
 	git clone git@github.com:NIMH-SCCN/callicog.git
 	```
-
 
 #### Install required Python version using Pyenv
 
