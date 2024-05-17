@@ -1,7 +1,7 @@
 import click
 
 from callicog.marmobox_listener import _main as run_task_agent
-# from callicog.main import callicog_run
+from callicog.main import run_or_resume
 # from callicog.main import callicog_resume
 
 
@@ -110,7 +110,7 @@ def run(host, animal, template):
 @callicog.command()
 @click.argument('host', required=True)
 @click.argument('experiment', required=True, type=int)
-def resume(host, animal, template):
+def resume(host, experiment_id):
     """
     Resume an existing experiment.
 
@@ -120,9 +120,9 @@ def resume(host, animal, template):
 
     If you don't know the experiment id, find it using the CalliCog webapp.
     """
-    click.echo(f"RESUME experiment {experiment} on {host}")
+    click.echo(f"RESUME experiment {experiment_id} on {host}")
     # TODO: fix conflict with argparse and break args obj coupling
-    # callicog_resume(host, experiment)
+    run_or_resume(host, experiment_id=experiment_id)
 
 
 if __name__ == "__main__":
