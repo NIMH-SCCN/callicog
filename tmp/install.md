@@ -13,6 +13,7 @@ referring to official install instructions for Ubuntu is sufficient).
 * Create an [installation USB][ubuntu_usb]
 * Install Ubuntu via the USB drive
 
+
 #### Navigate Ubuntu graphical install process
 * Choose keyboard layout
     * English (US)
@@ -48,6 +49,7 @@ mini-PC into the NIH network
     * Location services
         * Off
 * If updates are installed, reboot if prompted
+
 
 #### Disable Wayland (re-enable X)
 
@@ -119,6 +121,7 @@ but only permissioned users will be able to push commits.
 	git clone git@github.com:NIMH-SCCN/callicog.git
 	```
 
+
 #### Install required Python version using Pyenv
 
 * Referring to [the Pyenv documentation][pyenv], install `pyenv`.
@@ -155,7 +158,7 @@ is *required*, [per wxPython][wxpy_blog].
 #### Build the CalliCog virtual environment
 
 * Create and activate the virtual environment:
-    ```shell
+    ```sh
     cd ~/callicog
     python3 -m venv .venv
     source .venv/bin/activate
@@ -171,16 +174,31 @@ is *required*, [per wxPython][wxpy_blog].
 * Install CalliCog's dependencies into the virtual environment:
     ```sh
     pip install PsychoPy==2021.2.3 --no-deps
-    pip install Pillow pyserial numpy matplotlib pyqt5==5.14.0 pyyaml       \
+    pip install Pillow pyserial numpy==1.21.6 matplotlib pyqt5==5.14.0 pyyaml       \
         requests freetype-py pandas python-bidi pyglet==1.4.11 json-tricks  \
-        scipy packaging future imageio
-    pip install pyzmq
-    pip install pytest
+        scipy packaging future imageio pyzmq pytest
+    ```
+
+* Continuing with installing dependencies, this one has historically been finnicky. See note below if this snippet fails to install:
+    ```sh
+    # Download the pre-built wheel for your Ubuntu version (22.04) and cPython (3.8):
+    pip download https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
+
+    # Install the wheel file you downloaded:
     pip install wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
-    cd callicog/
-    pytest tests/test_psychopy_click.py 
-    pip uninstall numpy
-    pip install numpy==1.21.6
+
+    # Install libsdl, a dependency of wxPython:
+    sudo apt install libsdl2-2.0-0
+    ```
+
+* Run the `callicog` install script:
+
+   ```sh
+   pip install -e .
+   ```
+
+* Now let's run a test of CalliCog:
+    ```sh
     pytest tests/test_psychopy_click.py 
     ```
 
@@ -200,6 +218,7 @@ is *required*, [per wxPython][wxpy_blog].
 	sudo ln -s ~/callicog/scripts/start_vncserver.sh
 	```
 
+* Disable screen lock/sleep: Settings > Privacy > Screen
 * Install CalliCog dependencies:
 
 	```shell
