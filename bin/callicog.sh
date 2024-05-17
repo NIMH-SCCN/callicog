@@ -1,1 +1,3 @@
-source ~/callicogenv/bin/activate && cd callicog && python main.py "$@"
+source ~/callicog/callicog.env      &&  \
+source $CALLICOG_VENV/bin/activate  &&  \
+callicog "$@"
