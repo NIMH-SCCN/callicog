@@ -4,15 +4,11 @@ import logging
 import logging.config
 
 from callicog.marmobox import Marmobox
-from callicog.webapp.flask_app import (
-    db,
-    app,
-)
 
 logger = logging.getLogger(__name__)
 
 SOCKET_PORT = 10000
-app.app_context().push()
+FLASK_APP_INIT = False
 
 
 def run_or_resume(
@@ -21,8 +17,22 @@ def run_or_resume(
         template_name=None,
         experiment_id=None,
         socket_port=SOCKET_PORT,
-        db_session=db.session
+        db_session=None
     ):
+    # Import this here since it is a dependency of the exec/control computer,
+    # but not the trial agent/miniPC. Will fail if run there, as Postgres is not
+    # installed.
+    # TODO: consider moving the logic of run_or_resume() into another module and
+    # simply invoking that module from within here, with some kind of lazy-init.
+    from callicog.webapp.flask_app import (
+        db,
+        app,
+    )
+    db_session = db_session or db.session
+    global FLASK_APP_INIT
+    if not FLASK_APP_INIT:
+        app.app_context().push()
+        FLASK_APP_INIT = True
     assert (animal_name and template_name) or experiment_id
     with Marmobox(host, socket_port, db_session) as box:
         if experiment_id:
