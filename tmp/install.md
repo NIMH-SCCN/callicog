@@ -80,6 +80,22 @@ x11
 # ^ you should see 'x11' here.
 ```
 
+* Disable screen lock/sleep: `Settings > Privacy > Screen`
+  * Blank Screen Delay:			`Never`
+  * Automatic Screen Lock:	`Off`
+
+NOTE: If for some reason disabling sleep in the GUI doesn't work, try:
+```shell
+gsettings set org.gnome.settings-daemon.plugins.power		\
+	sleep-inactive-ac-type 'nothing'
+gsettings set org.gnome.settings-daemon.plugins.power		\
+	sleep-inactive-battery-type 'nothing'
+gsettings set org.gnome.settings-daemon.plugins.power		\
+	sleep-inactive-ac-timeout 0
+sudo systemctl mask sleep.target suspend.target					\
+	hibernate.target hybrid-sleep.target
+```
+
 
 ### Install software
 
@@ -184,7 +200,6 @@ is *required*, [per wxPython][wxpy_blog].
 	sudo ln -s ~/callicog/scripts/start_vncserver.sh
 	```
 
-* Disable screen lock/sleep: Settings > Privacy > Screen
 * Install CalliCog dependencies:
 
 	```shell
