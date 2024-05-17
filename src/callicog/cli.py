@@ -22,11 +22,11 @@ def start():
 
 
 @start.command()
-@click.argument('port', default='ttyACM0')
+@click.option('--port', default='ttyACM0', help='USB port of Arduino reward module')
 @click.option('--width', default=1280, help='Width of the Psychopy window')
 @click.option('--height', default=720, help='Height of the Psychopy window')
 @click.option('--dummy', is_flag=True, help='No reward module')
-@click.option('--fullscreen', is_flag=True, default=True, help='Psychopy window is fullscreen')
+@click.option('--fullscreen', is_flag=True, default=False, help='Psychopy window is fullscreen')
 def agent(port, width, height, dummy, fullscreen):
     """
     Start a task agent to listen for, and run, commands from an executive machine.
@@ -39,8 +39,8 @@ def agent(port, width, height, dummy, fullscreen):
       $ xrandr --output HDMI-2 --mode "1280x720"
 
     """
-    click.echo("<<< stub: start callicog task agent aka listener >>>")
-    # run_task_agent(port, width, height, dummy, fullscreen)
+    # click.echo("<<< stub: start callicog task agent aka listener >>>")
+    run_task_agent(port, width, height, dummy, fullscreen)
 
 
 @start.command()

@@ -292,7 +292,6 @@ def _main(arduino_port, width, height, dummy, fullscreen):
     assert arduino_port
     assert width
     assert height
-    assert fullscreen
     window_size = (width, height)
     is_dummy = dummy
     is_fullscreen = fullscreen
