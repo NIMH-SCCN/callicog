@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=x11vnc
+Exec=bash -c "x11vnc -display :0" -T "x11vnc autostart complete."
+Terminal=true

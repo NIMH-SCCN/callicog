@@ -103,7 +103,7 @@ sudo systemctl mask sleep.target suspend.target					\
 
 * Once running, open terminal and install tools:
     ```sh
-    sudo apt install git screen vim stow
+    sudo apt install git x11vnc screen vim stow
     ```
 
 #### Clone the CalliCog repository
@@ -203,7 +203,19 @@ is *required*, [per wxPython][wxpy_blog].
     pytest tests/test_psychopy_click.py 
     ```
 
-#### Configure OS for use in CalliCog context
+A window should open with a colored square stimulus, simulating a task as presented on the touchscreen. Click within the window to advance the task. After 3 windows the test will end.  
+
+#### Setup auto-start
+
+Set the CalliCog shell environment variables, make the special `autostart` directory, and then create symlinks to the `*.desktop` files that run on startup.
+
+sh
+```
+source $HOME/callicog/.env
+mkdir $HOME/.config/autostart
+ln -s $CALLICOG_DIR/bin/install/callicog.desktop $HOME/.config/autostart/
+ln -s $CALLICOG_DIR/bin/install/vnc_autostart.desktop $HOME/.config/autostart/
+```
 
 
 ### Links
