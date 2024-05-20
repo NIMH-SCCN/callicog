@@ -125,5 +125,17 @@ def resume(host, experiment_id):
     run_or_resume(host, experiment_id=experiment_id)
 
 
+@callicog.command()
+@click.option('--port', default='ttyACM0', help='USB port of Arduino reward module')
+def flush(port):
+    """ Flush lines of reward module by running pump continuously.
+
+    Press Ctrl+C to stop.
+    """
+    from marmobox_IO import MarmoboxIO
+    reward_module = MarmoboxIO(port)
+    reward_module.flush()
+
+
 if __name__ == "__main__":
     callicog()
