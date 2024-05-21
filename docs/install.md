@@ -103,7 +103,7 @@ sudo systemctl mask sleep.target suspend.target					\
 
 * Once running, open terminal and install tools:
     ```sh
-    sudo apt install git x11vnc screen vim stow
+    sudo apt install git x11vnc openssh-client openssh-server screen vim stow
     ```
 
 #### Clone the CalliCog repository

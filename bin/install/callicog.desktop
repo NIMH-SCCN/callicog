@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
 Name=CalliCog Task Agent
-Exec=bash -c "cd $HOME/callicog && source .env && source $CALLICOG_VENV/bin/activate && callicog start agent --dummy; bash" -T "CalliCog Task Agent started..."
+Exec=bash -c "cd $HOME/callicog && ./bin/start_task_agent.sh; bash" -T "CalliCog Task Agent started..."
 Terminal=true
