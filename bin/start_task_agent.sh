@@ -20,5 +20,6 @@ callicog start agent	\
   --port=ttyACM0	\
   --width=1280		\
   --height=720		\
-  --dummy		\
+# Uncomment to test w/o reward module:
+#  --dummy		\	
   --fullscreen
