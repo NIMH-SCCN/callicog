@@ -428,7 +428,7 @@ class Marmobox:
             # NOTE: this is not best practice, but probably was necessary
             # given the non-standard package structure of this Python repo.
             # Import the submodule with the given `protocol_name`:
-            mod = __import__(f'tasks.{current_task.template_protocol.protocol.protocol_name}', fromlist=['TaskInterface'])
+            mod = __import__(f'callicog.tasks.{current_task.template_protocol.protocol.protocol_name}', fromlist=['TaskInterface'])
             task_interface = getattr(mod, 'TaskInterface')()
             task_interface.generate_trials()
 

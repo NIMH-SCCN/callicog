@@ -102,9 +102,7 @@ def run(host, animal, template):
     The animal and the template must already exist in the database. If they
     don't yet, create them via the CalliCog webapp.
     """
-    click.echo(f"RUN new {template} experiment with {animal} on {host}")
-    # TODO: fix conflict with argparse and break args obj coupling
-    # callicog_run(host, animal, template)
+    run_or_resume(host, animal, template)
 
 
 @callicog.command()
