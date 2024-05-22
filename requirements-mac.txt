@@ -1,0 +1,25 @@
+pyglet<1.6
+numpy==1.21.6
+Pillow
+pyserial
+matplotlib
+pyyaml
+requests
+freetype-py
+pandas
+python-bidi
+json-tricks
+scipy
+packaging
+future
+imageio
+pyzmq
+pytest
+click
+
+# Mac
+wxPython==4.2.0
+flask
+flask-cors
+flask-sqlalchemy
+psycopg2
