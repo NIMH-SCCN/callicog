@@ -114,12 +114,23 @@ source .venv/bin/activate
 
 Install the required packages:
 ```sh
-pip install --update pip
+pip install --upgrade pip
 pip install PsychoPy==2021.2.3 --no-deps
 pip install -r requirements.exec.txt
 # Install the CalliCog package:
 pip install -e .
 ```
+
+## Test CalliCog
+
+Run the CalliCog task "demo":
+
+```sh
+source .venv/bin/activate
+callicog start demo
+```
+
+**TODO** Figure out why PsychoPy seems to try and load when I simply execute `callicog --help`, it shouldn't even be being imported except for commands that require it.
 
 ### Why do it this way?
 CalliCog uses the powerful, open-source [PsychoPy](ppy) as its cognitive task
