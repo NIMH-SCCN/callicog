@@ -11,16 +11,20 @@ Once it has been installed, refer to the output and follow any post-install inst
 ```sh
 brew install git
 
-git configure --global user.name "<user>@<computer name here>"
+git configure --global user.name "sccn@<computer name here>"
 # Including computer name is helpful for keeping track of the origin of changes when some code edits are made
 # from a shared environment
 git configure --global user.email "<email address here>"
 ```
 
-## Install Postgres
+## Install, configure Postgres
 
 ```sh
 brew install postgresql@15
+brew services start postgresql@15
+brew link postgresql@15 --force
+/opt/homebrew/bin/createuser -s postgres
+# ^ via: https://stackoverflow.com/questions/15301826/psql-fatal-role-postgres-does-not-exist
 ```
 
 ## Database setup
@@ -31,57 +35,68 @@ backend for the webapp. If you don't need either on this machine, skip this
 step (e.g. if you only want demo the software or are developing tasks).
 
 ### Create the database
-CalliCog was built for use with Postgres.
+CalliCog was built for use with Postgres. You can likely use another RDBMS, but it will require some customization.
 
 If not already installed, install Postgres 15 or newer. For installation on a
 MacOS host, [we recommend using brew](TODO insert link).
 
 TODO consider how to make $USER universal for README
 
-To create a new instance of the CalliCog database.
-- TODO finish this
+```sh
+# Create `sccn` user:
+psql -U postgres -c "CREATE ROLE sccn WITH SUPERUSER LOGIN"
+# Create database:
+createdb -U sccn callicog
+```
 
 ## Install CalliCog
 
-CalliCog requires Python 3.8. We recommend using [pyenv](pyenv), for control
-and isolation of different Python builds on a single machine. CalliCog has been
+### Install Pyenv (recommended)
+We recommend using pyenv, for control and isolation of different Python builds on a single machine.
+
+* Install [pyenv](pyenv_install)
+* [Configure shell environment](pyenv_cfg) for pyenv
+
+CalliCog has been
 tested using Python `3.8.19`.
 
-To install Python 3.8.19 using `pyenv`:
+### Install Python (if needed)
 
-```
+**REQUIRED:** Python 3.8
+
+CalliCog uses PsychoPy, which has a [narrow band of Python version support](ppy_py_vers). CalliCog has been tested with and supports Python 3.8.
+
+Install Python 3.8.19 (if using `pyenv`):
+
+```sh
 # NOTE: wxPython *requires* Python to be built with --enable-shared option
 env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.19
 ```
 
-Open a terminal window and `cd` to the directory you want to install into.
-Clone the repository.
+### Clone, set up repository
 
-```
-# Clone the repository
+```sh
 git clone git@github.com:NIMH-SCCN/callicog.git
-# cd into the repository dir
 cd callicog
-```
 
-If using pyenv:
-```
-# Set the directory-local Python
+# If using `pyenv`, set the directory-local Python:
 pyenv local 3.8.19
-```
 
-```
 # Confirm local Python version is 3.8
 python --version
-# Run the virtualenv install script
-./bin/install/dependencies-mac.sh
-```
 
-- Install 
-- build python 3.8
-- set local python
-- create venv
-- activate
+# Create the virtual environment:
+python -m venv .venv
+
+# Activate the virtual environment:
+source .venv/bin/activate
+
+# Install the required packages:
+pip install PsychoPy==2021.2.3 --no-deps
+pip install -r requirements.exec.txt
+# Install the CalliCog package:
+pip install -e .
+```
 
 ### Why do it this way?
 CalliCog uses the powerful, open-source [PsychoPy](ppy) as its cognitive task
@@ -89,15 +104,10 @@ engine. PsychoPy has [dependencies that can be difficult to wrangle](ppy_deps)
 and which [effectively limit compatible Python versions](ppy_py_vers). For this
 reason, CalliCog cannot be installed conventionally via e.g.
 `pip install callicog`, but is instead installed as above.
-```
-pip install PsychoPy==2021.2.3 --no-deps
-pip install "pyglet<1.6"
-pip install numpy==1.21.6
-pip install Pillow pyserial matplotlib pyyaml requests freetype-py \
-  pandas python-bidi json-tricks scipy packaging future imageio
-pip install wxPython==4.2.0
-pip install pyzmq pytest
-cd callicog/
-pytest tests/test_psychopy_click.py 
-```
 
+
+[pyenv_install]: https://github.com/pyenv/pyenv?tab=readme-ov-file#installation
+[pyenv_cfg]: https://github.com/pyenv/pyenv?tab=readme-ov-file#set-up-your-shell-environment-for-pyenv
+[ppy]: TODO
+[ppy_deps]: TODO
+[ppy_py_vers]: TODO insert ppy forum post link here
