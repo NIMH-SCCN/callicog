@@ -57,7 +57,7 @@ We recommend using `pyenv`, for control and isolation of different Python builds
 Install [pyenv](pyenv_install).
 
 ```sh
-# Install via Homebrew (see Pyenv docs for other install methods)
+# Install via Homebrew. See Pyenv docs for other install methods.
 brew update
 brew install pyenv
 ```
@@ -65,7 +65,7 @@ brew install pyenv
 **IMPORTANT** After installing `pyenv`, [configure your shell environment](pyenv_cfg).
 
 ```sh
-# Example for .zsh (default shell of MacOS):
+# Example for .zsh, the default shell of MacOS:
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
 echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
 echo 'eval "$(pyenv init -)"' >> ~/.zshrc
