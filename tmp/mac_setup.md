@@ -87,15 +87,21 @@ Install Python 3.8.19 (if using `pyenv`):
 env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.19
 ```
 
-### Clone, set up repository
+### Clone repository
 
 ```sh
 git clone git@github.com:NIMH-SCCN/callicog.git
 cd callicog
+```
 
-# If using `pyenv`, set the directory-local Python:
+### Set up virtual environment
+
+If using `pyenv`, set the directory-local Python:
+```sh
 pyenv local 3.8.19
+```
 
+```sh
 # Confirm local Python version is 3.8
 python --version
 
@@ -108,6 +114,7 @@ source .venv/bin/activate
 
 Install the required packages:
 ```sh
+pip install --update pip
 pip install PsychoPy==2021.2.3 --no-deps
 pip install -r requirements.exec.txt
 # Install the CalliCog package:
