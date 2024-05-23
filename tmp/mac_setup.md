@@ -1,5 +1,28 @@
 # CalliCog setup - MacOS
 
+## Install Homebrew
+
+Go to the [Homebrew website](https://brew.sh/) and follow the instructions to install Homebrew.
+
+Once it has been installed, refer to the output and follow any post-install instructions (e.g. adding `brew` to `.zshrc`).
+
+## Install, configure Git
+
+```sh
+brew install git
+
+git configure --global user.name "<user>@<computer name here>"
+# Including computer name is helpful for keeping track of the origin of changes when some code edits are made
+# from a shared environment
+git configure --global user.email "<email address here>"
+```
+
+## Install Postgres
+
+```sh
+brew install postgresql@15
+```
+
 ## Database setup
 
 ### When is a database instance required?
