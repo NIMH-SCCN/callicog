@@ -104,8 +104,10 @@ python -m venv .venv
 
 # Activate the virtual environment:
 source .venv/bin/activate
+```
 
-# Install the required packages:
+Install the required packages:
+```sh
 pip install PsychoPy==2021.2.3 --no-deps
 pip install -r requirements.exec.txt
 # Install the CalliCog package:
