@@ -52,10 +52,24 @@ createdb -U sccn callicog
 ## Install CalliCog
 
 ### Install Pyenv (recommended)
-We recommend using pyenv, for control and isolation of different Python builds on a single machine.
+We recommend using `pyenv`, for control and isolation of different Python builds on a single machine.
 
-* Install [pyenv](pyenv_install)
-* [Configure shell environment](pyenv_cfg) for pyenv
+Install [pyenv](pyenv_install).
+
+```sh
+# Install via Homebrew (see Pyenv docs for other install methods)
+brew update
+brew install pyenv
+```
+
+**IMPORTANT** After installing `pyenv`, [configure your shell environment](pyenv_cfg).
+
+```sh
+# Example for .zsh (default shell of MacOS):
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+```
 
 CalliCog has been
 tested using Python `3.8.19`.
