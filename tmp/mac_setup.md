@@ -82,8 +82,8 @@ CalliCog uses PsychoPy, which has a [narrow band of Python version support](ppy_
 
 Install Python 3.8.19 (if using `pyenv`):
 
+**NOTE**: wxPython *requires* Python to be built with --enable-shared option.
 ```sh
-# NOTE: wxPython *requires* Python to be built with --enable-shared option
 env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.19
 ```
 
