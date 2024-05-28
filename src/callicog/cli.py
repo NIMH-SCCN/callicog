@@ -67,8 +67,6 @@ def _demo(height=800, width=600, arduino_port='dummy'):
     trial_agent.initialize()
     for trial_params in touch2.trials:
         trial_windows = touch2.build_trial(trial_params)
-        #assert trial_windows[0].ppy_window
-            #.mouseVisible in (True, False)
         semantically_different_trial_params = {'trial_windows': trial_windows}
         result = trial_agent.run_trial(semantically_different_trial_params)
     return result
@@ -108,7 +106,7 @@ def run(host, animal, template):
 @callicog.command()
 @click.argument('host', required=True)
 @click.argument('experiment', required=True, type=int)
-def resume(host, experiment_id):
+def resume(host, experiment):
     """
     Resume an existing experiment.
 
@@ -118,9 +116,7 @@ def resume(host, experiment_id):
 
     If you don't know the experiment id, find it using the CalliCog webapp.
     """
-    click.echo(f"RESUME experiment {experiment_id} on {host}")
-    # TODO: fix conflict with argparse and break args obj coupling
-    run_or_resume(host, experiment_id=experiment_id)
+    run_or_resume(host, experiment_id=experiment)
 
 
 @callicog.command()
