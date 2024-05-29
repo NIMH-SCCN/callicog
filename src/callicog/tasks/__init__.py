@@ -1,4 +1,4 @@
 import pathlib
 
 
-IMAGE_DIR = pathlib.Path(__file__).parent/"images"
+IMAGE_DIR = pathlib.Path("src/callicog/tasks/images")
