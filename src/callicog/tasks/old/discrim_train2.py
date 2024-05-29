@@ -1,3 +1,4 @@
+from callicog.tasks import IMAGE_DIR
 from callicog.task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome
 import random
 import numpy as np
