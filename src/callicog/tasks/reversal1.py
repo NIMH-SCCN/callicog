@@ -27,9 +27,9 @@ class TaskInterface(TaskStructure):
         w2 = Window(transition=WindowTransition.MAINTAIN, is_outcome=True, timeout=2)
         # Duration for stimuli to remain displayed after screen is touched
         w2.post_touch_delay = 1
-        reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite4-2.jpg', color = (1,1,1), size_touch=(250,250))
+        reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = IMAGE_DIR/'composite4-2.jpg', color = (1,1,1), size_touch=(250,250))
         reward_stim.after_touch = [{'name': 'hide_other'}]
-        penalty_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = 'tasks/images/composite4-1.jpg', color = (1,1,1), size_touch=(250,250))
+        penalty_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = IMAGE_DIR/'composite4-1.jpg', color = (1,1,1), size_touch=(250,250))
         penalty_stim.after_touch = [{'name': 'hide_other'}]
         reward_stim.position = trial_parameters[Parameter.POSITION]
         reward_stim.outcome = Outcome.SUCCESS
