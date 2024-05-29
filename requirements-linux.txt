@@ -1,0 +1,19 @@
+pyglet<1.5  # This might be <1.6 on Ubuntu 22?
+numpy==1.21.6
+Pillow
+pyserial
+matplotlib
+pyyaml
+requests
+freetype-py
+pandas
+python-bidi
+json-tricks
+scipy
+packaging
+future
+imageio
+pyzmq
+pytest
+click
+flask-sqlalchemy
