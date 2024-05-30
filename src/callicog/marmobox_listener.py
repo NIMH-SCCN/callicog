@@ -14,6 +14,7 @@ import pickle
 import signal
 import time
 import queue
+import pathlib
 
 import numpy as np
 import zmq
@@ -92,7 +93,14 @@ class NumpyFloat32Encoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.float32):
             return float(obj)
-        return json.JSONEncoder.default(obj)
+        elif isinstance(obj, pathlib.Path):
+            return str(obj)
+        else:
+            try:
+                return super().default(obj)
+            except Exception as exc:
+                logger.error(exc)
+                raise exc
 
 
 class ListenerExit(Exception):
