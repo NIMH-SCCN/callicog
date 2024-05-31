@@ -69,7 +69,7 @@ class TaskInterface(TaskStructure):
             stimulus.position = position
             target = stimulus
             target.outcome = Outcome.SUCCESS
-            window = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout = 18)
+            window = Window(transition=WindowTransition.TOUCH, is_outcome=True)
             # Spacer
             spacer = Window(blank=2)
             for distractor in distractors:
@@ -85,7 +85,7 @@ class TaskInterface(TaskStructure):
             distractors.append(distractor)   
                 
         # Penalty window
-        pw = Window(blank=6)
+        pw = Window(blank=5)
 
         return [w1] + trial_sequence + [spacer, pw]
 
