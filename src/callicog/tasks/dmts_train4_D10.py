@@ -1,5 +1,5 @@
-from callicog.task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome, Parameter
-from callicog.task_structure import TaskStructure
+from task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome, Parameter
+from task_structure import TaskStructure
 import random
 import copy
 
