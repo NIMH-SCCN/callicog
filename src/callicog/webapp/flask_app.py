@@ -51,14 +51,14 @@ logger.addHandler(console_handler)
 DATE_FORMAT = '%d/%m/%Y'
 TIME_FORMAT = '%H:%M:%S'
 
-DEFAULT_DB_URL = 'postgresql:///marmodb'
+DEFAULT_DB_URL = 'postgresql:///callicog'
 
 # Attempt to read database location from environment variable:
 db_url = os.environ.get('CALLICOG_DB_URL', None)
 if not db_url:
     logger.info(
         'Use'
-        ' `export CALLICOG_DB_URL=postgresql://<user>@<host>:5432/marmodb`'
+        ' `export CALLICOG_DB_URL=postgresql://<user>@<host>:5432/callicog`'
         ' before running this command if you want your webapp to point to'
         ' a non-local database instance.'
     )
