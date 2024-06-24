@@ -5,6 +5,10 @@
 #define STEP 8
 #define ENA 2
 
+#define MS1 4
+#define MS2 5
+#define MS3 6
+
 #include <SPI.h>
 
 int pot_CS = 10;
@@ -33,18 +37,27 @@ void setup() {
   pinMode(DIR, OUTPUT);
   pinMode(STEP, OUTPUT);
   pinMode(ENA, OUTPUT);
+  pinMode(MS1, OUTPUT);
+  pinMode(MS2, OUTPUT);
+  pinMode(MS3, OUTPUT);
   digitalWrite(DIR, HIGH);
   digitalWrite(ENA, HIGH);
   //digitalWrite(STEP, LOW);
+
+  // Configure Big Easy Driver in FULL STEP mode
+  // See mode table here: https://learn.sparkfun.com/tutorials/big-easy-driver-hookup-guide
+  digitalWrite(MS1, LOW);
+  digitalWrite(MS2, LOW);
+  digitalWrite(MS3, LOW);
 }
 
 void loop() {
+  // Loop for bench testing:
   correct(correct_frequency, correct_volume, duration_ms, dosage_amount);
   delay(5000);
   incorrect(incorrect_frequency, incorrect_volume, duration_ms);
   delay(5000);
 }
-
 
 void correct(int frequency, int volume, int duration_ms, float dosage_amount) {
   playTone(frequency, volume, duration_ms);
