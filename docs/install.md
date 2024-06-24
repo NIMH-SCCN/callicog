@@ -103,7 +103,7 @@ sudo systemctl mask sleep.target suspend.target					\
 
 * Once running, open terminal and install tools:
     ```sh
-    sudo apt install git x11vnc openssh-client openssh-server screen vim stow
+    sudo apt install git x11vnc openssh-client openssh-server screen curl vim stow
     ```
 
 #### Clone the CalliCog repository
@@ -174,9 +174,8 @@ is *required*, [per wxPython][wxpy_blog].
 * Install CalliCog's dependencies into the virtual environment:
     ```sh
     pip install PsychoPy==2021.2.3 --no-deps
-    pip install Pillow pyserial numpy==1.21.6 matplotlib pyqt5==5.14.0 pyyaml       \
-        requests freetype-py pandas python-bidi pyglet==1.4.11 json-tricks  \
-        scipy packaging future imageio pyzmq pytest Click
+    # Install most other requirements from file:
+    pip install -r requirements-linux.txt
     ```
 
 * Continuing with installing dependencies, this one has historically been finnicky. See note below if this snippet fails to install:
@@ -200,21 +199,31 @@ is *required*, [per wxPython][wxpy_blog].
 
 * Now let's run a test of CalliCog:
     ```sh
-    pytest tests/test_psychopy_click.py 
+    pytest tests/test_psychopy_click.py
     ```
 
-A window should open with a colored square stimulus, simulating a task as presented on the touchscreen. Click within the window to advance the task. After 3 windows the test will end.  
+A window should open with a colored square stimulus, simulating a task as presented on the touchscreen. Click within the window to advance the task. After 3 windows the test will end.
 
 #### Setup auto-start
 
 Set the CalliCog shell environment variables, make the special `autostart` directory, and then create symlinks to the `*.desktop` files that run on startup.
 
-sh
+``` sh
+# First, create a local .env file from template:
+cd $HOME/callicog
+cp .env.template .env
+# Now, open .env in your preferred editor and determine if you need to
+# edit any values, such as the display interface (corresponding to which port
+# your display is plugged into), your CalliCog install directory, etc.
 ```
+
+Now that our `.env` environment configuration file is setup, we can:
+
+``` sh
 source $HOME/callicog/.env
 mkdir $HOME/.config/autostart
 ln -s $CALLICOG_DIR/bin/install/callicog.desktop $HOME/.config/autostart/
-ln -s $CALLICOG_DIR/bin/install/vnc_autostart.desktop $HOME/.config/autostart/
+ln -s $CALLICOG_DIR/bin/install/x11vnc.desktop $HOME/.config/autostart/
 ```
 
 
