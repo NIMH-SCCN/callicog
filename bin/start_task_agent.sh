@@ -10,6 +10,9 @@ model_info=$(hostnamectl | grep "Hardware Model")
 if [[ $model_info =~ "NUC" ]]; then
   # Running on Intel NUC
   xrandr --output $CALLICOG_DISPLAY --mode "1280x720"
+elif [[ $model_info =~ "Meerkat" ]]; then
+  # Running on System76 Meerkat (also Intel NUC)
+  xrandr --output $CALLICOG_DISPLAY --mode "1280x720"
 else
   :  # pass
 fi
@@ -20,6 +23,11 @@ callicog start agent	\
   --port=ttyACM0	\
   --width=1280		\
   --height=720		\
-# Uncomment to test w/o reward module:
-#  --dummy		\	
+  --dummy		\
   --fullscreen
+
+
+# !!! NOTE !!! for debugging/dev, to run without a reward module,
+# add this line above the --fullscreen line:
+#
+#  --dummy		\
