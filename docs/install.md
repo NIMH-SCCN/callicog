@@ -8,11 +8,15 @@ referring to official install instructions for Ubuntu is sufficient).
 
 ## Setting up the mini-PC
 
-### Install Ubuntu
+### Install Ubuntu 22.04
 
 * Create an [installation USB][ubuntu_usb]
+    * **NOTE** Ubuntu 22.04 is the latest version supported, due to PsychoPy's
+      dependency on [wxPython][wxpython_ubuntu]
 * Install Ubuntu via the USB drive
-
+    * Plug in the USB installer
+    * Boot the computer
+    * When prompted, choose "Try/Install Ubuntu"
 
 #### Navigate Ubuntu graphical install process
 * Choose keyboard layout
@@ -25,8 +29,9 @@ mini-PC into the NIH network
     * Minimal installation
     * Download updates while installing Ubuntu
     * Install third-party software for graphicxs and Wi-Fi hardware...
-    * Configure secure boot with password "marmoset"
+    * (If prompted) Configure secure boot with password "marmoset"
 * Erase disk and install Ubuntu > Continue
+    * Confirm: Yes, erase and continue
 * Select timezone (New York)
 * Who are you?
     * Your name: ""
@@ -59,7 +64,9 @@ being sunsetted in favor of a newer, more robust system called Wayland. Wayland
 is now the default graphics system in Ubuntu--but CalliCog is built on systems
 that are built on X, so we need to re-enable it. Fortunately, this is easy.
 
-Open a terminal and edit a configuration file with your preferred editor:
+Open a terminal and edit this configuration file with your preferred editor.
+(For help using the default text editor `nano`, refer to this [cheat
+sheet][nano_cheat].)
 
 ```sh
 sudo editor /etc/gdm3/custom.conf
@@ -83,19 +90,19 @@ x11
 ```
 
 * Disable screen lock/sleep: `Settings > Privacy > Screen`
-  * Blank Screen Delay:		`Never`
-  * Automatic Screen Lock:	`Off`
+  * Blank Screen Delay:     `Never`
+  * Automatic Screen Lock:  `Off`
 
 NOTE: If for some reason disabling sleep in the GUI doesn't work, try:
 ```sh
-gsettings set org.gnome.settings-daemon.plugins.power		\
-	sleep-inactive-ac-type 'nothing'
-gsettings set org.gnome.settings-daemon.plugins.power		\
-	sleep-inactive-battery-type 'nothing'
-gsettings set org.gnome.settings-daemon.plugins.power		\
-	sleep-inactive-ac-timeout 0
-sudo systemctl mask sleep.target suspend.target					\
-	hibernate.target hybrid-sleep.target
+gsettings set org.gnome.settings-daemon.plugins.power       \
+    sleep-inactive-ac-type 'nothing'
+gsettings set org.gnome.settings-daemon.plugins.power       \
+    sleep-inactive-battery-type 'nothing'
+gsettings set org.gnome.settings-daemon.plugins.power       \
+    sleep-inactive-ac-timeout 0
+sudo systemctl mask sleep.target suspend.target                 \
+    hibernate.target hybrid-sleep.target
 ```
 
 
@@ -103,42 +110,43 @@ sudo systemctl mask sleep.target suspend.target					\
 
 * Once running, open terminal and install tools:
     ```sh
-    sudo apt install git x11vnc openssh-client openssh-server screen curl vim stow
+    sudo apt install git curl x11vnc openssh-client openssh-server screen vim stow
     ```
 
 #### Clone the CalliCog repository
 
 Contributing users (e.g. SCCN users) need to create an SSH key in order to use
-the GitHub repository. While it is still private, this includes even cloning it
-in the first place. Once we make it public, anyone will be able to clone it,
-but only permissioned users will be able to push commits.
+the GitHub repository. **TODO** While it is still private, this includes even
+cloning it in the first place. Once we make it public, anyone will be able to
+clone it, but only permissioned users will be able to push commits.
 
 * [Create an SSH key][new_ssh], add it to the `ssh-agent`
 * [Add the SSH key][add_ssh] to your GitHub account
 * Clone CalliCog repo:
-	```sh
-	cd ~
-	git clone git@github.com:NIMH-SCCN/callicog.git
-	```
-
+    ```sh
+    cd ~
+    git clone git@github.com:NIMH-SCCN/callicog.git
+    ```
 
 #### Install required Python version using Pyenv
 
 * Referring to [the Pyenv documentation][pyenv], install `pyenv`.
   * Edit your `.bashrc` and/or other configuration files as advised by the 
 Pyenv installer.
+    * For help using the default text editor `nano`, refer to this [cheat
+      sheet][nano_cheat]
     * This adds the `pyenv` install directory to your `$PATH`, so your shell
 will know where to look to find it when you type the command "pyenv" on the
 command line
 * Install Python build dependencies (required when Pyenv tries to build a
 Python version). [Documentation is here][py_build_deps]. 
-	```sh
+    ```sh
     # NOTE: if you run into a Python build issue, refer to the Pyenv
     # documentation; these build dependencies could change with time.
-	sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
-	libbz2-dev libreadline-dev libsqlite3-dev curl libncursesw5-dev xz-utils \
+    sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev curl libncursesw5-dev xz-utils \
     tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
-	```
+    ```
 * Install the required Python version, 3.8.19. NOTE: `--enable-shared` argument
 is *required*, [per wxPython][wxpy_blog].
     ```sh
@@ -178,7 +186,10 @@ is *required*, [per wxPython][wxpy_blog].
     pip install -r requirements-linux.txt
     ```
 
-* Continuing with installing dependencies, this one has historically been finnicky. See note below if this snippet fails to install:
+* Continuing with installing dependencies, this one has historically been
+  finnicky. See note below if this snippet fails to install:
+
+* **TODO** figure out way to avoid downloaded files being deposited in 
     ```sh
     # Download the pre-built wheel for your Ubuntu version (22.04) and cPython (3.8):
     pip download https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
@@ -193,44 +204,52 @@ is *required*, [per wxPython][wxpy_blog].
 * Install the `callicog` package in editable mode:
 
    ```sh
-   # This invokes setup.py, enabling the `callicog` CLI command, among other things
+   # This invokes setup.py, enabling the `callicog` CLI command, among other
+things
    pip install -e .
    ```
 
 * Now let's run a test of CalliCog:
     ```sh
-    pytest tests/test_psychopy_click.py
+    pytest tests/test_psychopy_click.py 
     ```
 
-A window should open with a colored square stimulus, simulating a task as presented on the touchscreen. Click within the window to advance the task. After 3 windows the test will end.
+A window should open with a colored square stimulus, simulating a task as
+presented on the touchscreen. Click within the window to advance the task.
+After 3 windows the test will end.  
 
 #### Setup auto-start
 
-Set the CalliCog shell environment variables, make the special `autostart` directory, and then create symlinks to the `*.desktop` files that run on startup.
+Set the CalliCog shell environment variables, make the special `autostart`
+directory, and then create symlinks to the `*.desktop` files that run on
+startup.
 
-``` sh
-# First, create a local .env file from template:
-cd $HOME/callicog
-cp .env.template .env
-# Now, open .env in your preferred editor and determine if you need to
-# edit any values, such as the display interface (corresponding to which port
-# your display is plugged into), your CalliCog install directory, etc.
+sh
 ```
-
-Now that our `.env` environment configuration file is setup, we can:
-
-``` sh
 source $HOME/callicog/.env
 mkdir $HOME/.config/autostart
 ln -s $CALLICOG_DIR/bin/install/callicog.desktop $HOME/.config/autostart/
-ln -s $CALLICOG_DIR/bin/install/x11vnc.desktop $HOME/.config/autostart/
+ln -s $CALLICOG_DIR/bin/install/vnc_autostart.desktop $HOME/.config/autostart/
 ```
 
 
 ### Links
-[ubuntu_usb]: https://askubuntu.com/questions/1398432/how-to-burn-an-iso-file-to-a-usb "Install Ubuntu via USB"
-[new_ssh]: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent "Generating a new SSH key"
-[add_ssh]: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account "Add an SSH key to your GitHub account"
+[nano_cheat]:
+https://web.archive.org/web/20240201142800/https://itsfoss.com/content/images/wordpress/2020/05/nano-cheatsheet.png
+"Nano editor cheat sheet"
+[wxpython_ubuntu]: https://extras.wxpython.org/wxPython4/extras/linux/gtk3/
+"wxPython versions available for Ubuntu"
+[ubuntu_usb]:
+https://askubuntu.com/questions/1398432/how-to-burn-an-iso-file-to-a-usb
+"Install Ubuntu via USB"
+[new_ssh]:
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+"Generating a new SSH key"
+[add_ssh]:
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+"Add an SSH key to your GitHub account"
 [pyenv]: https://github.com/pyenv/pyenv
-[py_build_deps]: https://github.com/pyenv/pyenv/wiki#suggested-build-environment
-[wxpy_blog]: https://wxpython.org/blog/2017-08-17-builds-for-linux-with-pip/index.html
+[py_build_deps]:
+https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+[wxpy_blog]:
+https://wxpython.org/blog/2017-08-17-builds-for-linux-with-pip/index.html
