@@ -17,7 +17,7 @@ class TaskInterface(TaskStructure):
 # Defining possible stimuli
     def init_parameters(self):
         self.possible_stimulus_list = [
-            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = f'tasks/images/drst2/drst{i}.jpg', color = (1,1,1), size_touch = (200,200))
+            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = f'src/callicog/tasks/images/drst2/drst{i}.jpg', color = (1,1,1), size_touch = (200,200))
             for i in range(1,100)
         ]    
         #stimulus_list = random.sample(self.possible_stimulus_list, 8)
