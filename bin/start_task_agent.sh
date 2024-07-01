@@ -23,9 +23,7 @@ callicog start agent	\
   --port=ttyACM0	\
   --width=1280		\
   --height=720		\
-  --dummy		\
   --fullscreen
-
 
 # !!! NOTE !!! for debugging/dev, to run without a reward module,
 # add this line above the --fullscreen line:
