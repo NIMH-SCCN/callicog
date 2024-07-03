@@ -58,12 +58,12 @@ env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.19
 ### Clone repository
 ```sh
 git clone git@github.com:NIMH-SCCN/callicog.git
-cd callicog
 ```
 
 ### Set up virtual environment
 If using `pyenv`, set the directory-local Python:
 ```sh
+cd callicog
 pyenv local 3.8.19
 ```
 
