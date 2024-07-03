@@ -27,28 +27,6 @@ brew link postgresql@15 --force
 # ^ via: https://stackoverflow.com/questions/15301826/psql-fatal-role-postgres-does-not-exist
 ```
 
-## Database setup
-
-### When is a database instance required?
-A CalliCog database instance is required for execution of commands and as the
-backend for the webapp. If you don't need either on this machine, skip this
-step (e.g. if you only want demo the software or are developing tasks).
-
-### Create the database
-CalliCog was built for use with Postgres. You can likely use another RDBMS, but it will require some customization.
-
-If not already installed, install Postgres 15 or newer. For installation on a
-MacOS host, [we recommend using brew](TODO insert link).
-
-TODO consider how to make $USER universal for README
-
-```sh
-# Create `sccn` user:
-psql -U postgres -c "CREATE ROLE sccn WITH SUPERUSER LOGIN"
-# Create database:
-createdb -U sccn callicog
-```
-
 ## Install CalliCog
 
 ### Install Pyenv (recommended)
@@ -121,6 +99,23 @@ pip install -r requirements.exec.txt
 pip install -e .
 ```
 
+### Create .env shell configuration file
+
+```sh
+# Enter your repo directory, e.g.:
+cd ~/callicog
+# Copy the .env.template to create the environment configuration file for this instance
+cp .env.template .env \
+&& echo "\n\n    Done. Now edit your .env file if customization needed for this environment (e.g. directory location, database name etc)."
+```
+
+### Why do it this way?
+CalliCog uses the powerful, open-source [PsychoPy](ppy) as its cognitive task
+engine. PsychoPy has [dependencies that can be difficult to wrangle](ppy_deps)
+and which [effectively limit compatible Python versions](ppy_py_vers). For this
+reason, CalliCog cannot be installed conventionally via e.g.
+`pip install callicog`, but is instead installed as above.
+
 ## Test CalliCog
 
 Run the CalliCog task "demo":
@@ -130,14 +125,24 @@ source .venv/bin/activate
 callicog start demo
 ```
 
-**TODO** Figure out why PsychoPy seems to try and load when I simply execute `callicog --help`, it shouldn't even be being imported except for commands that require it.
+## Database setup
 
-### Why do it this way?
-CalliCog uses the powerful, open-source [PsychoPy](ppy) as its cognitive task
-engine. PsychoPy has [dependencies that can be difficult to wrangle](ppy_deps)
-and which [effectively limit compatible Python versions](ppy_py_vers). For this
-reason, CalliCog cannot be installed conventionally via e.g.
-`pip install callicog`, but is instead installed as above.
+### When is a database instance required?
+A CalliCog database instance is required for execution of commands and as the
+backend for the webapp. If you don't need either on this machine, skip this
+step (e.g. if you only want demo the software or are developing tasks).
+
+### Create the database
+CalliCog was built for use with Postgres. You can likely use another RDBMS, but it will require some customization.
+
+Run the `initdb.sh` script:
+```sh
+echo
+echo "ATTENTION: database name, user, etc are configurable. Edit .env to customize before creating."
+# cd to your repo directory, e.g.:
+cd ~/callicog
+./bin/initdb.sh
+```
 
 
 [pyenv_install]: https://github.com/pyenv/pyenv?tab=readme-ov-file#installation
