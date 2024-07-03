@@ -17,15 +17,6 @@ git configure --global user.name "sccn@<computer name here>"
 git configure --global user.email "<email address here>"
 ```
 
-## Install, configure Postgres
-
-```sh
-brew install postgresql@15
-brew services start postgresql@15
-brew link postgresql@15 --force
-/opt/homebrew/bin/createuser -s postgres
-# ^ via: https://stackoverflow.com/questions/15301826/psql-fatal-role-postgres-does-not-exist
-```
 
 ## Install CalliCog
 
@@ -55,7 +46,6 @@ tested using Python `3.8.19`.
 ### Install Python (if needed)
 
 **REQUIRED:** Python 3.8
-
 CalliCog uses PsychoPy, which has a [narrow band of Python version support](ppy_py_vers). CalliCog has been tested with and supports Python 3.8.
 
 Install Python 3.8.19 (if using `pyenv`):
@@ -66,14 +56,12 @@ env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.19
 ```
 
 ### Clone repository
-
 ```sh
 git clone git@github.com:NIMH-SCCN/callicog.git
 cd callicog
 ```
 
 ### Set up virtual environment
-
 If using `pyenv`, set the directory-local Python:
 ```sh
 pyenv local 3.8.19
@@ -100,7 +88,6 @@ pip install -e .
 ```
 
 ### Create .env shell configuration file
-
 ```sh
 # Enter your repo directory, e.g.:
 cd ~/callicog
@@ -117,7 +104,6 @@ reason, CalliCog cannot be installed conventionally via e.g.
 `pip install callicog`, but is instead installed as above.
 
 ## Test CalliCog
-
 Run the CalliCog task "demo":
 
 ```sh
@@ -126,6 +112,16 @@ callicog start demo
 ```
 
 ## Database setup
+CalliCog was built for use with Postgres. You can likely use another RDBMS, but it will require some customization.
+
+### Install, configure Postgres
+```sh
+brew install postgresql@15
+brew services start postgresql@15
+brew link postgresql@15 --force
+/opt/homebrew/bin/createuser -s postgres
+# ^ via: https://stackoverflow.com/questions/15301826/psql-fatal-role-postgres-does-not-exist
+```
 
 ### When is a database instance required?
 A CalliCog database instance is required for execution of commands and as the
@@ -133,8 +129,6 @@ backend for the webapp. If you don't need either on this machine, skip this
 step (e.g. if you only want demo the software or are developing tasks).
 
 ### Create the database
-CalliCog was built for use with Postgres. You can likely use another RDBMS, but it will require some customization.
-
 Run the `initdb.sh` script:
 ```sh
 echo
