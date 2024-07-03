@@ -51,7 +51,7 @@ logger.addHandler(console_handler)
 DATE_FORMAT = '%d/%m/%Y'
 TIME_FORMAT = '%H:%M:%S'
 
-DEFAULT_DB_URL = 'postgresql:///callicog'
+DEFAULT_DB_URL = 'postgresql://callicog@localhost:5432/callicog'
 
 # Attempt to read database location from environment variable:
 db_url = os.environ.get('CALLICOG_DB_URL', None)
