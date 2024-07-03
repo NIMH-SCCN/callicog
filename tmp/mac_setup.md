@@ -83,7 +83,7 @@ Install the required packages:
 ```sh
 pip install --upgrade pip
 pip install PsychoPy==2021.2.3 --no-deps
-pip install -r requirements.exec.txt
+pip install -r requirements-mac.txt
 # Install the CalliCog package:
 pip install -e .
 ```
