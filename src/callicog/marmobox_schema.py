@@ -142,13 +142,15 @@ class Session(Base):
 
     def getDuration(self):
         if self.session_start and self.session_end:
-            duration_secs = (self.session_end - self.session_start).total_seconds()
-            return f'{duration_secs // 60} min {duration_secs % 60} sec'
+            duration = (self.session_end - self.session_start).total_seconds()
+            mins = duration // 60
+            secs = duration % 60
+            return f'{mins:.0f} min {secs:.0f} sec'
         else:
             return ''
 
     def getTrials(self):
-        return len([trial for trial in self.trials if trial.trial_status != 'new'])
+        return self.getHits() + self.getFails()
 
     def getHits(self):
         return len([trial for trial in self.trials if trial.trial_status == Outcome.SUCCESS])
@@ -157,13 +159,18 @@ class Session(Base):
         return len([trial for trial in self.trials if trial.trial_status == Outcome.FAIL])
 
     def getNulls(self):
+        # e.g. Timeouts
         return len([trial for trial in self.trials if trial.trial_status == Outcome.NULL])
 
     def getSuccessRate(self):
         n_trials = self.getTrials()
-        if n_trials > 0:
-            return self.getHits() / self.getTrials() * 100
-        return 0
+        n_hits = self.getHits()
+
+        if n_trials == 0:
+            return 0
+        else:
+            success_rate = n_hits / n_trials * 100
+            return f"{success_rate:.1f}"
 
 
 class Task(Base):
