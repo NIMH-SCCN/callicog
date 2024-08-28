@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
+	<title>Callicog</title>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand">
+		<a class="navbar-item" style="font-weight: 900; font-size: large;">
+			Callicog
+		</a>
+
+		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+		</a>
+	</div>
+
+	<div id="navbarBasicExample" class="navbar-menu">
+		<div class="navbar-start">
+			<a class="navbar-item">
+				Home
+			</a>
+			<a class="navbar-item">
+				Documentation
+			</a>
+		</div>
+	</div>
+</nav>
+
+<div class="columns">
+	<div class="column is-one-fifth">
+		<div class="section">
+			<aside class="menu">
+				<p class="menu-label">
+					Manage
+				</p>
+				<ul class="menu-list">
+					<li><a href="/animals">Animals</a></li>
+					<li><a href="/tasks">Tasks</a></li>
+					<li><a href="/templates">Templates</a></li>
+				</ul>
+				<p class="menu-label">
+					Report
+				</p>
+				<ul class="menu-list">
+					<li><a href="/experiments">Experiments</a></li>
+					<li><a href="/trials">Trials</a></li>
+				</ul>
+			</aside>
+		</div>
+	</div>
+	<div class="column is-four-fifths">
+		<div class="section">
+			<h1 class="title">Trials</h1>
+			<form method="POST" action="">
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Trial ID</label>
+							<div class="control">
+								<input type="text" name="trial_id" class="input" placeholder="Trial ID">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Session ID</label>
+							<div class="control">
+								<input type="text" name="session_id" class="input" placeholder="Session ID">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Experiment ID</label>
+							<div class="control">
+								<input type="text" name="experiment_id" class="input" placeholder="Experiment ID">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Template</label>
+							<div class="control">
+								<input type="text" name="template_name" class="input" placeholder="e.g. stt_nc">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Task</label>
+							<div class="control">
+								<input type="text" name="task_name" class="input" placeholder="e.g. dmts">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Animal</label>
+							<div class="control">
+								<input type="text" name="animal_code" class="input" placeholder="e.g. rolls">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Start</label>
+							<div class="control">
+								<input id="start_date" type="text" name="trial_start" class="input" placeholder="YYYY-MM-dd">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">End</label>
+							<div class="control">
+								<input id="end_date" type="text" name="trial_end" class="input" placeholder="YYYY-MM-dd">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Timeout (s)</label>
+							<div class="control">
+								<input type="text" name="timeout" class="input" placeholder="e.g. 2">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label"># targets</label>
+							<div class="control">
+								<input type="text" name="ntargets" class="input" value="1" placeholder="e.g. 1">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label"># distractors</label>
+							<div class="control">
+								<input type="text" name="ndistractors" class="input" placeholder="e.g. 5">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Outcome</label>
+							<div class="control">
+								<input type="text" name="outcome" class="input" placeholder="e.g. fail">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Target</label>
+							<div class="control">
+								<input type="text" name="target_shape" class="input" placeholder="e.g. circle">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Color (rgb)</label>
+							<div class="control">
+								<input type="text" name="target_color" class="input" placeholder="e.g. (1,0,0)">
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Delay (s)</label>
+							<div class="control">
+								<input type="text" name="trial_delay" class="input" placeholder="e.g. 0.5">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field is-grouped">
+					<div class="control">
+						<button class="button is-link" name="action" value="search" type="submit">Search</button>
+					</div>
+					<div class="control">
+						<button class="button is-link" name="action" value="export" formmethod="post" type="submit">Foo</button>
+					</div>
+					<div class="control">
+						<a class="button is-success" href="#" onclick="download_table_as_csv('trial_table');">Export</a>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="section" style="overflow-x: scroll;">
+			<h1 class="title">Trial data</h1>
+			<table class="table" id="trial_table">
+				<thead>
+					<tr>
+						<th>Animal</th>
+						<th>Template</th>
+						<th>Task</th>
+						<th>Experiment ID</th>
+						<th>Session ID</th>
+						<th>Trial ID</th>
+						<th>Start</th>
+						<th>Duration (s)</th>
+						<th>Outcome</th>
+						<th>Flip</th>
+						<th>Outside</th>
+						<th>Target</th>
+						<th>Color</th>
+						<th>Position</th>
+						<th>Size</th>
+						<th>Touch</th>
+						<th>Response time (touch)</th>
+						<th>Response time (release)</th>
+						<th># targets</th>
+						<th># distractors</th>
+						<th>Delay</th>
+						<th>Timeout</th>
+					</tr>
+				</thead>
+				<!--<tfoot>
+					<tr>
+						<th>Animal</th>
+						<th>Template</th>
+						<th>Task</th>
+						<th>Experiment ID</th>
+						<th>Session ID</th>
+						<th>Trial ID</th>
+						<th>Start</th>
+						<th>Duration (s)</th>
+						<th>Outcome</th>
+						<th>Flip</th>
+						<th>Outside</th>
+						<th>Target</th>
+						<th>Color</th>
+						<th>Position</th>
+						<th>Size</th>
+						<th>Touch</th>
+						<th>Response time (touch)</th>
+						<th>Response time (release)</th>
+						<th># targets</th>
+						<th># distractors</th>
+						<th>Delay</th>
+						<th>Timeout</th>
+					</tr>
+				</tfoot>-->
+				<tbody>
+					{% for trial in trials %}
+						<tr>
+							<td>{{ trial[0] }}</td>
+							<td>{{ trial[1] }}</td>
+							<td>{{ trial[2] }}</td>
+							<td>{{ trial[3] }}</td>
+							<td>{{ trial[4] }}</td>
+							<td>{{ trial[5] }}</td>
+							<td>{{ trial[6] }}</td>
+							<td>{{ trial[7] }}</td>
+							<td>{{ trial[8] }}</td>
+							<td>{{ trial[9] }}</td>
+							<td>({{ trial[10] }},{{ trial[11] }})</td>
+							<td>{{ trial[12] }}</td>
+							<td>({{ trial[13] }},{{ trial[14] }},{{ trial[15] }})</td>
+							<td>({{ trial[16] }},{{ trial[17] }})</td>
+							<td>({{ trial[18] }},{{ trial[19] }})</td>
+							<td>({{ trial[20] }},{{ trial[21] }})</td>
+							<td>{{ trial[22] }}</td>
+							<td>{{ trial[23] }}</td>
+							<td>{{ trial[24] }}</td>
+							<td>{{ trial[25] }}</td>
+							<td>{{ trial[26] }}</td>
+							<td>{{ trial[27] }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	window.onload = function() {
+		today = new Date();
+		tomorrow = new Date(today.getTime() + 86400000); 
+		today_start = today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0');
+		tomorrow_end = tomorrow.getFullYear().toString() + '-' + (tomorrow.getMonth() + 1).toString().padStart(2, '0') + '-' + tomorrow.getDate().toString().padStart(2, '0');
+		document.getElementById('start_date').value = today_start;
+		document.getElementById('end_date').value = tomorrow_end;
+	}
+
+	// Quick and simple export target #table_id into a csv
+	function download_table_as_csv(table_id, separator = ',') {
+		// Select rows from table_id
+		var rows = document.querySelectorAll('table#' + table_id + ' tr');
+		// Construct csv
+		var csv = [];
+		for (var i = 0; i < rows.length; i++) {
+			var row = [], cols = rows[i].querySelectorAll('td, th');
+			for (var j = 0; j < cols.length; j++) {
+				// Clean innertext to remove multiple spaces and jumpline (break csv)
+				var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+				// Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+				data = data.replace(/"/g, '""');
+				// Push escaped string
+				row.push('"' + data + '"');
+			}
+			csv.push(row.join(separator));
+		}
+		var csv_string = csv.join('\n');
+		// Download it
+		var filename = 'export_' + table_id + '_' + new Date().toLocaleDateString() + '.csv';
+		var link = document.createElement('a');
+		link.style.display = 'none';
+		link.setAttribute('target', '_blank');
+		link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+		link.setAttribute('download', filename);
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
+</script>
+</body>
+</html>

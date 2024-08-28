@@ -23,9 +23,8 @@ class TaskInterface(TaskStructure):
         w1.add_stimulus(w1_square)
 
         # Window 2
-        # set targets
+        # In discrimination & reversal tasks, stimuli remain briefly after being touched to provide visual feedback. This is executed below.
         w2 = Window(transition=WindowTransition.MAINTAIN, is_outcome=True, timeout=2)
-        # Duration for stimuli to remain displayed after screen is touched
         w2.post_touch_delay = 1
         reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = IMAGE_DIR/'composite4-2.jpg', color = (1,1,1), size_touch=(250,250))
         reward_stim.after_touch = [{'name': 'hide_other'}]
@@ -33,11 +32,12 @@ class TaskInterface(TaskStructure):
         penalty_stim.after_touch = [{'name': 'hide_other'}]
         reward_stim.position = trial_parameters[Parameter.POSITION]
         reward_stim.outcome = Outcome.SUCCESS
-        penalty_stim.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0] #index required as variable is a list
+        penalty_stim.position = self.randomize_from(self.pseudorandom_parameters[Parameter.POSITION]['values'], exclude=[trial_parameters[Parameter.POSITION]])[0]
         penalty_stim.outcome = Outcome.FAIL
         w2.add_stimulus(reward_stim)
         w2.add_stimulus(penalty_stim)
-        #this is necessary for 'hide'ing to work?
+
+        # Required for 'hide' functionality
         for stimulus in w2.stimuli:
             stimulus.auto_draw = True
 

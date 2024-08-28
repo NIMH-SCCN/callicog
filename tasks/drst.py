@@ -1,13 +1,11 @@
-from callicog.task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome, Parameter
-from callicog.task_structure import TaskStructure
+from task_builder import Window, Stimulus, WindowTransition, StimulusShape, Outcome, Parameter
+from task_structure import TaskStructure
 import random
 import copy
 from time import sleep
 import logging
 
 logger = logging.getLogger(__name__)
-
-#def randomlist(possible_stimulus_list, k)
 
 class TaskInterface(TaskStructure):
     def __init__(self):
@@ -16,28 +14,36 @@ class TaskInterface(TaskStructure):
 
 # Defining possible stimuli
     def init_parameters(self):
-        self.possible_stimulus_list = [
-            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = f'src/callicog/tasks/images/drst2/drst{i}.jpg', color = (1,1,1), size_touch = (200,200))
-            for i in range(1,100)
-        ]    
-        #stimulus_list = random.sample(self.possible_stimulus_list, 8)
-        #self.stimulus_count = len(stimulus_list)
-        #self.add_parameter(Parameter.TARGET, stimulus_list)  
-        self.update_random_stimulus()
-        
-    # Defining possible positions
-        position_list = [(150, 150), (150, -150), (-150, 150), (-150, -150), (450, 150), (450, -150), (-450, 150), (-450, -150)]        
-        self.add_parameter(Parameter.POSITION, position_list)
-
-    def update_random_stimulus(self):
-        stimulus_list = random.sample(self.possible_stimulus_list, 8)
+        stimulus_list = [
+            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite1-1.jpg', color = (1,1,1), size_touch = (200,200)),
+            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite1-2.jpg', color = (1,1,1), size_touch = (200,200)),
+            Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite2-1.jpg', color = (1,1,1), size_touch = (200,200)),
+            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/composite2-2.jpg', color = (1,1,1), size_touch = (200,200)),
+            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img5.jpg', color = (1,1,1), size_touch = (200,200)),
+            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img6.jpg', color = (1,1,1), size_touch = (200,200)),
+            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img7.jpg', color = (1,1,1), size_touch = (200,200)),
+            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img8.jpg', color = (1,1,1), size_touch = (200,200)),
+            # Stimulus(shape = StimulusShape.IMAGE, size = (200,200), image = 'tasks/images/drst_img9.jpg', color = (1,1,1), size_touch = (200,200)),
+        ]
         self.stimulus_count = len(stimulus_list)
-        self.add_parameter(Parameter.TARGET, stimulus_list)        
+
+        self.add_parameter(Parameter.TARGET, stimulus_list)
+    # Defining possible positions
+        position_list = [(0,0), (-200, 0), (200, 0), (-200, -200)]
+        #, (-200, 200), (200, 200), (200, -200), (0, 200), (0, -200)]
+        self.add_parameter(Parameter.POSITION, position_list)
+        
+        # self.add_parameter(Parameter.TARGET_NUMBER, 1)
+        # self.add_parameter(Parameter.DISTRACTOR_NUMBER, 3)
+    # Defining delay between stimuli?
+        # delay_list = [1]
+        # self.add_parameter(Parameter.DELAY, delay_list, pseudorandom = False) #Don't use DELAY, probably have to create a new parameter
 
 # Generating trials based on parameters
     def generate_trials(self):
         self.trials = self.pseudorandomize_parameters()
-        
+
+# help
     def build_trial(self, trial_parameters={}):        
         #Window 1: cue window
         w1 = Window(transition=WindowTransition.RELEASE)
@@ -65,27 +71,27 @@ class TaskInterface(TaskStructure):
         trial_sequence = []
         distractors = []
         for (stimulus, position) in zip(stimuli, stimuli_positions):
-            self.update_random_stimulus()
             stimulus.position = position
             target = stimulus
             target.outcome = Outcome.SUCCESS
-            window = Window(transition=WindowTransition.TOUCH, is_outcome=True, timeout = 18)
-            # Spacer
-            spacer = Window(blank=2)
+            window = Window(transition=WindowTransition.TOUCH, is_outcome=False)
             for distractor in distractors:
                 window.add_stimulus(distractor)
-
             window.add_stimulus(target)
             trial_sequence.append(window)
-            trial_sequence.append(spacer)
-            
+        
             # Set up distractor for subsequent window:
             distractor = copy.copy(target)
             distractor.outcome = Outcome.FAIL
-            distractors.append(distractor)   
-                
+            distractors.append(distractor)    
+
+        trial_sequence[-1].is_outcome = True
+
+        # Spacer
+        spacer = Window(blank=0.5)
+
         # Penalty window
-        pw = Window(blank=6)
+        pw = Window(blank=1)
 
         return [w1] + trial_sequence + [spacer, pw]
 

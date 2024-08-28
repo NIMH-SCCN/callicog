@@ -57,6 +57,8 @@ class TaskInterface(TaskStructure):
 		w5.add_stimulus(w5_sample)
 		w5.add_stimulus(w5_distractor)
 
+		# Note hide function present in previous phases is now removed
+
 		# Window 6
 		w6 = Window(blank=0.5)
 		

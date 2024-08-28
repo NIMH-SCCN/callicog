@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
+	<title>Callicog - Templates</title>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand">
+		<a class="navbar-item" style="font-weight: 900; font-size: large;">
+			Callicog
+		</a>
+
+		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+		</a>
+	</div>
+
+	<div id="navbarBasicExample" class="navbar-menu">
+		<div class="navbar-start">
+			<a class="navbar-item">
+				Home
+			</a>
+			<a class="navbar-item">
+				Documentation
+			</a>
+		</div>
+	</div>
+</nav>
+
+<div class="columns">
+	<div class="column is-one-fifth">
+		<div class="section">
+			<aside class="menu">
+				<p class="menu-label">
+					Manage
+				</p>
+				<ul class="menu-list">
+					<li><a href="/animals">Animals</a></li>
+					<li><a href="/tasks">Tasks</a></li>
+					<li><a href="/templates">Templates</a></li>
+				</ul>
+				<p class="menu-label">
+					Report
+				</p>
+				<ul class="menu-list">
+					<li><a href="/experiments">Experiments</a></li>
+					<li><a href="/trials">Trials</a></li>
+				</ul>
+			</aside>
+		</div>
+	</div>
+	<div class="column is-four-fifths">
+		<div class="section">
+			<!--{% for message in get_flashed_messages() %}
+			<div class="notification is-success is-light">
+				<button class="delete"></button>
+				{{ message }}
+			</div>
+			{% endfor %}-->
+			<h1 class="title">Update template</h1>
+			<form method="POST" action="">
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Template ID</label>
+							<div class="control">
+								<input type="text" name="template_id" class="input" value="{{ template.template_id }}" placeholder="Template ID" disabled>
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Name</label>
+							<div class="control">
+								<input type="text" name="template_name" class="input" value="{{ template.template_name }}" placeholder="Name">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field is-grouped">
+					<div class="control">
+						<button class="button is-link" type="submit">Update</button>
+					</div>
+					<div class="control">
+						<a class="button is-danger" href="{{ url_for('deleteTemplate', id=template.template_id) }}" onclick="return confirm('This will DELETE all associated experiments. Do you really want to continue?');">Delete</a>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="section">
+			<h1 class="title">Task list</h1>
+			<form method="POST" action="{{ url_for('addTaskToTemplate', id=template.template_id) }}">
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Task</label>
+							<div class="control">
+								<div class="select">
+									<select name="protocol_id">
+										{% for protocol in all_protocols %}
+											<option value="{{ protocol.protocol_id }}">{{ protocol.protocol_name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Progression</label>
+							<div class="control">
+								<div class="select">
+									<select name="progression_type" onchange="toggleInput()" id="sel_progression">
+										<option value="target_based">Target based</option>
+										<option value="rolling_average">Rolling average</option>
+										<option value="session_based">Session based</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label"># trials</label>
+							<div class="control">
+								<input id="in_target_trials" type="text" name="target_trials" class="input" placeholder="# trials">
+							</div>
+						</div>
+						<div class="field">
+							<label class="label"># sessions</label>
+							<div class="control">
+								<input id="in_target_sessions" type="text" name="target_sessions" class="input" placeholder="# sessions" disabled>
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Success rate</label>
+							<div class="control">
+								<input id="in_success_rate" type="text" name="success_rate" class="input" placeholder="Success rate" disabled>
+							</div>
+						</div>
+						<div class="field">
+							<label class="label">Window size</label>
+							<div class="control">
+								<input id="in_window_size" type="text" name="rolling_window_size" class="input" placeholder="Window size" disabled>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field is-grouped">
+					<div class="control">
+						<button class="button is-link" type="submit">Add</button>
+					</div>
+				</div>
+			</form>
+			<br>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Task ID</th>
+						<th>Name</th>
+						<th>Progression</th>
+						<th># trials</th>
+						<th># sessions</th>
+						<th>Success rate</th>
+						<th>Window size</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>Task ID</th>
+						<th>Name</th>
+						<th>Progression</th>
+						<th># trials</th>
+						<th># sessions</th>
+						<th>Success rate</th>
+						<th>Window size</th>
+					</tr>
+				</tfoot>
+				<tbody>
+					{% for template_protocol in template_protocols %}
+					<tr>
+						<td>{{ template_protocol.protocol.protocol_id }}</td>
+						<td><a href="{{ url_for('updateTemplateTask', id=template_protocol.template_protocol_id) }}">{{ template_protocol.protocol.protocol_name }}</a></td>
+						<td>{{ template_protocol.progression }}</td>
+						<td>{{ '' if not template_protocol.target_trials else template_protocol.target_trials }}</td>
+						<td>{{ '' if not template_protocol.target_sessions else template_protocol.target_sessions }}</td>
+						<td>{{ '' if not template_protocol.success_rate else template_protocol.success_rate }}</td>
+						<td>{{ '' if not template_protocol.rolling_window_size else template_protocol.rolling_window_size }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<!--<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', () => {
+		(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+			const $notification = $delete.parentNode;
+			$delete.addEventListener('click', () => {
+				$notification.parentNode.removeChild($notification);
+			});
+		});
+	});
+</script>-->
+<script type="text/javascript">
+	function toggleInput() {
+		var sel_progression = document.getElementById("sel_progression");
+		var in_target_trials = document.getElementById("in_target_trials");
+		var in_target_sessions = document.getElementById("in_target_sessions");
+		var in_success_rate = document.getElementById("in_success_rate");
+		var in_window_size = document.getElementById("in_window_size");
+
+		in_target_trials.disabled = true;
+		in_target_sessions.disabled = true;
+		in_success_rate.disabled = true;
+		in_window_size.disabled = true;
+
+		if (sel_progression.options[sel_progression.selectedIndex].value == "target_based") {
+			in_target_trials.disabled = false;
+		} else if (sel_progression.options[sel_progression.selectedIndex].value == "session_based") {
+			in_target_trials.disabled = false;
+			in_target_sessions.disabled = false;
+			in_success_rate.disabled = false;
+		} else if (sel_progression.options[sel_progression.selectedIndex].value == "rolling_average") {
+			in_success_rate.disabled = false;
+			in_window_size.disabled = false;
+		}
+	}
+</script>
+</body>
+</html>

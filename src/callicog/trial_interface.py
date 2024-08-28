@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 
 class WindowRuntime:
     def __get_ppy_stim_from_shape(self, shape, ppy_window):
+        
+        # Define new stimuli here using psychopy parameters
         if shape == StimulusShape.SQUARE:
             return visual.Rect(win=ppy_window, colorSpace='rgb')
         elif shape == StimulusShape.CIRCLE:
@@ -29,35 +31,12 @@ class WindowRuntime:
             return visual.ShapeStim(win=ppy_window, vertices=star_vertices, units = 'pix', colorSpace='rgb')
         elif shape == StimulusShape.DIAMOND:
             return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb')
-        elif shape == StimulusShape.ARROW_N:
+        elif shape == StimulusShape.ARROW:
             arrow_vertices = [(0,4), (-3,0), (-1,0), (-1,-3), (1,-3), (1,0), (3,0)]
             return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
         elif shape == StimulusShape.IMAGE:
             return visual.ImageStim(win=ppy_window, colorSpace='rgb')
-        elif shape == StimulusShape.ARROW_E:
-            arrow_vertices = [(4, 0), (0,-3), (0,-1), (-3,-1), (-3, 1), (0, 1), (0, 3)]
-            return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
-        elif shape == StimulusShape.ARROW_W:
-            arrow_vertices = [(-4, 0), (0,-3), (0,-1), (3,-1), (3, 1), (0, 1), (0, 3)]
-            return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
-        elif shape == StimulusShape.ARROW_S:
-            arrow_vertices = [(0,-4), (-3,0), (-1,0), (-1,3), (1,3), (1,0), (3,0)]
-            return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
-        elif shape == StimulusShape.TRIANGLE:
-            triangle_vertices = [(-5,4), (5,4), (0, -4)]
-            return visual.ShapeStim(win=ppy_window, vertices=triangle_vertices, colorSpace='rgb255')
-        elif shape == StimulusShape.ARROW_NE:
-            arrow_vertices = [(2.83,2.83), (-2.12,2.12), (-0.71,0.71), (-2.83,-1.41), (-1.41,-2.83), (0.71,-0.71), (2.12,-2.12)]
-            return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
-        elif shape == StimulusShape.ARROW_NW:
-            arrow_vertices = [(-2.83,2.83), (2.12,2.12), (0.71,0.71), (2.83,-1.41), (1.41,-2.83), (-0.71,-0.71), (-2.12,-2.12)]
-            return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
-        elif shape == StimulusShape.ARROW_SE:
-            arrow_vertices = [(2.83,-2.83), (-2.12,-2.12), (-0.71,-0.71), (-2.83,1.41), (-1.41,2.83), (0.71,0.71), (2.12,2.12)]
-            return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
-        elif shape == StimulusShape.ARROW_SW:
-            arrow_vertices = [(-2.83,-2.83), (2.12,-2.12), (0.71,-0.71), (2.83,1.41), (1.41,2.83), (-0.71,0.71), (-2.12,2.12)]
-            return visual.ShapeStim(win=ppy_window, vertices=arrow_vertices, colorSpace='rgb255')
+
 
     def __load_stimulus(self, stimulus, ppy_window):
         stimulus.ppy_touch_stim = visual.Rect(win=ppy_window, opacity=0)

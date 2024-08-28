@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
+	<title>Callicog - Experiment</title>
+	<style type="text/css">
+		.display-none {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand">
+		<a class="navbar-item" style="font-weight: 900; font-size: large;">
+			Callicog
+		</a>
+
+		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+		</a>
+	</div>
+
+	<div id="navbarBasicExample" class="navbar-menu">
+		<div class="navbar-start">
+			<a class="navbar-item">
+				Home
+			</a>
+			<a class="navbar-item">
+				Documentation
+			</a>
+		</div>
+	</div>
+</nav>
+
+<div class="columns">
+	<div class="column is-one-fifth">
+		<div class="section">
+			<aside class="menu">
+				<p class="menu-label">
+					Manage
+				</p>
+				<ul class="menu-list">
+					<li><a href="/animals">Animals</a></li>
+					<li><a href="/tasks">Tasks</a></li>
+					<li><a href="/templates">Templates</a></li>
+				</ul>
+				<p class="menu-label">
+					Report
+				</p>
+				<ul class="menu-list">
+					<li><a href="/experiments">Experiments</a></li>
+					<li><a href="/trials">Trials</a></li>
+				</ul>
+			</aside>
+		</div>
+	</div>
+	<div class="column is-four-fifths">
+		<div class="section">
+			<!--{% for message in get_flashed_messages() %}
+			<div class="notification is-success is-light">
+				<button class="delete"></button>
+				{{ message }}
+			</div>
+			{% endfor %}-->
+			<h1 class="title">Experiment</h1>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Animal</th>
+						<th>Template</th>
+						<th>Start</th>
+						<th>End</th>
+						<th>Tasks</th>
+						<th>Completion</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>{{ experiment.experiment_id }}</th>
+						<td>{{ experiment.animal.animal_code }}</td>
+						<td>{{ experiment.template.template_name }}</td>
+						<td>{{ experiment.experiment_start.strftime('%d/%m/%Y-%H:%M:%S') }}</td>
+						<td>{% if experiment.experiment_end %} {{ experiment.experiment_end.strftime('%d/%m/%Y-%H:%M:%S') }} {% endif %}</td>
+						<td>{{ experiment.tasks|length }}</td>
+						<td>{{ experiment.getCompletion() }}%</td>
+					</tr>
+				</tbody>
+			</table>
+			<h1 class="title">Tasks</h1>
+			<!--<div class="container">-->
+			{% for task in experiment.tasks %}
+			<div class="card is-fullwidth">
+				<header class="card-header">
+					<p class="card-header-title">{{ task.template_protocol.protocol.protocol_name }}</p>
+					<a class="card-header-icon card-toggle">
+						<i class="fa fa-angle-down"></i>
+					</a>
+				</header>
+				<div class="card-content">
+					<div class="content">
+						<div class="tags">
+							{% if task.complete %}
+							<span class="tag is-success">complete</span>
+							{% else %}
+							<span class="tag is-danger">incomplete</span>
+							{% endif %}
+							<span class="tag">{{ task.template_protocol.progression }}</span>
+							{% if task.template_protocol.target_trials %}
+							<span class="tag">{{ task.template_protocol.target_trials }} trials</span>
+							{% endif %}
+							{% if task.template_protocol.target_sessions %}
+							<span class="tag">{{ task.template_protocol.target_sessions }} sessions</span>
+							{% endif %}
+							{% if task.template_protocol.success_rate %}
+							<span class="tag">{{ task.template_protocol.success_rate * 100 }}% success rate</span>
+							{% endif %}
+							{% if task.template_protocol.rolling_window_size %}
+							<span class="tag">{{ task.template_protocol.rolling_window_size }} trial window</span>
+							{% endif %}
+						</div>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Session ID</th>
+									<!--<th>Outcome</th>-->
+									<th>End</th>
+									<th>Duration</th>
+									<th>Trials</th>
+									<th>Hits</th>
+									<th>Misses</th>
+									<th>Timeouts</th>
+									<th>Rate</th>
+									<th>Trials</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for session in task.sessions %}
+									<tr>
+										<th>{{ session.session_id }}</th>
+										<!--{% if session.session_status == 'success' %}
+											<td><span class="tag is-success">pass</span></td>
+										{% else %}
+											<td><span class="tag is-danger">x</span></td>
+										{% endif %}-->
+										<td>{% if session.session_end %} {{ session.session_end.strftime('%d/%m/%Y-%H:%M:%S') }} {% endif %}</td>
+										<td>{{ session.getDuration() }}</td>
+										<td>{{ session.getTrials() }}</td>
+										<td>{{ session.getHits() }}</td>
+										<td>{{ session.getFails() }}</td>
+										<td>{{ session.getNulls() }}</td>
+										<td>{{ session.getSuccessRate() }}%</td>
+										<td><a id="toggle-link" title="Show trials" href="#" onclick="toggleTrial(this);return false;">Show</a></td>
+									</tr>
+									<tr id="yep" class="display-none">
+										<td colspan="10">
+											<table class="table">
+												<thead>
+													<tr>
+														<th>Trial ID</th>
+														<th>Outcome</th>
+														{% for parameter in task.template_protocol.protocol.parameters %}
+															<th>{{ parameter.parameter_name }}</th>
+														{% endfor %}
+													</tr>
+												</thead>
+												<tbody>
+													{% for trial in session.trials %}
+													<tr>
+														<td>{{ trial.trial_id }}</td>
+														{% if trial.trial_status == 'success'%}
+															<td><span class="tag is-success is-light">{{ trial.trial_status }}</span></td>
+														{% elif trial.trial_status == 'fail' %}
+															<td><span class="tag is-danger is-light">{{ trial.trial_status }}</span></td>
+														{% elif trial.trial_status == 'null' %}
+															<td><span class="tag is-warning is-light">{{ trial.trial_status }}</span></td>
+														{% else %}
+															<td><span class="tag is-light">{{ trial.trial_status }}</span></td>
+														{% endif %}
+														{% for parameter in trial.parameters %}
+															<td>{{ parameter.getParameterValue() }}</td>
+														{% endfor %}
+													</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<br>
+			{% endfor %}
+			<!--</div>-->
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	function toggleTrial(link_td) {
+		var trial_table_tr = link_td.parentElement.parentElement.nextElementSibling;
+		if (link_td.innerText == 'Show') {
+			link_td.innerText = 'Hide';
+			trial_table_tr.classList.remove('display-none')
+		} else if (link_td.innerText == 'Hide') {
+			link_td.innerText = 'Show';
+			trial_table_tr.classList.add('display-none')
+		}
+	}
+</script>
+</body>
+</html>

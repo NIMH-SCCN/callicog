@@ -7,31 +7,12 @@ import traceback
 from pkg_resources import Distribution
 
 class Parameter:
+    #Define new parameters for stimuli
     POSITION = 'position'
     TARGET = 'target'
     DISTRACTOR = 'distractor'
-    DISTRACTOR1 = 'distractor1'
-    DISTRACTOR2 = 'distractor2'
-    DISTRACTOR3 = 'distractor3'
-    DISTRACTOR41 = 'distractor41'
-    #new system that I am testing right now
-    DISTRACTOR21 = 'distractor21'
-    DISTRACTOR22 = 'distractor22'
-    DISTRACTOR31 = 'distractor31'
-    DISTRACTOR32 = 'distractor32'
-    DISTRACTOR4 = 'distractor4'
-    # new distractor pools 
-    BLUESHAPES = 'blueshapes'
-    BLUEARROWSYELLOWSHAPES = 'bluearrowsyellowshapes'
-    BLUEARROWSYELLOWARROWS = 'bluearrowsyellowarrows'
-    YELLOWSHAPES = 'yellowshapes'
-    BLUEARROWS = 'bluearrows'
-    YELLOWARROWS = 'yellowarrows'
     DELAY = 'delay'
     COLOR = 'color'
-    DISTRACTOR_NUMBER = 'distractor_number'
-    DISTRACTOR_NUMBER2 = 'distractor_number2'
-    TARGET_NUMBER = 'target_number'
 
 class Progression:
     SESSION_BASED = 'session_based'
@@ -53,15 +34,8 @@ class StimulusShape:
     CIRCLE = 'circle'
     STAR = 'star'
     DIAMOND = 'diamond'
-    ARROW_N = 'arrow_n'
+    ARROW = 'arrow'
     IMAGE = 'image'
-    ARROW_S = 'arrow_s'
-    ARROW_E = 'arrow_e'
-    ARROW_W = 'arrow_w'
-    ARROW_NE = 'arrow_ne'
-    ARROW_NW = 'arrow_nw'
-    ARROW_SE = 'arrow_se'
-    ARROW_SW = 'arrow_sw'
     TRIANGLE = 'triangle'
 
 class Window:
@@ -78,9 +52,7 @@ class Window:
         self.ppy_window = None
         self.flip_tstamp = None
         self.stimuli = []
-        # Time in seconds to continue displaying stimuli after touch
-        # (i.e. for tasks that "hide" stimuli after a touch)
-        self.post_touch_delay = None
+        self.post_touch_delay = None # Time in seconds to continue displaying stimuli after touch (i.e. for tasks that "hide" stimuli after a touch)
         self.is_delayed_after_touch = False
 
     def add_stimulus(self, stimulus):

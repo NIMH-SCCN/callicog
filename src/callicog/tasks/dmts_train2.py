@@ -55,7 +55,7 @@ class TaskInterface(TaskStructure):
 		w5.add_stimulus(w5_sample)
 		w5.add_stimulus(w5_distractor)
 
-		#this is necessary for 'hide'ing to work?
+		# Required for 'hide' functionality
 		for stimulus in w5.stimuli:
 			stimulus.auto_draw = True
 

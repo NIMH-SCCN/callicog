@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bulma.min.css') }}">
+	<title>Callicog - Tasks</title>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand">
+		<a class="navbar-item" style="font-weight: 900; font-size: large;">
+			Callicog
+		</a>
+
+		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+		</a>
+	</div>
+
+	<div id="navbarBasicExample" class="navbar-menu">
+		<div class="navbar-start">
+			<a class="navbar-item">
+				Home
+			</a>
+			<a class="navbar-item">
+				Documentation
+			</a>
+		</div>
+	</div>
+</nav>
+
+<div class="columns">
+	<div class="column is-one-fifth">
+		<div class="section">
+			<aside class="menu">
+				<p class="menu-label">
+					Manage
+				</p>
+				<ul class="menu-list">
+					<li><a href="/animals">Animals</a></li>
+					<li><a href="/tasks">Tasks</a></li>
+					<li><a href="/templates">Templates</a></li>
+				</ul>
+				<p class="menu-label">
+					Report
+				</p>
+				<ul class="menu-list">
+					<li><a href="/experiments">Experiments</a></li>
+					<li><a href="/trials">Trials</a></li>
+				</ul>
+			</aside>
+		</div>
+	</div>
+	<div class="column is-four-fifths">
+		<div class="section">
+			<!--{% for message in get_flashed_messages() %}
+			<div class="notification is-success is-light">
+				<button class="delete"></button>
+				{{ message }}
+			</div>
+			{% endfor %}-->
+			<h1 class="title">Tasks</h1>
+			<form method="POST" action="">
+				<div class="columns">
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Task ID</label>
+							<div class="control">
+								<input type="text" name="task_id" class="input" placeholder="Task ID" disabled>
+							</div>
+						</div>
+					</div>
+					<div class="column is-one-quarter">
+						<div class="field">
+							<label class="label">Task</label>
+							<div class="control">
+								<input type="text" name="task_name" class="input" placeholder="Task name" autofocus>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field is-grouped">
+					<div class="control">
+						<button class="button is-link" type="submit">Add</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="section">
+			<h1 class="title">List</h1>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Task ID</th>
+						<th>Task name</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>Task ID</th>
+						<th>Task name</th>
+					</tr>
+				</tfoot>
+				<tbody>
+					{% for task in tasks %}
+					<tr>
+						<td>{{ task.protocol_id }}</td>
+						<td><a href="{{ url_for('updateTask', id=task.protocol_id) }}"> {{ task.protocol_name }} </a></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<!--<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', () => {
+		(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+			const $notification = $delete.parentNode;
+			$delete.addEventListener('click', () => {
+				$notification.parentNode.removeChild($notification);
+			});
+		});
+	});
+</script>-->
+</body>
+</html>
