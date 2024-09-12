@@ -2,7 +2,7 @@
 
 ## Summary
 
-CalliCog provides a fast, easy, yet flexible way to design behavioral experiments. This can be achieved over 2 levels as detailed below: writing new protocols, which involves using the in-built web app to create experiments based on pre-made parameters; and writing new tasks and stimuli, which requires basic programming knowledge to create new experiments from scratch. 
+CalliCog provides a fast, easy, yet flexible way to design behavioral experiments. This can be achieved with 2 approaches as detailed below: **writing new protocols**, which involves using the in-built web app to create experiments based on pre-made parameters; and **writing new tasks and stimuli**, which requires basic programming knowledge to create new experiments from scratch. 
 
 ### Hierarchy
 
@@ -58,7 +58,7 @@ def __get_ppy_stim_from_shape(self, shape, ppy_window):
 ```
 To define a new image Stimulus, import the chosen image into `/src/callicog/tasks/images`. This can then be called directly from a Task file (see further for more detail).
 
-### Writing a task
+### Writing tasks
 
 Tasks are Python scripts that contain the instructions for a Trial structure, in addition to the parameters that change between each Trial in the Task. To create or modify a Task, a user must directly write to the Python script. Thankfully, these scripts are organised according to a standardised structure of 3 editable functions, which follow an intuitive workflow. 
 
@@ -85,7 +85,7 @@ class TaskInterface(TaskStructure):
 		return []
 ```
 
-#### The function `init_parameters()`
+#### `init_parameters()`
 
 Used to define dynamic parameters that will change between Trials. If Trials do not use dynamic parameters, simply return `pass`.
 In the following example, a "correct" stimulus will be sampled from a pair of stimuli (a red square or blue circle) on a given trial, using the dynamic parameter `TARGET`. The function `init_parameters()` will contain:
@@ -109,19 +109,19 @@ delay_list = [1, 2, 4]
 self.add_parameter(Parameter.DELAY, delay_list)
 ```
 
-The task will generate trials for all 6 (2x3) combinations of `stimulus_list` and `delay_list`. If you do not want to use a parameter for the generation of trials, simply indicate `pseudorandom=False` when calling the function `self.add_parameter()`. 
+The Task will generate trials for all 6 (2x3) combinations of `stimulus_list` and `delay_list`. If you do not want to use a parameter for the generation of trials, simply indicate `pseudorandom=False` when calling the function `self.add_parameter()`. 
 
 **Note:** `init_parameters()` does not return a value. Simply finish the function with `self.add_parameter()` calls or `pass` if the task is static.
 
-#### The function `generate_trials()`
+#### `generate_trials()`
 
-If the task does not have parameters, simply place `pass`. Otherwise, this function is in charge of generating the trials based on the combinations of pseudorandom parameters. If that is the case, just write
+If the Task does not have parameters, simply place `pass`. Otherwise, this function is in charge of generating the trials based on the combinations of pseudorandom parameters. If that is the case, just write
 
 ```
 self.trials = self.pseudorandomize_parameters()
 ```
 
-#### The function `build_trial()`
+#### `build_trial()`
 
 This function contains the configuration for the Trial structure. It defines the Windows and consituent Stimuli that are to be sequentially presented in each trial.
 
