@@ -8,11 +8,11 @@ CalliCog provides a fast, easy, yet flexible way to design behavioral experiment
 
 CalliCog uses a special hierarchy that must be understood to design or run experiments. Modifcations at each level of the hierarchy allows for fine control of automated training protocols, from adjustments of a visual stimulus through to a behavioral task and the criteria for automated task progression (i.e. the progression criteria). Each level is summarised below:
 
-- #Stimulus:# A visual stimulus presented to the test subject. Example: "A red square"
-- #Window:# A visual display presented to the test subject on a touchscreen for a duration, usually containing Stimuli. Example: "Display containing a red square"
-- #Trial:# A linear sequence of Windows presented to a test subject that results in an Outcome (e.g. success, fail, or timeout). Example: "Window 1: present red square. Window 2: present blank display"
-- #Task:# A behavioral task that follows a stereotyped structure. Tasks comprise multiple Trials and specifies parameters to be changed between trials. Example: "Present a square that may be red, yellow or blue on different trials (i.e. `touch1.py`)"
-- #Template:# An instance of a complete experimental protocol, applied to a specific Animal. Contains individual Tasks and their progression criteria. Example: "Present coloured squares that gradually reduce in size with successful performance (i.e. touchscreen training)"
+- **Stimulus:** A visual stimulus presented to the test subject. Example: "A red square"
+- **Window:** A visual display presented to the test subject on a touchscreen for a duration, usually containing Stimuli. Example: "Display containing a red square"
+- **Trial:** A linear sequence of Windows presented to a test subject that results in an Outcome (e.g. success, fail, or timeout). Example: "Window 1: present red square. Window 2: present blank display"
+- **Task:** A behavioral task that follows a stereotyped structure. Tasks comprise multiple Trials and specifies parameters to be changed between trials. Example: "Present a square that may be red, yellow or blue on different trials (i.e. `touch1.py`)"
+- **Template:** An instance of a complete experimental protocol, applied to a specific Animal. Contains individual Tasks and their progression criteria. Example: "Present coloured squares that gradually reduce in size with successful performance (i.e. touchscreen training)"
 
 ## 1. Writing new protocols
 
