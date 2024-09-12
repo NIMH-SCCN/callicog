@@ -1,6 +1,6 @@
 # Developing new tasks for CalliCog
 
-## Writing new tasks
+### Writing new tasks
 
 Tasks are Python files that contain the instructions for trial-based stimuli presentation. New files are created in `~/callicog/tasks`. Make sure the filename is also added in the database (via 'Tasks' in the web app) without the extension `.py`.
 
