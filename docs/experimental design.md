@@ -4,7 +4,7 @@
 
 CalliCog provides a fast, easy, yet flexible way to design behavioral experiments. This can be achieved over 2 levels as detailed below: writing new protocols, which involves using the in-built web app to create experiments based on pre-made parameters; and writing new tasks and stimuli, which requires basic programming knowledge to create new experiments from scratch. 
 
-### (IMPORTANT) Hierarchy
+### Hierarchy
 
 CalliCog uses a special hierarchy that must be understood to design or run experiments. Modifcations at each level of the hierarchy allows for fine control of automated training protocols, from adjustments of a visual stimulus through to a behavioral task and the criteria for automated task progression (i.e. the progression criteria). Each level is summarised below:
 
@@ -14,7 +14,8 @@ CalliCog uses a special hierarchy that must be understood to design or run exper
 - **Task:** A behavioral task that follows a stereotyped structure. Tasks comprise multiple Trials and specifies parameters to be changed between trials. Example: "Present a square that may be red, yellow or blue on different trials (i.e. `touch1.py`)"
 - **Template:** An instance of a complete experimental protocol, applied to a specific Animal. Contains individual Tasks and their progression criteria. Example: "Present coloured squares that gradually reduce in size with successful performance (i.e. touchscreen training)"
 
-## 1. Writing new protocols
+
+## Writing new protocols
 
 Protocols are designed in the CalliCog web app under the `MANAGE` tabs. Each protocol consists of a Template containing one or more Tasks.
 
@@ -36,9 +37,9 @@ Adjust the following parameters to import a task and its progression criterion. 
 - `Success rate`: (Session-based or rolling average) The percentage of successful Trials for progression. Values are expressed as a float between 0 and 1.
 - `Window size`: (Rolling average) The size (in Trials) of a rolling window.
 
-## 2. Writing new tasks and stimuli
+## Writing new tasks and stimuli
 
-# Writing stimuli
+### Writing stimuli
 
 Visual displays using CalliCog are powered by PyschoPy, a powerful open-source psychophysics toolbox in Python. Currently, CalliCog can implement any static visual stimulus that can be defined using PsychoPy. For further instructions, see [here](https://psychopy.org/api/visual/index.html).
 
@@ -57,7 +58,7 @@ def __get_ppy_stim_from_shape(self, shape, ppy_window):
 ```
 To define a new image Stimulus, import the chosen image into `/src/callicog/tasks/images`. This can then be called directly from a Task file (see further for more detail).
 
-# Writing a task
+### Writing a task
 
 Tasks are Python scripts that contain the instructions for a Trial structure, in addition to the parameters that change between each Trial in the Task. To create or modify a Task, a user must directly write to the Python script. Thankfully, these scripts are organised according to a standardised structure of 3 editable functions, which follow an intuitive workflow. 
 
