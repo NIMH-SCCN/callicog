@@ -125,7 +125,7 @@ self.trials = self.pseudorandomize_parameters()
 
 This function contains the configuration for the trial structure. It defines the windows and consituent Stimuli that are to be sequentially presented in each trial.
 
-##### Usage
+#### Usage
 
 To configure a window, first define the window and its constituent stimuli, then add Stimuli to the window. The following example displays a window containing a single predefined target stimulus that is positioned randomly within a specified area.
 
@@ -147,7 +147,7 @@ w2_square = Stimulus(shape=StimulusShape.SQUARE,
 			position=(0, 0))
 w2.add_stimulus(w1_square)
 ```
-##### Windows
+#### Windows
 
 Windows are objects that can contain be defined using the following parameters.
 
@@ -162,7 +162,7 @@ Windows are objects that can contain be defined using the following parameters.
 Per convention, windows should be defined in the order that they are presented using the nomenclature `w1`, `w2`, `w3`, etc., and then returned as a list at the end of the function. However, the sequence of window presentation in the trial is **actually** dependent on the order of the returned list.
 **Important**: The final window in the list is a special instance that is only executed if the trial ends in a failure, and is typically implemented as a blank display for a duration as a penalty timeout for the test subject. This window should be conventionally defined as `pw`, the penalty window. **Note** If the user desires to exclude a penalty from the task, `pw` **must** still be used, but should be assigned `blank=0`.
 
-##### Stimuli
+#### Stimuli
 
 Stimuli are objects that can contain be currently defined using the following parameters.
 
@@ -178,7 +178,7 @@ Stimuli are objects that can contain be currently defined using the following pa
 - `timeout_gain` (default `0`). (BETA) Adds the number of specified seconds to the window timeout value when the stimulus is touched (or released, depending on transition).
 
 
-##### A useful function: `randomize_from()`
+#### A useful function: `randomize_from()`
 
 As the name suggests, it randomizes from a list. The function parameters are:
 
