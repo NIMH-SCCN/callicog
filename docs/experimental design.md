@@ -6,7 +6,7 @@ CalliCog provides a fast, easy, yet flexible way to design behavioral experiment
 
 ### Hierarchy
 
-CalliCog uses a special hierarchy that must be understood to design or run experiments. Modifcations at each level of the hierarchy allows for fine control of automated training protocols, from adjustments of a visual stimulus through to a behavioral task and the criteria for automated task progression (i.e. the progression criteria). Each level is summarised below:
+CalliCog uses a special hierarchy that must be understood to design or run experiments. Modifications at each level of the hierarchy allows for fine control of automated training protocols, from adjustments of a visual stimulus through to a behavioral task and the criteria for automated task progression (i.e. the progression criteria). Each level is summarised below:
 
 - **Stimulus:** A visual stimulus presented to the test subject. Example: "A red square"
 - **Window:** A visual display presented to the test subject on a touchscreen for a duration, usually containing Stimuli. Example: "Display containing a red square"
