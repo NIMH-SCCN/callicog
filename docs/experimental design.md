@@ -54,7 +54,8 @@ def __get_ppy_stim_from_shape(self, shape, ppy_window):
     if shape == StimulusShape.DIAMOND:
         return visual.Rect(win=ppy_window, ori=45, colorSpace='rgb')
 
-# The color space for this stimulus and its orientation are defined here as they will never change, whenever the stimulus is initialised in any task. Other parameters (e.g. color, position, size) will.
+# The color space for this stimulus and its orientation are defined here as they will never change,
+# whenever the stimulus is initialised in any task. Other parameters (e.g. color, position, size) will.
 ```
 To define a new image stimulus, import the chosen image into `/src/callicog/tasks/images`. This can then be called directly from a task file (see further for more detail).
 
