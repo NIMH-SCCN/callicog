@@ -28,7 +28,7 @@ _Recommended: NUC 13 (Intel); Ubuntu (v22.04)_
 * Raspberry Pi microcomputer (Camera Module)\
 _Recommended: Raspberry Pi Zero W w/ Raspberry Pi Camera Module 2_
 
-**For Reward Module installation**, upload [this code](src/arduino/pump_code.ino) 
+**For Reward Module installation**, upload [this code](src/arduino/pump_code/pump_code.ino) 
 
 <br>
 
