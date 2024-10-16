@@ -1,8 +1,7 @@
 # CalliCog
 
-Open-source tools for automated behavioral training and testing, designed for the homecage environment. 
+Open-source tools for automated behavioral training and testing, designed for the homecage environment.
 
-<br>
 
 ## Summary ##
 
@@ -18,7 +17,7 @@ Scott, J.T., Mendivez Vasquez, B.L., Stewart, B.J., Panacheril, D., Rajit, D.K.,
 <br>
 
 ## Hardware Requirements
-CalliCog comprises a central computer (_Executive PC_) that controls the operations of up to several (at least one) operant chambers, each controlled by its own computer (_Agent PC_). See [here]() for a full inventory of materials required to construct CalliCog, _including supported model and part no's_. 
+CalliCog uses a central computer (**Executive PC**) that controls the operations of up to several (at least one) operant chambers, each controlled by its own computer (**Agent PC**). See [here]() for a full inventory of materials required to construct CalliCog, _including supported model and part no's_. 
 
 **For basic implementation (i.e. a bench-test), the following hardware is required:** 
 * Computer running MacOS (Executive PC)\
