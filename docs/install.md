@@ -204,8 +204,8 @@ is *required*, [per wxPython][wxpy_blog].
 * Install the `callicog` package in editable mode:
 
    ```sh
-   # This invokes setup.py, enabling the `callicog` CLI command, among other
-things
+   # This invokes setup.py, enabling the `callicog` CLI command, among other things:
+   python setup.py install
    pip install -e .
    ```
 
