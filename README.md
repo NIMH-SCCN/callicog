@@ -33,3 +33,10 @@ To install the Reward Module, simply upload [this code](src/arduino/pump_code/pu
 ## Running CalliCog
 
 > Include basic run-through to test without setting up minipc
+> Include info on:
+> * setting up venv
+> * callicog commands
+> * initialising db
+> * accessing webapp
+> * running vnc client
+> * video surveillance
