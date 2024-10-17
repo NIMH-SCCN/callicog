@@ -7,7 +7,7 @@ The Executive PC requires macOS. CalliCog was last tested on Sonoma (v14.5).
 ### Install pyenv (recommended)
 We recommend using `pyenv`, for control and isolation of different Python builds on a single machine.
 
-Install `pyenv`. This can be achieved easily using [Homebrew](https://brew.sh/) or alternative methods listed [here](https://github.com/pyenv/pyenv#installation)
+Install `pyenv`. This can be achieved easily using [Homebrew](https://brew.sh/) or alternative methods listed [here](https://github.com/pyenv/pyenv#installation).
 
 ```sh
 brew update
