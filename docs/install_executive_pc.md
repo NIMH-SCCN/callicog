@@ -1,37 +1,20 @@
-# CalliCog setup - MacOS
+# Executive PC Installation
 
-## Install Homebrew
+The Executive PC requires a computer running macOS. CalliCog was last tested on Sonoma (v14.5).
 
-Go to the [Homebrew website](https://brew.sh/) and follow the instructions to install Homebrew.
-
-Once it has been installed, refer to the output and follow any post-install instructions (e.g. adding `brew` to `.zshrc`).
-
-## Install, configure Git
-
-```sh
-brew install git
-
-git configure --global user.name "sccn@<computer name here>"
-# Including computer name is helpful for keeping track of the origin of changes when some code edits are made
-# from a shared environment
-git configure --global user.email "<email address here>"
-```
-
-
-## Install CalliCog
+## Installation
 
 ### Install Pyenv (recommended)
 We recommend using `pyenv`, for control and isolation of different Python builds on a single machine.
 
-Install [pyenv](pyenv_install).
+Install `pyenv`. This can be achieved easily using [Homebrew](https://brew.sh/) or alternative methods listed [here](https://github.com/pyenv/pyenv#installation)
 
 ```sh
-# Install via Homebrew. See Pyenv docs for other install methods.
 brew update
 brew install pyenv
 ```
 
-**IMPORTANT** After installing `pyenv`, [configure your shell environment](pyenv_cfg).
+**IMPORTANT** After installing `pyenv`, [configure your shell environment](https://github.com/pyenv/pyenv?tab=readme-ov-file#set-up-your-shell-environment-for-pyenv).
 
 ```sh
 # Example for .zsh, the default shell of MacOS:
@@ -41,22 +24,17 @@ echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-CalliCog has been
-tested using Python `3.8.19`.
-
 ### Install Python (if needed)
-
 **REQUIRED:** Python 3.8
-CalliCog uses PsychoPy, which has a [narrow band of Python version support](ppy_py_vers). CalliCog has been tested with and supports Python 3.8.
+CalliCog uses PsychoPy, which has a [narrow band of Python version support](https://www.psychopy.org/download.html#pip-install). CalliCog has been tested with and supports **Python 3.8.19**.
 
 Install Python 3.8.19 (if using `pyenv`):
-
-**NOTE**: wxPython *requires* Python to be built with --enable-shared option.
 ```sh
 env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.19
 ```
-
-### Clone repository
+> [!NOTE]
+> wxPython *requires* Python to be built with --enable-shared option.
+### Clone git repository
 ```sh
 git clone git@github.com:NIMH-SCCN/callicog.git
 ```
@@ -104,7 +82,7 @@ and which [effectively limit compatible Python versions](ppy_py_vers). For this
 reason, CalliCog cannot be installed conventionally via e.g.
 `pip install callicog`, but is instead installed as above.
 
-## Test CalliCog
+## Testing
 Run the CalliCog task "demo":
 
 ```sh
@@ -140,8 +118,6 @@ cd ~/callicog
 ```
 
 
-[pyenv_install]: https://github.com/pyenv/pyenv?tab=readme-ov-file#installation
-[pyenv_cfg]: https://github.com/pyenv/pyenv?tab=readme-ov-file#set-up-your-shell-environment-for-pyenv
 [ppy]: TODO
 [ppy_deps]: TODO
 [ppy_py_vers]: TODO insert ppy forum post link here
