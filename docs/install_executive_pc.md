@@ -1,6 +1,6 @@
 # Executive PC Installation
 
-The Executive PC requires a computer running macOS. CalliCog was last tested on Sonoma (v14.5).
+The Executive PC requires macOS. CalliCog was last tested on Sonoma (v14.5).
 
 ## Installation
 
