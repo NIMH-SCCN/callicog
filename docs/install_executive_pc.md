@@ -80,7 +80,7 @@ cp .env.template .env \
 ### Why do it this way?
 CalliCog uses the powerful, open-source [PsychoPy](https://www.psychopy.org/index.html) as its behavior task engine. PsychoPy has dependencies that can be difficult to wrangle, and which effectively limit compatible Python versions. For this reason, CalliCog cannot be installed conventionally (e.g. via `pip install callicog`), but is instead installed as above.
 
-## Confirm installation
+## Confirm Installation
 Run the CalliCog task "demo":
 
 ```sh
@@ -89,7 +89,7 @@ callicog start demo
 ```
 This should launch a Python window with an interactive stimulus. **If successful, CalliCog has been successfully installed.**
 
-## Database setup
+## Database Setup
 
 ### Why is a database required?
 A CalliCog database instance is required for execution of commands and as the
