@@ -5,7 +5,7 @@ Open-source tools for automated behavioral training and testing, designed for th
 
 ## Summary ##
 
-CalliCog is an automated platform for behavioral experimentats, designed for the homecage-based training of common marmosets (_Callithrix jacchus_) and other small nonhuman primates. It delivers behavioral tasks via touchscreens in custom-built operant chambers made from inexpensive and publicly available materials. CalliCog runs on open-source code based in Python, and includes a custom webapp for running experiments and recording behavioral data. 
+CalliCog is an automated platform for behavioral experiments, designed for the homecage-based **cog**nitive training of common marmosets (_**Calli**thrix jacchus_) and other small nonhuman primates. It delivers behavioral tasks via touchscreens in custom-built operant chambers made from inexpensive and publicly available materials. CalliCog runs on open-source code based in Python, and includes a custom webapp for running experiments and recording behavioral data. 
 
 **Build your own CalliCog setup!** See a full inventory of materials and instructions [here]().
 
