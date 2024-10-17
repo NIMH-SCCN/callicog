@@ -36,6 +36,7 @@ env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.19
 > wxPython *requires* Python to be built with --enable-shared option.
 
 ### Clone git repository
+If needed, [install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 ```sh
 git clone https://github.com/NIMH-SCCN/callicog.git
 ```
