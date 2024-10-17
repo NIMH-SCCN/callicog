@@ -86,9 +86,15 @@ Run the CalliCog task "demo":
 source .venv/bin/activate
 callicog start demo
 ```
-This should launch a Python window with an interactive stimulus (red, blue, and yellow square) on a blank grey background. **If successful, CalliCog has been successfully installed.**
+This should launch a Python window with an interactive stimulus. **If successful, CalliCog has been successfully installed.**
 
 ## Database setup
+
+### Why is a database required?
+A CalliCog database instance is required for execution of commands and as the
+backend for the interactive webapp. It contains the behavioral data recorded from operant chambers, and the associated metadata (i.e. experimental design parameters set by the user). 
+When the user interacts with the webapp, they are essentially interfacing with the database.
+
 CalliCog was built for use with Postgres. You can likely use another RDBMS, but it will require some customization.
 
 ### Install and configure Postgres
@@ -100,11 +106,6 @@ brew link postgresql@15 --force
 # ^ via: https://stackoverflow.com/questions/15301826/psql-fatal-role-postgres-does-not-exist
 ```
 
-### When is a database instance required?
-A CalliCog database instance is required for execution of commands and as the
-backend for the webapp. If you don't need either on this machine, skip this
-step (e.g. if you only want demo the software or are developing tasks).
-
 ### Create the database
 Run the `initdb.sh` script:
 ```sh
@@ -114,8 +115,3 @@ echo "ATTENTION: database name, user, etc are configurable. Edit .env to customi
 cd ~/callicog
 ./bin/initdb.sh
 ```
-
-
-[ppy]: TODO
-[ppy_deps]: TODO
-[ppy_py_vers]: TODO insert ppy forum post link here
