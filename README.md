@@ -28,7 +28,7 @@ CalliCog uses a central computer (**Executive PC**) that controls the operations
 * [Install Agent PC (Mini PC)](docs/install_agent_pc.md)
 * [Install Camera Module (Raspberry Pi)](docs/install_camera_module.md)
 
-To install the Reward Module (Arduino), simply upload [this code](src/arduino/pump_code/pump_code.ino) to the Arduino using [Arduino IDE](https://www.arduino.cc/en/software).
+To install the Reward Module, simply upload [this code](src/arduino/pump_code/pump_code.ino) to the Arduino using [Arduino IDE](https://www.arduino.cc/en/software).
 
 ## Running CalliCog
 
