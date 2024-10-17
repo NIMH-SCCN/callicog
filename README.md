@@ -15,7 +15,7 @@ Scott, J.T., Mendivez Vasquez, B.L., Stewart, B.J., Panacheril, D., Rajit, D.K.,
 ✉️ **Further info or support:** callicog_support@mail.nih.gov 
 
 ## Hardware Requirements
-CalliCog uses a central computer (**Executive PC**) that controls the operations of up to several (at least one) operant chambers, each controlled by its own computer (**Agent PC**). Operant chambers also contain a **Reward Module** for the delivery of liquid reward, and a **Camera Module** for surveillance. A full inventory of materials, _including part/model no's_, can be found [here]().
+CalliCog uses a central computer (**Executive PC**) that controls the operations of up to several (at least one) operant chambers, each controlled by its own computer (**Agent PC**). Operant chambers also contain a **Reward Module** for the delivery of liquid reward, and a **Camera Module** for surveillance. See [inventory]() for more.
 
 **For software installation, the following hardware is required:** 
 * Computer running MacOS (Executive PC). _Recommended: M2 Mac Mini (Apple)._
