@@ -1,75 +1,21 @@
-# CalliCog Setup SOP
+# Agent PC Installation
 
-This SOP is intended to be separate from the README/repo documentation. It
-should NOT be included in the official releases, as it may contain
-SCCN-specific information, or just includes too much detail such that the
-instructions can be either irrelevant, overwhelming or too brittle (e.g.
-referring to official install instructions for Ubuntu is sufficient).
+The Agent PC requires [Ubuntu](https://ubuntu.com/desktop). Version 22.04 is the latest version supported, due to PsychoPy's [dependency on wxPython.](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/)
 
-## Setting up the mini-PC
-
-### Install Ubuntu 22.04
-
-* Create an [installation USB][ubuntu_usb]
-    * **NOTE** Ubuntu 22.04 is the latest version supported, due to PsychoPy's
-      dependency on [wxPython][wxpython_ubuntu]
-* Install Ubuntu via the USB drive
-    * Plug in the USB installer
-    * Boot the computer
-    * When prompted, choose "Try/Install Ubuntu"
-
-#### Navigate Ubuntu graphical install process
-* Choose keyboard layout
-    * English (US)
-* Select "I don't want to connect to a Wi-Fi network right now"
-    * Using either the white USB-A or black USB-C Ethernet adapters, plug the
-mini-PC into the NIH network
-    * Do not try to plug in via the built-in Ethernet port, this will not work
-* Updates and other software
-    * Minimal installation
-    * Download updates while installing Ubuntu
-    * Install third-party software for graphicxs and Wi-Fi hardware...
-    * (If prompted) Configure secure boot with password "marmoset"
-* Erase disk and install Ubuntu > Continue
-    * Confirm: Yes, erase and continue
-* Select timezone (New York)
-* Who are you?
-    * Your name: ""
-    * Your computer's name: "ccpcNN" (where NN is the appropriate number)
-    * Pick a username: "sccn"
-    * Log in automatically
-    * Continue
-* Reboot
-* Remove installer USB, press enter to continue
-* If prompted about MOK, press enter to continue
-* Upon successful reboot, you will probably be prompted:
-    * Software updates
-        * Install software updates
-    * Online Accounts
-        * Skip
-    * Ubuntu pro
-        * Skip
-    * Send system statistics/diagnostics?
-        * No
-    * Location services
-        * Off
-* If updates are installed, reboot if prompted
-
+## Installation
 
 #### Disable Wayland (re-enable X)
 
 Most graphical Linux distros have for decades relied on a graphical system
 called Xorg or X. This display technology has architectural flaws, it is
 being sunsetted in favor of a newer, more robust system called Wayland. Wayland
-is now the default graphics system in Ubuntu--but CalliCog is built on systems
+is now the default graphics system in Ubuntu - but CalliCog is built on systems
 that are built on X, so we need to re-enable it. Fortunately, this is easy.
 
-Open a terminal and edit this configuration file with your preferred editor.
-(For help using the default text editor `nano`, refer to this [cheat
-sheet][nano_cheat].)
+Open a terminal and edit this configuration file with your preferred editor, e.g. `nano`
 
 ```sh
-sudo editor /etc/gdm3/custom.conf
+sudo nano /etc/gdm3/custom.conf
 ```
 
 You should see a line `#WaylandEnable=false`. Delete the `#` so the line is:
