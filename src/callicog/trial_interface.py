@@ -87,12 +87,12 @@ class WindowRuntime:
 
     def __check_touch(self, window, flip_time, ppy_mouse):
         touch_event = None
-        test = True
+        #test = True
         while True:
             touch_time, touch_elapsed, timed_out =  self.__wait_touch(window, ppy_mouse)
-            if test:
-                print('waiting for touch')
-            test = False
+            #if test:
+            #    print('waiting for touch')
+            #test = False
             if timed_out:
                 print('timed out')
                 return None, touch_event, Outcome.NULL
@@ -150,9 +150,11 @@ class WindowRuntime:
                 if window.is_outside_fail:
                     return None, touch_event, Outcome.FAIL
 
+    #TODO current touchscreen issue is occurring in this fn
     def __wait_touch(self, window, ppy_mouse):
         print('waiting')
         start = datetime.now()
+        ppy_mouse.clickReset() #new
         while not ppy_mouse.getPressed()[0]:
             time.sleep(0.001)
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
