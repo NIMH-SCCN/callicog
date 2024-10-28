@@ -42,7 +42,7 @@ callicog start webapp
 ```
 
 ### Run the web app
-The web app acts as the interface to the database. It allows the user to perform [experimental design](docs/experimental_design.md) and [access experimental data.](docs/data_reporting.md) Follow these links for more details.
+The web app acts as the interface to the database. It allows the user to perform [experimental design](docs/experimental_design.md) and to [access experimental data.](docs/data_reporting.md) Follow these links for more details.
 
 To access the webapp:
 * Ensure the database is initialised
@@ -51,15 +51,31 @@ To access the webapp:
 
 ### Run an experiment
 All subsequent steps first require the Executive PC to first be connected to an active operant chamber (Agent PC) via wired LAN.
-Note: operant chamber Agent PCs automatically run a 'listener' script on boot, and await commands from an Executive PC. Therefore, the user controls experiments directly from the Executive PC.
+Operant chamber Agent PCs automatically run a 'listener' script on boot, and await commands from an Executive PC. Therefore, the user controls experiments directly from the Executive PC.
 
-To begin, open a new terminal on the Executive PC, enter `callicog` directory and activat the virtual environment.
+To begin, open a new terminal on the Executive PC, navigate to the `callicog` directory, and activate the virtual environment:
 ```sh
 source .venv/bin/activate
 ```
 **To run a NEW experiment:**
-`callicog run <
+```sh
+callicog run <animal> <hostname>.local <template>
+# <animal> = your animal name. Must be first added to the database via the webapp tab 'Animals'.
+# <hostname> = your operant chamber hostname.
+# <template> = the experiment of choice. Must be first added to the database via the webapp tab 'Templates'.
+```
+**To resume an EXISTING experiment:**
+```sh
+callicog resume <hostname>.local <experiment_id>
+# <experiment_id> = ID of the experiment. Must be listed in the database under the webapp tab 'Experiments'
+```
 
+**For help:**
+```sh
+callicog -help
+```
+
+### Monitor an experiment
 > Include basic run-through to test without setting up minipc
 > Include info on:
 > * setting up venv
