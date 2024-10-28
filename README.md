@@ -47,7 +47,7 @@ The web app acts as the interface to the database. It allows the user to perform
 To access the webapp:
 * Ensure the database is initialised
 * Open your favorite web brower (e.g. Google Chrome)
-* Navigate to `localhost:8000/html`
+* Navigate to `http://localhost:5000`
 
 ### Run an experiment
 All subsequent steps first require the Executive PC to first be connected to an active operant chamber (Agent PC) via wired LAN.
@@ -61,9 +61,9 @@ source .venv/bin/activate
 ```sh
 callicog run <animal> <hostname>.local <template>
 
-# <animal> = your animal name. Must be first added to the database via the webapp tab 'Animals'.
+# <animal> = the name of the test subject. Must be first added to the database via the webapp tab 'Animals'.
 # <hostname> = your operant chamber hostname.
-# <template> = the experiment of choice. Must be first added to the database via the webapp tab 'Templates'.
+# <template> = a template for the experiment of choice. Must be first added to the database via the webapp tab 'Templates'.
 
 ```
 **To resume an EXISTING experiment:**
@@ -73,7 +73,7 @@ callicog resume <hostname>.local <experiment_id>
 # <experiment_id> = ID of the experiment. Must be listed in the database under the webapp tab 'Experiments'
 ```
 
-For help, run `callicog -help`
+For help, run `callicog --help`
 
 > [!IMPORTANT]
 > CalliCog can run multiple operant chambers simultaneously, but only one operant chamber can be controlled at a time via a terminal. To send a command to a new operant chamber, open up a new terminal.
