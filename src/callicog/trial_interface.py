@@ -87,8 +87,12 @@ class WindowRuntime:
 
     def __check_touch(self, window, flip_time, ppy_mouse):
         touch_event = None
+        test = True
         while True:
             touch_time, touch_elapsed, timed_out =  self.__wait_touch(window, ppy_mouse)
+            if test:
+                print('waiting for touch')
+            test = False
             if timed_out:
                 print('timed out')
                 return None, touch_event, Outcome.NULL
