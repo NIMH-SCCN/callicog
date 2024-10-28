@@ -1,6 +1,5 @@
 import logging
 import time
-# import marmobox_stimuli as st
 from serial.serialutil import SerialException
 from psychopy import visual, event
 from psychopy import logging as ppy_logging
