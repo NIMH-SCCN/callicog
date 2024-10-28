@@ -60,30 +60,32 @@ source .venv/bin/activate
 **To run a NEW experiment:**
 ```sh
 callicog run <animal> <hostname>.local <template>
+
 # <animal> = your animal name. Must be first added to the database via the webapp tab 'Animals'.
 # <hostname> = your operant chamber hostname.
 # <template> = the experiment of choice. Must be first added to the database via the webapp tab 'Templates'.
+
 ```
 **To resume an EXISTING experiment:**
 ```sh
 callicog resume <hostname>.local <experiment_id>
+
 # <experiment_id> = ID of the experiment. Must be listed in the database under the webapp tab 'Experiments'
 ```
 
-**For help:**
-```sh
-callicog -help
-```
+For help, run `callicog -help`
 
+> [!IMPORTANT]
+> CalliCog can run multiple operant chambers simultaneously, but only one operant chamber can be controlled at a time via a terminal. To send a command to a new operant chamber, open up a new terminal.
+ 
 ### Monitor an experiment
-> Include basic run-through to test without setting up minipc
-> Include info on:
-> * setting up venv
-> * callicog commands
-> * initialising db
-> * accessing webapp
-> * running vnc client
 
-> * video surveillance
+**For video surveillance:**
+If an active operant chamber contains a Camera Module, live video will be streamed by default over a configured wifi network. To access the video stream:
+* Ensure the Executive PC is connected to the same network
+* Open a web browser and navigate to http://raspberrypi.local/html/ (replacing 'raspberrypi' with your Raspberry Pi's hostname). See [here](docs/install_camera_module.md) for more info.
 
-### Monitor experiments
+**For touchscreen mirroring:**
+Operant chambers are configured as VNC servers, meaning that the display can be remotely viewed during real time experimentation. To view a screen mirror:
+* Open VNC Viewer for MacOS. Available for download [here](https://www.realvnc.com/en/connect/download/viewer/macos)
+* Enter the IP address or hostname (<hostname>.local) to view the screen mirror.
