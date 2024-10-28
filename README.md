@@ -89,5 +89,5 @@ If an active operant chamber contains a Camera Module, live video will be stream
 **For touchscreen mirroring:**
 
 Operant chambers are configured as VNC servers, meaning that the display can be remotely viewed during real time experimentation. To view a screen mirror:
-* Open VNC Viewer for MacOS. Available for download [here](https://www.realvnc.com/en/connect/download/viewer/macos).
+* Open a VNC client, e.g. [RealVNC Viewer for MacOS](https://www.realvnc.com/en/connect/download/viewer/macos).
 * Enter the IP address or hostname (<hostname>.local) to view the screen mirror.
