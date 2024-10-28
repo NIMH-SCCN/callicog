@@ -48,6 +48,7 @@ class MarmoboxInterface:
         self.ppy_mouse = event.Mouse(win=self.ppy_window, visible=self.is_dummy)
         ppy_logging.console.setLevel(ppy_logging.ERROR)
         logger.debug("Marmobox interface initialized")
+
         return True
 
     def close(self):
