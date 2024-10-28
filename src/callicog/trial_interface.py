@@ -157,8 +157,10 @@ class WindowRuntime:
         print(ppy_mouse.getPressed()[0])
         while not (ppy_mouse.getPressed()[0] or ppy_mouse.getPressed()[1] or ppy_mouse.getPressed()[2]):
             time.sleep(0.001)
-            if ppy_mouse.getPressed():
-                    print(ppy_mouse.getPressed())
+            if ppy_mouse.getPressed()[1]:
+                    print('1')
+            if ppy_mouse.getPressed()[2]:
+                    print('2')
             
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
                 return 0, 0, True
