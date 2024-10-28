@@ -4,7 +4,7 @@ The Agent PC requires [Ubuntu](https://ubuntu.com/desktop). Version 22.04 is the
 
 ## Installation
 
-#### Disable Wayland (re-enable X)
+### Disable Wayland (re-enable X)
 
 Most graphical Linux distros have for decades relied on a graphical system called Xorg or X. This display technology has architectural flaws, it is
 being sunsetted in favor of a newer, more robust system called Wayland. Wayland is now the default graphics system in Ubuntu - but CalliCog is built on systems 
@@ -33,33 +33,28 @@ x11
 # ^ you should see 'x11' here.
 ```
 
+### Disable screen lock/sleep
+
+Ensure that your display never goes to sleep, which would otherwise interfere with behavioral experiments.
+
 * Disable screen lock/sleep: `Settings > Privacy > Screen`
-  * Blank Screen Delay:     `Never`
-  * Automatic Screen Lock:  `Off`
-
-
+* Blank Screen Delay:     `Never`
+* Automatic Screen Lock:  `Off`
 
 ### Install software
 
-* Once running, open terminal and install tools:
-    ```sh
-    sudo apt install git curl x11vnc openssh-client openssh-server screen vim stow
-    ```
+Once running, open terminal and install the following tools.
 
-#### Clone the CalliCog repository
+```sh
+sudo apt install git curl x11vnc openssh-client openssh-server screen vim stow
+```
 
-Contributing users (e.g. SCCN users) need to create an SSH key in order to use
-the GitHub repository. **TODO** While it is still private, this includes even
-cloning it in the first place. Once we make it public, anyone will be able to
-clone it, but only permissioned users will be able to push commits.
+Clone the CalliCog repository.
 
-* [Create an SSH key][new_ssh], add it to the `ssh-agent`
-* [Add the SSH key][add_ssh] to your GitHub account
-* Clone CalliCog repo:
-    ```sh
-    cd ~
-    git clone git@github.com:NIMH-SCCN/callicog.git
-    ```
+```sh
+git clone https://github.com/NIMH-SCCN/callicog.git
+```
+
 
 #### Install required Python version using Pyenv
 
