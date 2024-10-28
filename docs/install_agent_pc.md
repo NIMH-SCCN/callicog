@@ -56,27 +56,24 @@ git clone https://github.com/NIMH-SCCN/callicog.git
 ```
 
 
-#### Install required Python version using Pyenv
+### Install Python 3.8.19 (supported version) using Pyenv
 
-* Referring to [the Pyenv documentation][pyenv], install `pyenv`.
-  * Edit your `.bashrc` and/or other configuration files as advised by the 
+Referring to [the Pyenv documentation][pyenv], install `pyenv`. Edit your `.bashrc` and/or other configuration files as advised by the 
 Pyenv installer.
-    * For help using the default text editor `nano`, refer to this [cheat
-      sheet][nano_cheat]
-    * This adds the `pyenv` install directory to your `$PATH`, so your shell
-will know where to look to find it when you type the command "pyenv" on the
-command line
-* Install Python build dependencies (required when Pyenv tries to build a
+
+Install Python build dependencies (required when Pyenv tries to build a
 Python version). [Documentation is here][py_build_deps]. 
-    ```sh
-    # NOTE: if you run into a Python build issue, refer to the Pyenv
-    # documentation; these build dependencies could change with time.
-    sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev curl libncursesw5-dev xz-utils \
-    tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
-    ```
-* Install the required Python version, 3.8.19. NOTE: `--enable-shared` argument
-is *required*, [per wxPython][wxpy_blog].
+
+```sh
+sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev curl libncursesw5-dev xz-utils \
+tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+```
+> [!NOTE]
+> if you run into a Python build issue, refer to the Pyenv documentation; these build dependencies could change with time.
+
+Install Python 3.8.19.
+
     ```sh
     # Build/install an instance of Python 3.8.19:
     env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.19
@@ -90,67 +87,55 @@ is *required*, [per wxPython][wxpy_blog].
     # Confirm Python version is 3.8.19:
     python --version
     ```
+> [!NOTE]
+> wxPython *requires* Python to be built with --enable-shared option.
 
-#### Build the CalliCog virtual environment
+### Build the CalliCog virtual environment
 
-* Create and activate the virtual environment:
-    ```sh
-    cd ~/callicog
-    python3 -m venv .venv
-    source .venv/bin/activate
+Create and activate the virtual environment:
+```sh
+cd ~/callicog
+python3 -m venv .venv
+source .venv/bin/activate
 
-    # Verify that when we invoke `python` now, it's the one in the venv:
-    which python
-    # ^ should give: `{install dir}/callicog/.venv/bin/python`
+# Verify that when we invoke `python` now, it's the one in the venv:
+which python
+# ^ should give: `{install dir}/callicog/.venv/bin/python`
 
-    # Verify that it's still the correct version:
-    python --version
-    # ^ should give: `Python 3.8.19`
-    ```
-* Install CalliCog's dependencies into the virtual environment:
-    ```sh
-    pip install PsychoPy==2021.2.3 --no-deps
-    # Install most other requirements from file:
-    pip install -r requirements-linux.txt
-    ```
+# Verify that it's still the correct version:
+python --version
+# ^ should give: `Python 3.8.19`
+```
 
-* Continuing with installing dependencies, this one has historically been
-  finnicky. See note below if this snippet fails to install:
+Install CalliCog's dependencies into the virtual environment:
+```sh
+pip install PsychoPy==2021.2.3 --no-deps
+# Install most other requirements from file:
+pip install -r requirements-linux.txt
+```
 
-* **TODO** figure out way to avoid downloaded files being deposited in 
-    ```sh
-    # Download the pre-built wheel for your Ubuntu version (22.04) and cPython (3.8):
-    pip download https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
+Download the pre-built wheel for your Ubuntu version (22.04) and cPython (3.8):
+```sh 
+pip download https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
 
-    # Install the wheel file you downloaded:
-    pip install wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
+# Install the wheel file you downloaded:
+pip install wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
 
-    # Install libsdl, a dependency of wxPython:
-    sudo apt install libsdl2-2.0-0
-    ```
+# Install libsdl, a dependency of wxPython:
+sudo apt install libsdl2-2.0-0
+```
 
 * Install the `callicog` package in editable mode:
 
-   ```sh
-   # This invokes setup.py, enabling the `callicog` CLI command, among other things:
-   python setup.py install
-   pip install -e .
-   ```
+```sh
+# This invokes setup.py, enabling the `callicog` CLI command, among other things:
+python setup.py install
+pip install -e .
+```
 
-* Now let's run a test of CalliCog:
-    ```sh
-    pytest tests/test_psychopy_click.py 
-    ```
+### Setup auto-start
 
-A window should open with a colored square stimulus, simulating a task as
-presented on the touchscreen. Click within the window to advance the task.
-After 3 windows the test will end.  
-
-#### Setup auto-start
-
-Set the CalliCog shell environment variables, make the special `autostart`
-directory, and then create symlinks to the `*.desktop` files that run on
-startup.
+Configure the Agent PC to automatically run CalliCog tools on boot.
 
 sh
 ```
@@ -160,8 +145,21 @@ ln -s $CALLICOG_DIR/bin/install/callicog.desktop $HOME/.config/autostart/
 ln -s $CALLICOG_DIR/bin/install/vnc_autostart.desktop $HOME/.config/autostart/
 ```
 
+## Confirm installation
 
-### Links
+Run a test of CalliCog (ensure the virtual environment is active).
+
+```sh
+pytest tests/test_psychopy_click.py 
+```
+
+A window should open with a colored square stimulus, simulating a task as presented on the touchscreen. Click within the window to advance the task. After 3 windows, the test will end. 
+If this sequence is observed, CalliCog is successfully installed.
+
+
+
+
+
 [nano_cheat]:
 https://web.archive.org/web/20240201142800/https://itsfoss.com/content/images/wordpress/2020/05/nano-cheatsheet.png
 "Nano editor cheat sheet"
