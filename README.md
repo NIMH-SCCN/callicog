@@ -81,11 +81,13 @@ For help, run `callicog -help`
 ### Monitor an experiment
 
 **For video surveillance:**
+
 If an active operant chamber contains a Camera Module, live video will be streamed by default over a configured wifi network. To access the video stream:
 * Ensure the Executive PC is connected to the same network.
 * Open a web browser and navigate to http://raspberrypi.local/html/ (replacing 'raspberrypi' with your Raspberry Pi's hostname). See [here](docs/install_camera_module.md) for more info.
 
 **For touchscreen mirroring:**
+
 Operant chambers are configured as VNC servers, meaning that the display can be remotely viewed during real time experimentation. To view a screen mirror:
 * Open VNC Viewer for MacOS. Available for download [here](https://www.realvnc.com/en/connect/download/viewer/macos).
 * Enter the IP address or hostname (<hostname>.local) to view the screen mirror.
