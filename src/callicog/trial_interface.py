@@ -46,7 +46,6 @@ class WindowRuntime:
             stimulus.ppy_touch_stim.size = stimulus.size
         stimulus.ppy_touch_stim.pos = stimulus.position
         stimulus.ppy_touch_stim.autoDraw = stimulus.auto_draw
-
         stimulus.ppy_show_stim = self.__get_ppy_stim_from_shape(stimulus.shape, ppy_window)
         stimulus.ppy_show_stim.size = stimulus.size
         stimulus.ppy_show_stim.color = stimulus.color
@@ -62,7 +61,6 @@ class WindowRuntime:
         if window.blank > 0:
             time.sleep(window.blank)
             print(f'blank for {window.blank} seconds')
-            #return
         if len(window.stimuli) > 0:
             for stimulus in window.stimuli:
                 self.__load_stimulus(stimulus, ppy_window)
@@ -77,15 +75,12 @@ class WindowRuntime:
         if stimulus:
             if len(stimulus.after_touch) > 0:
                 stimulus.on_touch()
-                # import pdb; pdb.set_trace()
             stimulus.record_touch_data(
                 touch_event['xcoor'],
                 touch_event['ycoor'],
                 flip_time,
                 touch_event['touch_time'],
                 touch_event['release_time'])
-        #elif not stimulus: #test
-            #stimulus.record_touch_data(flip_time) #test
         elif window.is_outside_fail and touch_event:
             window.fail_position = (touch_event['xcoor'], touch_event['ycoor'])
         return outcome
@@ -156,7 +151,7 @@ class WindowRuntime:
         start = datetime.now()
         while not ppy_mouse.getPressed()[0]:
             time.sleep(0.001)
-            if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: # Here, the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - need to fix (JS (02/03/2022))
+            if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
                 return 0, 0, True
         touch_time = datetime.now()
         return touch_time, (touch_time - start).total_seconds(), False
@@ -185,7 +180,6 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
                 if (outcome == Outcome.FAIL) or (outcome == Outcome.NULL):
                     # In cases where a task has multiple outcome windows, abort any remaining outcome windows (whole trial failed)
                     print(f"failed trial at trial window {i}")
-                    # TODO: run this logic by Jack to confirm it's sufficiently backward compatible
                     for subsequent_window in windows[i+1:-2]:
                         # Trial failed, abort all remaining trial windows (not penalty windows)
                         subsequent_window.aborted = True
@@ -228,8 +222,8 @@ def run_trial(windows, box, ppy_window, ppy_mouse):
             window_obj['stimuli'].append(stimulus.pack_data())
         trial_data.append(window_obj)
         window.reset()
-        if outcome == Outcome.NULL: #new
-            break #new
+        if outcome == Outcome.NULL:
+            break
 
     # Penalty timeout
     if outcome == Outcome.FAIL:
