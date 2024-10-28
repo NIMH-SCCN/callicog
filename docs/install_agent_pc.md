@@ -125,7 +125,7 @@ pip install wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
 sudo apt install libsdl2-2.0-0
 ```
 
-* Install the `callicog` package in editable mode:
+Install the `callicog` package in editable mode:
 
 ```sh
 # This invokes setup.py, enabling the `callicog` CLI command, among other things:
@@ -137,8 +137,7 @@ pip install -e .
 
 Configure the Agent PC to automatically run CalliCog tools on boot.
 
-sh
-```
+```sh
 source $HOME/callicog/.env
 mkdir $HOME/.config/autostart
 ln -s $CALLICOG_DIR/bin/install/callicog.desktop $HOME/.config/autostart/
