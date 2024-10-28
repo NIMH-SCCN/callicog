@@ -32,6 +32,21 @@ To install the Reward Module, simply upload [this code](src/arduino/pump_code/pu
 
 ## Running CalliCog
 
+### Initialise the database
+
+The CalliCog database as repository for both collected experimental data and experimental designs. It must be initialised prior to sending commands to operant chambers, or accessing data via the web app.
+To initialise the database, open a terminal on the Executive PC, navigate to the `callicog` directory, and enter:
+```sh
+source .venv/bin/activate
+callicog start webapp
+```
+
+### Running the web app
+The web app acts as the interface to the database. It allows the user to perform [experimental design](docs/experimental_design.md) and [access experimental data.](docs/data_reporting.md)
+To access the webapp:
+* Ensure the database is initialised
+* Open a brower of choice 
+
 > Include basic run-through to test without setting up minipc
 > Include info on:
 > * setting up venv
