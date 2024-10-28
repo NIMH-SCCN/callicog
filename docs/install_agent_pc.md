@@ -6,10 +6,8 @@ The Agent PC requires [Ubuntu](https://ubuntu.com/desktop). Version 22.04 is the
 
 #### Disable Wayland (re-enable X)
 
-Most graphical Linux distros have for decades relied on a graphical system
-called Xorg or X. This display technology has architectural flaws, it is
-being sunsetted in favor of a newer, more robust system called Wayland. Wayland
-is now the default graphics system in Ubuntu - but CalliCog is built on systems
+Most graphical Linux distros have for decades relied on a graphical system called Xorg or X. This display technology has architectural flaws, it is
+being sunsetted in favor of a newer, more robust system called Wayland. Wayland is now the default graphics system in Ubuntu - but CalliCog is built on systems 
 that are built on X, so we need to re-enable it. Fortunately, this is easy.
 
 Open a terminal and edit this configuration file with your preferred editor, e.g. `nano`
@@ -39,17 +37,6 @@ x11
   * Blank Screen Delay:     `Never`
   * Automatic Screen Lock:  `Off`
 
-NOTE: If for some reason disabling sleep in the GUI doesn't work, try:
-```sh
-gsettings set org.gnome.settings-daemon.plugins.power       \
-    sleep-inactive-ac-type 'nothing'
-gsettings set org.gnome.settings-daemon.plugins.power       \
-    sleep-inactive-battery-type 'nothing'
-gsettings set org.gnome.settings-daemon.plugins.power       \
-    sleep-inactive-ac-timeout 0
-sudo systemctl mask sleep.target suspend.target                 \
-    hibernate.target hybrid-sleep.target
-```
 
 
 ### Install software
