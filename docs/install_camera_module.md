@@ -18,7 +18,7 @@
 8. Once complete, safely eject and insert the prepared SD card into the Raspberry Pi Zero W.
 
 ## Install Rpi Cam Web Interface
-Live video monitoring can be easily achieved in CalliCog using Rpi Cam Web Interface, a third-party open access application. Protocols for its installation and/or operation are distinct from CalliCog, and may change in the future. For complete details on how to operate the application, see the [documentation](https://elinux.org/RPi-Cam-Web-Interface).
+Live video monitoring can be easily achieved using Raspberry Pis with using Rpi Cam Web Interface, a third-party open access application. Protocols for its installation and/or operation are distinct from CalliCog, and may change in the future. To be most up-to-date, refer to the [documentation](https://elinux.org/RPi-Cam-Web-Interface).
 
 1. Connect the Raspberry Pi to a desktop computer via USB.
 2. Obtain the IP address of the Pi. It should have connected to your wifi network automatically on boot.
