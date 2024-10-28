@@ -154,6 +154,7 @@ class WindowRuntime:
     def __wait_touch(self, window, ppy_mouse):
         print('waiting')
         start = datetime.now()
+        ppy_mouse.clickReset()
         while not ppy_mouse.getPressed():
             time.sleep(0.001)
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
