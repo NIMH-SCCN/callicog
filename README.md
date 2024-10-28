@@ -41,11 +41,24 @@ source .venv/bin/activate
 callicog start webapp
 ```
 
-### Running the web app
-The web app acts as the interface to the database. It allows the user to perform [experimental design](docs/experimental_design.md) and [access experimental data.](docs/data_reporting.md)
+### Run the web app
+The web app acts as the interface to the database. It allows the user to perform [experimental design](docs/experimental_design.md) and [access experimental data.](docs/data_reporting.md) Follow these links for more details.
+
 To access the webapp:
 * Ensure the database is initialised
-* Open a brower of choice 
+* Open your favorite web brower (e.g. Google Chrome)
+* Navigate to `localhost:8000/html`
+
+### Run an experiment
+All subsequent steps first require the Executive PC to first be connected to an active operant chamber (Agent PC) via wired LAN.
+Note: operant chamber Agent PCs automatically run a 'listener' script on boot, and await commands from an Executive PC. Therefore, the user controls experiments directly from the Executive PC.
+
+To begin, open a new terminal on the Executive PC, enter `callicog` directory and activat the virtual environment.
+```sh
+source .venv/bin/activate
+```
+**To run a NEW experiment:**
+`callicog run <
 
 > Include basic run-through to test without setting up minipc
 > Include info on:
@@ -54,4 +67,7 @@ To access the webapp:
 > * initialising db
 > * accessing webapp
 > * running vnc client
+
 > * video surveillance
+
+### Monitor experiments
