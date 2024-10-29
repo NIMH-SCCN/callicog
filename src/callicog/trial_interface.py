@@ -86,6 +86,11 @@ class WindowRuntime:
             window.fail_position = (touch_event['xcoor'], touch_event['ycoor'])
         return outcome
 
+    def check_cursor_move(touch_pos, ppy_mouse):
+        new_touch_pos = ppy_mouse.getPos()
+        if not np.array_equal(touch_pos,new_touch_pos):
+             return True   
+
     def __check_touch(self, window, flip_time, ppy_mouse):
         touch_event = None
         start = datetime.now()
@@ -151,12 +156,16 @@ class WindowRuntime:
 
     def __wait_touch(self, window, ppy_mouse, start):
         print('waiting')
-        touchPos1 = ppy_mouse.getPos()
+        touch_pos = ppy_mouse.getPos() #change to while loop for np.array_equal
         while not ppy_mouse.getPressed()[0]:
             time.sleep(0.001)
-            touchPos2 = ppy_mouse.getPos() 
-            if not np.array_equal(touchPos1,touchPos2): 
-                break # Checks if cursor has moved (effectively the same as a mouse click on a touchscreen). Workaround for high performance devices where clicks can be missed by PsychoPy.
+            if self.check_cursor_move(touch_pos, ppy_mouse):
+                break
+        #    touchPos2 = ppy_mouse.getPos() 
+        #    if not np.array_equal(touchPos1,touchPos2): 
+        #        break # Checks if cursor has moved (effectively the same as a mouse click on a touchscreen). Workaround for high performance devices where clicks can be missed by PsychoPy.
+        
+        
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
                 return 0, 0, True
             
