@@ -103,7 +103,6 @@ class WindowRuntime:
                 print('touched')
                 for stimulus in window.stimuli:
                     if ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
-                   # if stimulus.ppy_touch_stim.contains(ppy_mouse):
                         stimulus.touched = True
                         if stimulus.outcome == Outcome.SUCCESS and stimulus.timeout_gain > 0:
                             window.active_timeout = (window.timeout - touch_elapsed) + stimulus.timeout_gain
@@ -122,25 +121,16 @@ class WindowRuntime:
                             return stimulus, touch_event, stimulus.outcome
                         elif window.transition == WindowTransition.RELEASE:
                             print(f'in object, waiting for release')
-                            touch_pos1 = ppy_mouse.getPos()
                             while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
                                 time.sleep(0.001)
-                                print('is pressed in')
-                                #touch_pos2 = ppy_mouse.getPos() 
-                                #if not np.array_equal(touch_pos1,touch_pos2): 
-                                #    break 
                             release_time = datetime.now()
                             touch_event['release_time'] = release_time
                             print('released')
                             return stimulus, touch_event, stimulus.outcome
                         elif window.transition == WindowTransition.MAINTAIN:
                             print(f'in object, maintain touched stim, waiting for release')
-                            touch_pos1 = ppy_mouse.getPos()
-                            while ppy_mouse.getPressed()[0]:
+                            while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
                                 time.sleep(0.001)
-                                touch_pos2 = ppy_mouse.getPos() 
-                                if not np.array_equal(touch_pos1,touch_pos2): 
-                                    break 
                             release_time = datetime.now()
                             touch_event['release_time'] = release_time
                             print('released')
@@ -152,13 +142,11 @@ class WindowRuntime:
                     'ycoor': position[1],
                     'touch_time': touch_time
                 }
-                touch_pos1 = ppy_mouse.getPos()
-                while ppy_mouse.getPressed()[0]:
-                    time.sleep(0.001)
-                    #touch_pos2 = ppy_mouse.getPos() 
-                    #if not np.array_equal(touch_pos1,touch_pos2): 
-                    #    break 
-                print('released')
+
+                #while ppy_mouse.getPressed()[0]:
+                #    time.sleep(0.001)
+                #print('released')
+                
                 if window.is_outside_fail:
                     return None, touch_event, Outcome.FAIL
 
