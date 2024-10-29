@@ -154,9 +154,8 @@ class WindowRuntime:
     def __wait_touch(self, window, ppy_mouse):
         print('waiting')
         start = datetime.now()
-        print(ppy_mouse.getPressed()[0])
-        while not (ppy_mouse.getPressed()[0] or ppy_mouse.getPressed()[1] or ppy_mouse.getPressed()[2]):
-            time.sleep(0.001)
+        while not ppy_mouse.getPressed()[0]:
+            #time.sleep(0.001)
             if ppy_mouse.getPressed()[1]:
                     print('1')
             if ppy_mouse.getPressed()[2]:
