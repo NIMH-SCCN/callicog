@@ -123,11 +123,11 @@ class WindowRuntime:
                         elif window.transition == WindowTransition.RELEASE:
                             print(f'in object, waiting for release')
                             touch_pos1 = ppy_mouse.getPos()
-                            while ppy_mouse.getPressed()[0]:
+                            while ppy_mouse.isPressedIn():
                                 time.sleep(0.001)
-                                touch_pos2 = ppy_mouse.getPos() 
-                                if not np.array_equal(touch_pos1,touch_pos2): 
-                                    break 
+                                #touch_pos2 = ppy_mouse.getPos() 
+                                #if not np.array_equal(touch_pos1,touch_pos2): 
+                                #    break 
                             release_time = datetime.now()
                             touch_event['release_time'] = release_time
                             print('released')
