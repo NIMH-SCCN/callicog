@@ -156,8 +156,6 @@ class WindowRuntime:
         touch_pos1 = ppy_mouse.getPos() #change to while loop for np.array_equal
         while not ppy_mouse.getPressed()[0]:
             time.sleep(0.001)
-            #if self.check_cursor_move(touch_pos, ppy_mouse):
-            #    break
             touch_pos2 = ppy_mouse.getPos() 
             if not np.array_equal(touch_pos1,touch_pos2): 
                 break # Checks if cursor has moved (effectively the same as a mouse click on a touchscreen). Workaround for high performance devices where clicks can be missed by PsychoPy.
