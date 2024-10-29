@@ -126,7 +126,6 @@ class WindowRuntime:
                             while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
                                 time.sleep(0.001)
                                 print('is pressed in')
-                                
                                 #touch_pos2 = ppy_mouse.getPos() 
                                 #if not np.array_equal(touch_pos1,touch_pos2): 
                                 #    break 
@@ -156,9 +155,9 @@ class WindowRuntime:
                 touch_pos1 = ppy_mouse.getPos()
                 while ppy_mouse.getPressed()[0]:
                     time.sleep(0.001)
-                    touch_pos2 = ppy_mouse.getPos() 
-                    if not np.array_equal(touch_pos1,touch_pos2): 
-                        break 
+                    #touch_pos2 = ppy_mouse.getPos() 
+                    #if not np.array_equal(touch_pos1,touch_pos2): 
+                    #    break 
                 print('released')
                 if window.is_outside_fail:
                     return None, touch_event, Outcome.FAIL
