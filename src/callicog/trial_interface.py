@@ -5,6 +5,7 @@ import math
 import time
 from serial import SerialException
 import logging
+import numpy as np
 
 
 logger = logging.getLogger(__name__)
@@ -152,9 +153,9 @@ class WindowRuntime:
         start = datetime.now()
         touchPos1 = ppy_mouse.getPos()
         while not ppy_mouse.getPressed()[0]:
-            #time.sleep(0.001)
+            time.sleep(0.001)
             touchPos2 = ppy_mouse.getPos()
-            if touchPos1 != touchPos2:
+            if not np.array_equal(touchPos1,touchPos2):
                 break
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
                 return 0, 0, True
