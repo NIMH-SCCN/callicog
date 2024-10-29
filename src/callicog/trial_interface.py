@@ -86,10 +86,10 @@ class WindowRuntime:
             window.fail_position = (touch_event['xcoor'], touch_event['ycoor'])
         return outcome
 
-    def check_cursor_move(touch_pos, ppy_mouse):
-        new_touch_pos = ppy_mouse.getPos()
-        if not np.array_equal(touch_pos,new_touch_pos):
-             return True   
+    #def check_cursor_move(touch_pos, ppy_mouse):
+    #    new_touch_pos = ppy_mouse.getPos()
+    #    if not np.array_equal(touch_pos,new_touch_pos):
+    #         return True   
 
     def __check_touch(self, window, flip_time, ppy_mouse):
         touch_event = None
@@ -116,27 +116,30 @@ class WindowRuntime:
                         }
                         if window.transition == WindowTransition.TOUCH:
                             print(f'in object, touched')
-                            # NOTE: we've chosen in this case to set
-                            # release_time to touch_time, since tracking the
-                            # actual release_time here would require parallel
-                            # processing, complicated dev that is not
-                            # currently warranted.
-                            release_time = touch_time
+                            release_time = touch_time # NOTE: we've chosen in this case to define release_time as touch_time, to avoid unnecessary parallel processing
                             touch_event['release_time'] = release_time
                             print('released')
                             return stimulus, touch_event, stimulus.outcome
                         elif window.transition == WindowTransition.RELEASE:
                             print(f'in object, waiting for release')
+                            touch_pos1 = ppy_mouse.getPos()
                             while ppy_mouse.getPressed()[0]:
                                 time.sleep(0.001)
+                                touch_pos2 = ppy_mouse.getPos() 
+                                if not np.array_equal(touch_pos1,touch_pos2): 
+                                    break 
                             release_time = datetime.now()
                             touch_event['release_time'] = release_time
                             print('released')
                             return stimulus, touch_event, stimulus.outcome
                         elif window.transition == WindowTransition.MAINTAIN:
                             print(f'in object, maintain touched stim, waiting for release')
+                            touch_pos1 = ppy_mouse.getPos()
                             while ppy_mouse.getPressed()[0]:
                                 time.sleep(0.001)
+                                touch_pos2 = ppy_mouse.getPos() 
+                                if not np.array_equal(touch_pos1,touch_pos2): 
+                                    break 
                             release_time = datetime.now()
                             touch_event['release_time'] = release_time
                             print('released')
@@ -148,24 +151,27 @@ class WindowRuntime:
                     'ycoor': position[1],
                     'touch_time': touch_time
                 }
+                touch_pos1 = ppy_mouse.getPos()
                 while ppy_mouse.getPressed()[0]:
                     time.sleep(0.001)
+                    touch_pos2 = ppy_mouse.getPos() 
+                    if not np.array_equal(touch_pos1,touch_pos2): 
+                        break 
                 print('released')
                 if window.is_outside_fail:
                     return None, touch_event, Outcome.FAIL
 
     def __wait_touch(self, window, ppy_mouse, start):
         print('waiting')
-        touch_pos = ppy_mouse.getPos() #change to while loop for np.array_equal
+        touch_pos1 = ppy_mouse.getPos() #change to while loop for np.array_equal
         while not ppy_mouse.getPressed()[0]:
             time.sleep(0.001)
-            if self.check_cursor_move(touch_pos, ppy_mouse):
-                break
-        #    touchPos2 = ppy_mouse.getPos() 
-        #    if not np.array_equal(touchPos1,touchPos2): 
-        #        break # Checks if cursor has moved (effectively the same as a mouse click on a touchscreen). Workaround for high performance devices where clicks can be missed by PsychoPy.
-        
-        
+            #if self.check_cursor_move(touch_pos, ppy_mouse):
+            #    break
+            touch_pos2 = ppy_mouse.getPos() 
+            if not np.array_equal(touch_pos1,touch_pos2): 
+                break # Checks if cursor has moved (effectively the same as a mouse click on a touchscreen). Workaround for high performance devices where clicks can be missed by PsychoPy.
+
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
                 return 0, 0, True
             
