@@ -125,6 +125,8 @@ class WindowRuntime:
                             touch_pos1 = ppy_mouse.getPos()
                             while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
                                 time.sleep(0.001)
+                                print('is pressed in')
+                                
                                 #touch_pos2 = ppy_mouse.getPos() 
                                 #if not np.array_equal(touch_pos1,touch_pos2): 
                                 #    break 
