@@ -95,12 +95,14 @@ class WindowRuntime:
         touch_event = None
         start = datetime.now()
         while True:
+            
             touch_time, touch_elapsed, timed_out =  self.__wait_touch(window, ppy_mouse, start)
             if timed_out:
                 print('timed out')
                 return None, touch_event, Outcome.NULL
             else:
                 print('touched')
+                
                 for stimulus in window.stimuli:
                     if stimulus.ppy_touch_stim.contains(ppy_mouse):
                     #if ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
@@ -114,6 +116,7 @@ class WindowRuntime:
                             'ycoor': position[1],
                             'touch_time': touch_time
                         }
+
                         if window.transition == WindowTransition.TOUCH:
                             print(f'in object, touched')
                             release_time = touch_time # NOTE: we've chosen in this case to define release_time as touch_time, to avoid unnecessary parallel processing
@@ -122,8 +125,16 @@ class WindowRuntime:
                             return stimulus, touch_event, stimulus.outcome
                         elif window.transition == WindowTransition.RELEASE:
                             print(f'in object, waiting for release')
-                            while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
+                            #while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
+                            #    time.sleep(0.001)
+                            
+                            #test - TODO come back to this
+                            ppy_mouse.clickReset()
+                            while ppy_mouse.getPressed(getTime=True)[0][0] == 1:
                                 time.sleep(0.001)
+                                ppy_mouse.clickReset()
+                        
+                            
                             release_time = datetime.now()
                             touch_event['release_time'] = release_time
                             print('released')
@@ -136,6 +147,7 @@ class WindowRuntime:
                             touch_event['release_time'] = release_time
                             print('released')
                             return stimulus, touch_event, stimulus.outcome
+                        
                 print('outside, waiting for release')
                 position = ppy_mouse.getPos()
                 touch_event = {
