@@ -123,7 +123,7 @@ class WindowRuntime:
                         elif window.transition == WindowTransition.RELEASE:
                             print(f'in object, waiting for release')
                             touch_pos1 = ppy_mouse.getPos()
-                            while ppy_mouse.isPressedIn():
+                            while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
                                 time.sleep(0.001)
                                 #touch_pos2 = ppy_mouse.getPos() 
                                 #if not np.array_equal(touch_pos1,touch_pos2): 
