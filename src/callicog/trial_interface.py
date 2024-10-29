@@ -102,7 +102,8 @@ class WindowRuntime:
             else:
                 print('touched')
                 for stimulus in window.stimuli:
-                    if ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
+                    if stimulus.ppy_touch_stim.contains(ppy_mouse):
+                    #if ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
                         stimulus.touched = True
                         if stimulus.outcome == Outcome.SUCCESS and stimulus.timeout_gain > 0:
                             window.active_timeout = (window.timeout - touch_elapsed) + stimulus.timeout_gain
@@ -146,7 +147,7 @@ class WindowRuntime:
                 #while ppy_mouse.getPressed()[0]:
                 #    time.sleep(0.001)
                 #print('released')
-                
+
                 if window.is_outside_fail:
                     return None, touch_event, Outcome.FAIL
 
