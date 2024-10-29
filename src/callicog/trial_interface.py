@@ -88,8 +88,9 @@ class WindowRuntime:
 
     def __check_touch(self, window, flip_time, ppy_mouse):
         touch_event = None
+        start = datetime.now()
         while True:
-            touch_time, touch_elapsed, timed_out =  self.__wait_touch(window, ppy_mouse)
+            touch_time, touch_elapsed, timed_out =  self.__wait_touch(window, ppy_mouse, start)
             if timed_out:
                 print('timed out')
                 return None, touch_event, Outcome.NULL
@@ -148,16 +149,14 @@ class WindowRuntime:
                 if window.is_outside_fail:
                     return None, touch_event, Outcome.FAIL
 
-    #TODO current touchscreen issue is occurring in this fn
-    def __wait_touch(self, window, ppy_mouse):
+    def __wait_touch(self, window, ppy_mouse, start):
         print('waiting')
-        start = datetime.now()
         touchPos1 = ppy_mouse.getPos()
         while not ppy_mouse.getPressed()[0]:
             time.sleep(0.001)
-            touchPos2 = ppy_mouse.getPos()
-            if not np.array_equal(touchPos1,touchPos2):
-                break
+            touchPos2 = ppy_mouse.getPos() 
+            if not np.array_equal(touchPos1,touchPos2): 
+                break # Checks if cursor has moved (effectively the same as a mouse click on a touchscreen). Workaround for high performance devices where clicks can be missed by PsychoPy.
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
                 return 0, 0, True
             
