@@ -123,6 +123,16 @@ class WindowRuntime:
                             touch_event['release_time'] = release_time
                             print('released')
                             return stimulus, touch_event, stimulus.outcome
+                        
+                        #NOTE: below, release works if previous stim touched, but not current stim. This is the behavior to be fixed.
+                        # Also need to prevent hold issue for first window - thought this was RELEASE, so this is weird.
+                        # Should change all stim to behave as RELEASE... consider 2AFC window can be responded to if stimulus pressed in 
+
+                        # on tap: [0,0,0] - no getpressed, followed by next window
+                        # on hold: [0,0,0] - no getpressed, followed by next window
+                        # if first stim held: [1,0,0] - getpressed, waits for release as intended.
+
+
                         elif window.transition == WindowTransition.RELEASE:
                             print(f'in object, waiting for release')
                             #while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
@@ -166,14 +176,24 @@ class WindowRuntime:
                 if window.is_outside_fail:
                     return None, touch_event, Outcome.FAIL
 
+    #NOTE: first line below is probably where the release isn't triggering correctly. If stimulus is held in, positions will change & touch will be detected.
+
     def __wait_touch(self, window, ppy_mouse, start):
         print('waiting')
-        touch_pos1 = ppy_mouse.getPos() #change to while loop for np.array_equal
-        while not ppy_mouse.getPressed()[0]:
+        
+        #test
+        ppy_mouse.clickReset()
+        while ppy_mouse.getPressed(getTime=True)[0][0] == 1:
             time.sleep(0.001)
-            touch_pos2 = ppy_mouse.getPos() 
-            if not np.array_equal(touch_pos1,touch_pos2): 
-                break # Checks if cursor has moved (effectively the same as a mouse click on a touchscreen). Workaround for high performance devices where clicks can be missed by PsychoPy.
+        
+        
+        
+        #touch_pos1 = ppy_mouse.getPos() #change to while loop for np.array_equal
+        #while not ppy_mouse.getPressed()[0]:
+            #time.sleep(0.001)
+            #touch_pos2 = ppy_mouse.getPos() 
+            #if not np.array_equal(touch_pos1,touch_pos2): 
+            #    break # Checks if cursor has moved (effectively the same as a mouse click on a touchscreen). Workaround for high performance devices where clicks can be missed by PsychoPy.
 
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
                 return 0, 0, True
