@@ -5,7 +5,6 @@ import math
 import time
 from serial import SerialException
 import logging
-import numpy as np
 
 
 logger = logging.getLogger(__name__)
@@ -86,11 +85,6 @@ class WindowRuntime:
             window.fail_position = (touch_event['xcoor'], touch_event['ycoor'])
         return outcome
 
-    #def check_cursor_move(touch_pos, ppy_mouse):
-    #    new_touch_pos = ppy_mouse.getPos()
-    #    if not np.array_equal(touch_pos,new_touch_pos):
-    #         return True   
-
     def __check_touch(self, window, flip_time, ppy_mouse):
         touch_event = None
         start = datetime.now()
@@ -104,8 +98,7 @@ class WindowRuntime:
                 print('touched')
                 
                 for stimulus in window.stimuli:
-                    if stimulus.ppy_touch_stim.contains(ppy_mouse):
-                    #if ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
+                    if stimulus.ppy_touch_stim.contains(ppy_mouse): # preferred over fn isPressedIn() as this detects transient events that may be missed from high performance devices
                         stimulus.touched = True
                         if stimulus.outcome == Outcome.SUCCESS and stimulus.timeout_gain > 0:
                             window.active_timeout = (window.timeout - touch_elapsed) + stimulus.timeout_gain
@@ -123,41 +116,19 @@ class WindowRuntime:
                             touch_event['release_time'] = release_time
                             print('released')
                             return stimulus, touch_event, stimulus.outcome
-                        
-                        #NOTE: below, release works if previous stim touched, but not current stim. This is the behavior to be fixed.
-                        # Also need to prevent hold issue for first window - thought this was RELEASE, so this is weird.
-                        # Should change all stim to behave as RELEASE... consider 2AFC window can be responded to if stimulus pressed in 
-
-                        # on tap: [0,0,0] - no getpressed, followed by next window
-                        # on hold: [0,0,0] - no getpressed, followed by next window
-                        # if first stim held: [1,0,0] - getpressed, waits for release as intended.
-
-                        # holding first stim delays timeout. holding second stim does not.
-
 
                         elif window.transition == WindowTransition.RELEASE:
                             print(f'in object, waiting for release')
+                            
                             #while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
                             #    time.sleep(0.001)
                             
-                            #test - TODO come back to this
+                            # detect release event from (very) recent history
                             ppy_mouse.clickReset()
-                            print(ppy_mouse.getPressed())
                             while ppy_mouse.getPressed(getTime=True)[0][0] == 1:
-                                print('getpressed')
                                 time.sleep(0.001)
                                 ppy_mouse.clickReset()
-                                print(ppy_mouse.getPressed())
                         
-                            
-                            release_time = datetime.now()
-                            touch_event['release_time'] = release_time
-                            print('released')
-                            return stimulus, touch_event, stimulus.outcome
-                        elif window.transition == WindowTransition.MAINTAIN:
-                            print(f'in object, maintain touched stim, waiting for release')
-                            while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
-                                time.sleep(0.001)
                             release_time = datetime.now()
                             touch_event['release_time'] = release_time
                             print('released')
@@ -171,37 +142,24 @@ class WindowRuntime:
                     'touch_time': touch_time
                 }
 
-                #while ppy_mouse.getPressed()[0]:
-                #    time.sleep(0.001)
-                #print('released')
-
                 if window.is_outside_fail:
                     return None, touch_event, Outcome.FAIL
 
-    #NOTE: first line below is probably where the release isn't triggering correctly. If stimulus is held in, positions will change & touch will be detected.
 
     def __wait_touch(self, window, ppy_mouse, start):
         print('waiting')
         
-        #test
+        # prevent animal from holding on one window and then triggering next without releasing touch
         ppy_mouse.clickReset()
-        while ppy_mouse.getPressed(getTime=True)[0][0] == 1: #prevent animal from holding on one window and triggering next
-            #time.sleep(0.001)
+        while ppy_mouse.getPressed(getTime=True)[0][0] == 1: #NOTE: getTime is used to query history rather than getPressed() for current status, as high performance devices can transiently
+                                                                    # record events faster than PyschoPy can detect them 
+            time.sleep(0.001)
             pass
 
+        # detect touch events from (very) recent history
         ppy_mouse.clickReset()
-        while ppy_mouse.getPressed(getTime=True)[0][0] == 0: #getTime so that nothing is missed in slow code
-            pass#time.sleep(0.001)
-        
-        
-        
-        #touch_pos1 = ppy_mouse.getPos() #change to while loop for np.array_equal
-        #while not ppy_mouse.getPressed()[0]:
-            #time.sleep(0.001)
-            #touch_pos2 = ppy_mouse.getPos() 
-            #if not np.array_equal(touch_pos1,touch_pos2): 
-            #    break # Checks if cursor has moved (effectively the same as a mouse click on a touchscreen). Workaround for high performance devices where clicks can be missed by PsychoPy.
-
+        while ppy_mouse.getPressed(getTime=True)[0][0] == 0:
+            time.sleep(0.001) 
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
                 return 0, 0, True
             
