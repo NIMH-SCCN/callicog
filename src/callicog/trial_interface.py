@@ -130,9 +130,12 @@ class WindowRuntime:
                             
                             #test - TODO come back to this
                             ppy_mouse.clickReset()
+                            print(ppy_mouse.getPressed())
                             while ppy_mouse.getPressed(getTime=True)[0][0] == 1:
+                                print('getpressed')
                                 time.sleep(0.001)
                                 ppy_mouse.clickReset()
+                                print(ppy_mouse.getPressed())
                         
                             
                             release_time = datetime.now()
