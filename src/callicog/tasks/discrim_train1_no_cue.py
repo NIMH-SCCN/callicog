@@ -20,7 +20,7 @@ class TaskInterface(TaskStructure):
   
         # Window 1
         # In discrimination & reversal tasks, stimuli remain briefly after being touched to provide visual feedback. This is executed below.
-        w1 = Window(transition=WindowTransition.MAINTAIN, is_outcome=True, timeout=2)
+        w1 = Window(transition=WindowTransition.RELEASE, is_outcome=True, timeout=2)
         w1.post_touch_delay = 1
         reward_stim = Stimulus(shape=StimulusShape.IMAGE, size=(250,250), image = IMAGE_DIR/'composite1-1.jpg', color = (1,1,1), size_touch=(250,250))
         reward_stim.after_touch = [{'name': 'hide_other'}]
