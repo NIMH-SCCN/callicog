@@ -120,13 +120,9 @@ class WindowRuntime:
                         elif window.transition == WindowTransition.RELEASE:
                             print(f'in object, waiting for release')
                             
-                            #while ppy_mouse.isPressedIn(stimulus.ppy_touch_stim):
-                            #    time.sleep(0.001)
-                            
                             # detect release event from (very) recent history
                             ppy_mouse.clickReset()
                             while ppy_mouse.getPressed(getTime=True)[0][0] == 1:
-                                #time.sleep(0.001)
                                 ppy_mouse.clickReset()
                         
                             release_time = datetime.now()
@@ -153,13 +149,11 @@ class WindowRuntime:
         ppy_mouse.clickReset()
         while ppy_mouse.getPressed(getTime=True)[0][0] == 1: #NOTE: getTime is used to query history rather than getPressed() for current status, as high performance devices can transiently
                                                                     # record events faster than PyschoPy can detect them 
-            #time.sleep(0.001)
             pass
 
         # detect touch events from (very) recent history
         ppy_mouse.clickReset()
         while ppy_mouse.getPressed(getTime=True)[0][0] == 0:
-            #time.sleep(0.001) 
             if window.active_timeout > 0 and (datetime.now() - start).total_seconds() > window.active_timeout: #TODO: the variable 'start' is refreshed after each touch, so touching outside stimuli resets timeout - this behavior could be improved
                 return 0, 0, True
             
