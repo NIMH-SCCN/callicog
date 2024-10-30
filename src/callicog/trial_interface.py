@@ -132,6 +132,8 @@ class WindowRuntime:
                         # on hold: [0,0,0] - no getpressed, followed by next window
                         # if first stim held: [1,0,0] - getpressed, waits for release as intended.
 
+                        # holding first stim delays timeout. holding second stim does not.
+
 
                         elif window.transition == WindowTransition.RELEASE:
                             print(f'in object, waiting for release')
