@@ -183,7 +183,7 @@ class WindowRuntime:
         
         #test
         ppy_mouse.clickReset()
-        while ppy_mouse.getPressed(getTime=True)[0][0] == 1:
+        while ppy_mouse.getPressed(getTime=True)[0][0] == 0:
             time.sleep(0.001)
         
         
