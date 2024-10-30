@@ -182,7 +182,8 @@ class WindowRuntime:
         print('waiting')
         
         #test
-        while ppy_mouse.getPressed(): #prevent animal from holding on one window and triggering next
+        ppy_mouse.clickReset()
+        while ppy_mouse.getPressed(getTime=True)[0][0] == 1: #prevent animal from holding on one window and triggering next
             #time.sleep(0.001)
             pass
 
