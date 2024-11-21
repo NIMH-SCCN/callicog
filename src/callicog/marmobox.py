@@ -144,7 +144,8 @@ class Marmobox:
         experiment = self.db_session.query(Experiment).filter(Experiment.experiment_id == experiment_id).all()[0]
         return experiment
 
-    # TODO: delete this if confirmed it is not still needed/used
+    # Placeholder for animal detection function
+
     # def wait_for_animal(self):
     #     message = {
     #         'action': 'wait_for_animal'
@@ -177,7 +178,7 @@ class Marmobox:
         if response and response['success'] == 1:
             body = response['body']
             trial_data = body['data']
-            # TODO: print (or log) just useful trial data
+            # TODO: print (or log) more summarised trial data
             print(json.dumps(trial_data, indent=2))
             return trial_data
         elif not response:
@@ -226,14 +227,12 @@ class Marmobox:
 
                 if next_trial and new_trial.trial_status == Outcome.NULL:
                     trial_indices.append(next_trial)
-                # valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
+
                 valid_trials = [trial for trial in session.trials if trial.trial_status != Outcome.NULL]
 
             # all trials, included null repetitions, complete
             session.session_end = datetime.now()
             # check valid trials in session
-
-            # valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
             success_trials = sum([1 for trial in valid_trials if trial.trial_status == Outcome.SUCCESS])
             if (success_trials / len(valid_trials)) >= current_task.template_protocol.success_rate:
                 session.session_status = Outcome.SUCCESS
@@ -301,9 +300,6 @@ class Marmobox:
                 if stimulus['touch_pos']:
                     window_stimulus.stimulus_touch_x = stimulus['touch_pos'][0]
                     window_stimulus.stimulus_touch_y = stimulus['touch_pos'][1]
-        # TODO: find out why this is commented out, and whether we need this
-        # functionality to be re-enabled. Right now this is not "saving" the
-        # trial events as the function name suggests.
         self.db_session.commit()
 
     def run_target_based_trials(self, current_task, task_interface):
@@ -343,7 +339,6 @@ class Marmobox:
                 self.save_trial_events(trial_events, new_trial, trial_config, task_parameters)
 
             # check if task is over
-            # valid_trials = session.trials.filter(Trial.trial_status != Outcome.NULL).all()
             valid_trials = [trial for trial in session.trials if trial.trial_status != Outcome.NULL]
             if len(valid_trials) == current_task.template_protocol.target_trials:
                 session.session_end = datetime.now()

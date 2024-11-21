@@ -22,8 +22,6 @@ def run_or_resume(
     # Import this here since it is a dependency of the exec/control computer,
     # but not the trial agent/miniPC. Will fail if run there, as Postgres is not
     # installed.
-    # TODO: consider moving the logic of run_or_resume() into another module and
-    # simply invoking that module from within here, with some kind of lazy-init.
     from callicog.webapp.flask_app import (
         db,
         app,
@@ -53,9 +51,7 @@ def run_or_resume(
                     # Experiment over, exit loop:
                     break
                 except json.JSONDecodeError as exc:
-                    # Due to networking errors, we have been seeing truncations of
-                    # JSON messages, leading to JSONDecodeErrors. If this happens,
-                    # log the error and automatically resume experiment:
+                    # Due to networking errors causing truncations of JSON messages - if this happens, notify and resume exp.
                     logger.error(
                         "Malformed JSON, presumably truncated due to packet loss. "
                         "Attempting to auto-resume..."
