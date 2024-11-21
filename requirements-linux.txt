@@ -1,4 +1,4 @@
-pyglet<1.5  # This might be <1.6 on Ubuntu 22?
+pyglet<1.5
 numpy==1.21.6
 Pillow
 pyserial
