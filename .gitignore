@@ -169,3 +169,7 @@ cython_debug/
 # .ignore directory for development artifacts to be saved locally but not
 # tracked/committed by git
 /.ignore
+
+/src/callicog/tasks/beta/
+/src/callicog/tasks/images/drst/
+/src/callicog/tasks/images/drst2/

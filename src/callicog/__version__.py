@@ -7,7 +7,7 @@
 __title__ = "callicog"
 __description__ = "CalliCog: an adaptable operant chamber platform."
 __url__ = "https://github.com/NIMH-SCCN/callicog/"
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 __author__ = "NIMH Section on Cellular and Cognitive Neurodevelopment"
 __author_email__ = "jack.scott2@nih.gov"
 __license__ = "CC0-1.0"
