@@ -9,7 +9,7 @@ CalliCog is an automated platform for behavioral experiments, designed for the h
 
 **Build your own CalliCog setup!** See a full inventory of materials and instructions [here](https://www.doi.org/10.6084/m9.figshare.27873153).
 
-**If you use CalliCog, please cite the [paper]():**\
+**If you use CalliCog, please cite the [paper](https://doi.org/10.1101/2024.11.26.625450):**\
 Scott, J.T., Mendivez Vasquez, B.L., Stewart, B.J., Panacheril, D., Rajit, D.K., Fan, A.Y., Bourne, J.A. (2024) CalliCog: an open-source cognitive neuroscience toolkit for freely behaving nonhuman primates. _bioRxiv_.  
 
 ✉️ **Further info or support:** callicog_support@mail.nih.gov 
