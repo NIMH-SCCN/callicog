@@ -141,7 +141,7 @@ Configure the Agent PC to automatically run CalliCog tools on boot.
 source $HOME/callicog/.env
 mkdir $HOME/.config/autostart
 ln -s $CALLICOG_DIR/bin/install/callicog.desktop $HOME/.config/autostart/
-ln -s $CALLICOG_DIR/bin/install/vnc_autostart.desktop $HOME/.config/autostart/
+ln -s $CALLICOG_DIR/bin/install/x11vnc.desktop $HOME/.config/autostart/
 ```
 
 ## Confirm installation
