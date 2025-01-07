@@ -1,11 +1,17 @@
-# CalliCog
-
-Open-source tools for automated behavioral training and testing, designed for the homecage environment.
-
+<div align="center">
+ <img src="https://github.com/NIMH-SCCN/callicog/blob/master/docs/images/callicog_logo.png" alt="callicog logo" width="635" height="184">
+<br><br>
+ Open-source tools for automated behavioral training and testing, designed for the homecage environment.
+</div>
 
 ## Summary ##
 
 CalliCog is an automated platform for behavioral experiments, designed for the homecage-based **cog**nitive training of common marmosets (_**Calli**thrix jacchus_) and other small nonhuman primates. It delivers behavioral tasks via touchscreens in custom-built operant chambers made from inexpensive and publicly available materials. CalliCog runs on open-source code based in Python, and includes a custom webapp for running experiments and recording behavioral data. 
+
+<br>
+<div align="center">
+<img src="https://github.com/NIMH-SCCN/callicog/blob/master/docs/images/graphical_abstract_web.png" alt="callicog graphic">
+<br><br><br>
 
 **Build your own CalliCog setup!** See a full inventory of materials and instructions [here](https://www.doi.org/10.6084/m9.figshare.27873153).
 
@@ -13,6 +19,7 @@ CalliCog is an automated platform for behavioral experiments, designed for the h
 Scott, J.T., Mendivez Vasquez, B.L., Stewart, B.J., Panacheril, D., Rajit, D.K., Fan, A.Y., Bourne, J.A. (2024) CalliCog: an open-source cognitive neuroscience toolkit for freely behaving nonhuman primates. _bioRxiv_.  
 
 ✉️ **Further info or support:** callicog_support@mail.nih.gov 
+</div><br>
 
 ## Hardware Requirements
 CalliCog uses a central computer (**Executive PC**) that controls the operations of up to several (at least one) operant chambers, each controlled by its own computer (**Agent PC**). Operant chambers also contain a **Reward Module** for the delivery of liquid reward, and a **Camera Module** for surveillance. See [inventory](https://www.doi.org/10.6084/m9.figshare.27873153) for full details.
