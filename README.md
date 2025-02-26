@@ -21,6 +21,8 @@ Scott, J.T., Mendivez Vasquez, B.L., Stewart, B.J., Panacheril, D., Rajit, D.K.,
 ✉️ **Further info or support:** callicog_support@mail.nih.gov 
 </div><br>
 
+<br>
+
 ## Hardware Requirements
 CalliCog uses a central computer (**Executive PC**) that controls the operations of up to several (at least one) operant chambers, each controlled by its own computer (**Agent PC**). Operant chambers also contain a **Reward Module** for the delivery of liquid reward, and a **Camera Module** for surveillance. See [inventory](https://www.doi.org/10.6084/m9.figshare.27873153) for full details.
 
@@ -30,12 +32,16 @@ CalliCog uses a central computer (**Executive PC**) that controls the operations
 * Arduino microcontroller (Reward Module). _Recommended: Uno Rev3_
 * Raspberry Pi microcomputer (Camera Module). _Recommended: Raspberry Pi Zero W._
 
+<br>
+
 ## Installation
 * [Install Executive PC (Mac)](docs/install_executive_pc.md)
 * [Install Agent PC (Mini PC)](docs/install_agent_pc.md)
 * [Install Camera Module (Raspberry Pi)](docs/install_camera_module.md)
 
 To install the Reward Module, simply upload [this code](src/arduino/pump_code/pump_code.ino) to the Arduino using [Arduino IDE](https://www.arduino.cc/en/software).
+
+<br>
 
 ## Running CalliCog
 
@@ -98,3 +104,14 @@ If an active operant chamber contains a Camera Module, live video will be stream
 Operant chambers are configured as VNC servers, meaning that the display can be remotely viewed during real time experimentation. To view a screen mirror:
 * Open a VNC client, e.g. [RealVNC Viewer for MacOS](https://www.realvnc.com/en/connect/download/viewer/macos).
 * Enter the IP address or hostname (<hostname>.local) to view the screen mirror.
+
+<br>
+
+## Timing Synchronization
+
+Behavioral data from CalliCog can be synchronized with techniques for neural recording, such as electrocorticography (ECoG), obtained wirelessly while test subjects perform behavioral tasks. This is achieved by integrating a computer that acquires neural data into the local network, and configuring this computer as a Network Time Protocol (NTP) server that synchronizes the clock on an Agent PC. The behavioral and neural data can then be temporally aligned _post hoc_. 
+
+NTP configuration is not a supported function of CalliCog, and it will vary depending on the user’s hardware, software and operating system used for neural recording. However, instructions on how to configure NTP can be found [here.](https://www.ntp.org/documentation/4.2.8-series/ntpd/) For general considerations and a troubleshooting guide regarding timing precision in CalliCog, see [here](docs/optimizing_timings.md).
+
+> [!Note]
+> NTP is a quick, easy and inexpensive method for synchronization. However, it may not be an appropriate method for certain applications (such as single-unit electrophysiology) that require high temporal precision. Development is currently underway in CalliCog for I/O functionality that will enable alternative synchronization methods.
