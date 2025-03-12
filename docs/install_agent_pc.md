@@ -90,6 +90,16 @@ Install Python 3.8.19.
 > [!NOTE]
 > wxPython *requires* Python to be built with --enable-shared option.
 
+### Create .env shell configuration file
+
+```sh
+# Enter your repo directory, e.g.:
+cd ~/callicog
+# Copy the .env.template to create the environment configuration file for this instance
+cp .env.template .env \
+&& echo "\n\n    Done. Now edit your .env file if customization needed for this environment (e.g. directory location, database name etc)."
+```
+
 ### Build the CalliCog virtual environment
 
 Create and activate the virtual environment:
